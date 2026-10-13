@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { THEME_PRESETS, ThemeKey } from './themeConfig';
 import {
   Mail,
@@ -193,6 +194,7 @@ function NeuralAiCanvas({ waveColor }: { waveColor: string }) {
 }
 
 export default function LoginPage() {
+  const router = useRouter();
   const [currentThemeKey, setCurrentThemeKey] = useState<ThemeKey>('emerald');
   const [tab, setTab] = useState<'login' | 'register'>('login');
   const [selectedRole, setSelectedRole] = useState(ROLES[0]);
@@ -228,20 +230,32 @@ export default function LoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('kognos_role', JSON.stringify(selectedRole));
+      localStorage.setItem('kognos_theme', currentThemeKey);
+      localStorage.setItem('kognos_user', email);
+    }
+
     setTimeout(() => {
       setIsLoading(false);
-      alert(
-        tab === 'login'
-          ? `Access granted to Kognos Rice Mill CRM as ${selectedRole.label}`
-          : 'Staff enrollment request queued for approval!'
-      );
-    }, 1200);
+      if (tab === 'login') {
+        router.push('/dashboard');
+      } else {
+        alert('Staff enrollment request queued for approval!');
+        setTab('login');
+      }
+    }, 900);
   };
 
   const cycleTheme = () => {
     const keys = Object.keys(THEME_PRESETS) as ThemeKey[];
     const nextIndex = (keys.indexOf(currentThemeKey) + 1) % keys.length;
-    setCurrentThemeKey(keys[nextIndex]);
+    const nextTheme = keys[nextIndex];
+    setCurrentThemeKey(nextTheme);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('kognos_theme', nextTheme);
+    }
   };
 
   return (

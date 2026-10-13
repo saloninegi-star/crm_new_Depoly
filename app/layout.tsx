@@ -1,9 +1,10 @@
-import './globals.css'; // <-- Yeh line honi zaroori hai!
+import './globals.css';
 import type { Metadata } from 'next';
+import { ThemeProvider } from './context/ThemeContext';
 
 export const metadata: Metadata = {
   title: 'Kognos Rice Mill CRM',
-  description: 'Enterprise ERP & Milling CRM',
+  description: 'Autonomous ERP & Milling Core',
 };
 
 export default function RootLayout({
@@ -13,7 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="antialiased">
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+/* --- Holographic AI Core Keyframe Animations --- */
+
+@keyframes ai-reticle-clockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ai-reticle-counter {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes ai-core-breathe {
+  0%, 100% {
+    transform: scale(0.96);
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+  }
+  50% {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 1));
+  }
+}
+
+@keyframes ai-scanner-beam {
+  0% { top: 0%; opacity: 0.1; }
+  20% { opacity: 0.9; }
+  80% { opacity: 0.9; }
+  100% { top: 97%; opacity: 0.1; }
+}
+
+.animate-ai-clockwise {
+  animation: ai-reticle-clockwise 14s linear infinite;
+}
+
+.animate-ai-counter {
+  animation: ai-reticle-counter 20s linear infinite;
+}
+
+.animate-ai-breathe {
+  animation: ai-core-breathe 2.8s ease-in-out infinite;
+}
+
+.animate-ai-scanner {
+  animation: ai-scanner-beam 3.8s ease-in-out infinite alternate;
+}

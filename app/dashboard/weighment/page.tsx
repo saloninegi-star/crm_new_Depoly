@@ -18,6 +18,7 @@ import {
   Gauge,
   Sparkles,
   AlertTriangle,
+  Check,
 } from 'lucide-react';
 
 interface WeighmentRecord {
@@ -30,8 +31,9 @@ interface WeighmentRecord {
   netWeight: number;   // in KG
   moisture: number;    // %
   deduction: number;   // in KG
-  finalPaddyWeight: number; // after moisture deduction
+  finalPaddyWeight: number;
   godown: string;
+  bay?: string;
   status: 'Waiting Gross' | 'Unloading in Godown' | 'Waiting Tare' | 'Completed & Billed';
   time: string;
 }
@@ -49,6 +51,7 @@ const INITIAL_RECORDS: WeighmentRecord[] = [
     deduction: 0,
     finalPaddyWeight: 24800,
     godown: 'Godown #01',
+    bay: 'Bay #1',
     status: 'Completed & Billed',
     time: '12:45 PM',
   },
@@ -64,6 +67,7 @@ const INITIAL_RECORDS: WeighmentRecord[] = [
     deduction: 0,
     finalPaddyWeight: 31200,
     godown: 'Godown #02',
+    bay: 'Bay #2',
     status: 'Unloading in Godown',
     time: '13:25 PM',
   },
@@ -75,11 +79,12 @@ const INITIAL_RECORDS: WeighmentRecord[] = [
     grossWeight: 42100,
     tareWeight: 13700,
     netWeight: 28400,
-    moisture: 15.2, // 15.2% moisture has deduction
+    moisture: 15.2,
     deduction: 340,
     finalPaddyWeight: 28060,
     godown: 'Godown #03',
-    status: 'Waiting Tare',
+    bay: 'Bay #1',
+    status: 'Unloading in Godown',
     time: '13:50 PM',
   },
   {
@@ -87,14 +92,15 @@ const INITIAL_RECORDS: WeighmentRecord[] = [
     vehicle: 'DL 01 AB 7741',
     farmer: 'Gurmeet Farm Lot',
     variety: '1509 Basmati',
-    grossWeight: 0,
+    grossWeight: 35800,
     tareWeight: 0,
     netWeight: 0,
     moisture: 14.0,
     deduction: 0,
     finalPaddyWeight: 0,
     godown: 'Godown #02',
-    status: 'Waiting Gross',
+    bay: 'Bay #3',
+    status: 'Unloading in Godown',
     time: '14:05 PM',
   },
   {
@@ -116,13 +122,13 @@ const INITIAL_RECORDS: WeighmentRecord[] = [
 
 export default function WeighbridgePage() {
   const { currentTheme } = useTheme();
-  const [role, setRole] = useState<'admin' | 'gate_guard'>('admin');
+  const [role, setRole] = useState('superadmin');
   const [records, setRecords] = useState<WeighmentRecord[]>(INITIAL_RECORDS);
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSlip, setSelectedSlip] = useState<WeighmentRecord | null>(null);
 
-  // Digital Scale Live weight simulation (KG)
+  // Digital scale simulation
   const [liveScaleWeight, setLiveScaleWeight] = useState(38420);
 
   useEffect(() => {
@@ -132,7 +138,6 @@ export default function WeighbridgePage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Form State for Weighment Recording
   const [weighForm, setWeighForm] = useState({
     token: '#TK-4824',
     vehicle: 'DL 01 AB 7741',
@@ -147,36 +152,27 @@ export default function WeighbridgePage() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const directRole = localStorage.getItem('user_role');
-    const kognosRoleStr = localStorage.getItem('kognos_role');
+    const kognosRole = localStorage.getItem('kognos_role');
 
-    if (directRole === 'gate_guard') {
-      setRole('gate_guard');
-      return;
-    }
-
-    if (kognosRoleStr) {
+    let detected = directRole || '';
+    if (!detected && kognosRole) {
       try {
-        const parsed = JSON.parse(kognosRoleStr);
-        if (parsed.id === 'gate_guard') {
-          setRole('gate_guard');
-          return;
-        }
-      } catch {
-        // ignore
-      }
+        const parsed = JSON.parse(kognosRole);
+        detected = parsed.id || '';
+      } catch {}
     }
 
-    setRole('admin');
+    if (detected) {
+      setRole(detected.toLowerCase().trim());
+    }
   }, []);
 
-  // Auto-calculate Net Weight and Moisture Deduction (PDF Page 2 Formula)
   const gross = Number(weighForm.grossWeight) || 0;
   const tare = Number(weighForm.tareWeight) || 0;
   const rawNet = Math.max(0, gross - tare);
   const moistureVal = Number(weighForm.moisture) || 14.0;
-  // Agar moisture > 14% hai toh 1% par 10kg/ton deduction
   const excessMoisture = Math.max(0, moistureVal - 14.0);
-  const calculatedDeduction = Math.round((rawNet * (excessMoisture * 0.015)));
+  const calculatedDeduction = Math.round(rawNet * (excessMoisture * 0.015));
   const finalPaddy = Math.max(0, rawNet - calculatedDeduction);
 
   const handleRecordWeight = (e: React.FormEvent) => {
@@ -204,6 +200,21 @@ export default function WeighbridgePage() {
     if (slipItem) setSelectedSlip(slipItem);
   };
 
+  const handleConfirmUnloadForGodown = (token: string) => {
+    setRecords(
+      records.map((r) => {
+        if (r.token === token) {
+          return { ...r, status: 'Waiting Tare' as const };
+        }
+        return r;
+      })
+    );
+  };
+
+  const isGodownStaff = role === 'godown_incharge' || role === 'paddy_stock';
+  const isGateGuard = role === 'gate_guard';
+  const isWeighbridgeStaff = role === 'weighbridge' || role === 'superadmin' || role === 'admin' || role === 'owner';
+
   const filteredRecords = records.filter(
     (item) =>
       item.token.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -213,32 +224,27 @@ export default function WeighbridgePage() {
 
   return (
     <div className="space-y-6">
-      {/* ========================================================= */}
-      {/* TOP HEADER */}
-      {/* ========================================================= */}
+      {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span
-              className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider text-white"
-              style={{ backgroundColor: currentTheme.buttonBg }}
-            >
-              PDF Checkpoint #2
-            </span>
-            <h1 className="text-xl font-bold text-slate-900">
-              {role === 'gate_guard'
-                ? 'Weighbridge Queue & Exit Clearance'
-                : 'Weighbridge Integration & Tare/Gross Station'}
-            </h1>
-          </div>
+          <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider text-white" style={{ backgroundColor: currentTheme.buttonBg }}>
+            {isGodownStaff ? 'Godown Unloading Desk' : 'PDF Checkpoint #2'}
+          </span>
+          <h1 className="text-xl font-bold text-slate-900 mt-1">
+            {isGodownStaff
+              ? 'Truck Inward Unloading & Tare Clearance'
+              : isGateGuard
+              ? 'Weighbridge Queue & Exit Clearance'
+              : 'Weighbridge Integration & Tare/Gross Station'}
+          </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            {role === 'gate_guard'
-              ? 'Trucks awaiting Gross weighment and empty trucks waiting for Tare exit clearance'
+            {isGodownStaff
+              ? 'Confirm truck unloading at assigned Godown bays so vehicles can proceed to Tare weighment'
               : 'Gross & Tare capture, Auto-calc net weight, Moisture deduction & Godown lot transfer'}
           </p>
         </div>
 
-        {role === 'admin' && (
+        {isWeighbridgeStaff && (
           <button
             onClick={() => setIsModalOpen(true)}
             className="px-4 py-2.5 rounded-xl text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm cursor-pointer transition-transform active:scale-95"
@@ -250,12 +256,34 @@ export default function WeighbridgePage() {
         )}
       </div>
 
-      {/* ========================================================= */}
-      {/* DIGITAL WEIGHBRIDGE SCALE SIMULATION (PDF Page 2) */}
-      {/* ========================================================= */}
-      {role === 'admin' && (
+      {/* GODOWN INCHARGE VIEW: Trucks at Unloading Bays */}
+      {isGodownStaff && (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <span className="text-xs font-semibold text-slate-400">Trucks at Unloading Bays</span>
+            <div className="text-2xl font-black text-blue-600">
+              {records.filter((r) => r.status === 'Unloading in Godown').length} Vehicles
+            </div>
+            <div className="text-[11px] text-slate-400">Paddy stacking in progress</div>
+          </div>
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <span className="text-xs font-semibold text-slate-400">Paddy Being Unloaded</span>
+            <div className="text-2xl font-black text-slate-900">81.6 MT</div>
+            <div className="text-[11px] text-emerald-600 font-semibold">1,820 Total Bags</div>
+          </div>
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <span className="text-xs font-semibold text-slate-400">Cleared for Tare Scale</span>
+            <div className="text-2xl font-black text-emerald-600">
+              {records.filter((r) => r.status === 'Waiting Tare' || r.status === 'Completed & Billed').length} Trucks
+            </div>
+            <div className="text-[11px] text-slate-400">Unloading verified</div>
+          </div>
+        </div>
+      )}
+
+      {/* DIGITAL SCALE SENSOR (Visible for Weighbridge Staff) */}
+      {isWeighbridgeStaff && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          {/* Digital Scale Readout */}
           <div className="lg:col-span-5 p-5 rounded-2xl bg-slate-900 text-white shadow-md flex flex-col justify-between border border-slate-800">
             <div className="flex items-center justify-between text-slate-400">
               <div className="flex items-center gap-2">
@@ -284,7 +312,6 @@ export default function WeighbridgePage() {
             </div>
           </div>
 
-          {/* KPI Summary for Weighbridge */}
           <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
               <div className="text-xs font-semibold text-slate-400">Waiting for Gross Wt</div>
@@ -311,71 +338,27 @@ export default function WeighbridgePage() {
         </div>
       )}
 
-      {/* ========================================================= */}
-      {/* GATE GUARD VIEW: QUEUE & CLEARANCE CARDS */}
-      {/* ========================================================= */}
-      {role === 'gate_guard' && (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between">
-            <div>
-              <div className="text-xs font-bold text-amber-900">Step 1: Gross Weight Queue</div>
-              <div className="text-xl font-black text-amber-800">
-                {records.filter((r) => r.status === 'Waiting Gross').length} Trucks
-              </div>
-              <div className="text-[10px] text-amber-700">Awaiting 1st weighment</div>
-            </div>
-            <Truck className="w-8 h-8 text-amber-500 opacity-80" />
-          </div>
-
-          <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-between">
-            <div>
-              <div className="text-xs font-bold text-blue-900">Step 2: Unloading in Mill</div>
-              <div className="text-xl font-black text-blue-800">
-                {records.filter((r) => r.status === 'Unloading in Godown').length} Trucks
-              </div>
-              <div className="text-[10px] text-blue-700">Paddy transfer lot-wise</div>
-            </div>
-            <Warehouse className="w-8 h-8 text-blue-500 opacity-80" />
-          </div>
-
-          <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between">
-            <div>
-              <div className="text-xs font-bold text-emerald-900">Step 3: Ready for Exit Pass</div>
-              <div className="text-xl font-black text-emerald-800">
-                {records.filter((r) => r.status === 'Completed & Billed').length} Trucks
-              </div>
-              <div className="text-[10px] text-emerald-700">Tare done & verified</div>
-            </div>
-            <CheckCircle2 className="w-8 h-8 text-emerald-500 opacity-80" />
-          </div>
-        </div>
-      )}
-
-      {/* ========================================================= */}
-      {/* WEIGHBRIDGE REGISTER TABLE (PDF Page 2 Structure) */}
-      {/* ========================================================= */}
+      {/* WEIGHMENT / UNLOADING REGISTER TABLE */}
       <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 className="text-base font-bold text-slate-900">
-              {role === 'gate_guard' ? 'Weighbridge Queue & Exit Status' : 'Master Weighment Register'}
+              {isGodownStaff ? 'Truck Unloading Register & Tare Handover' : 'Master Weighment Register'}
             </h2>
             <p className="text-xs text-slate-400">
-              PDF Flow: Gross Weight &rarr; Tare Weight &rarr; Net Paddy Auto-calc &rarr; Moisture Deduction
+              PDF Flow: Gross Weight &rarr; Godown Unload &rarr; Tare Weight &rarr; Final Net Stock
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
-              <input
-                type="text"
-                placeholder="Search token, vehicle, farmer..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:outline-none focus:border-emerald-500 w-56 sm:w-64"
-              />
-            </div>
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
+            <input
+              type="text"
+              placeholder="Search token, vehicle, farmer..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:outline-none focus:border-emerald-500 w-56 sm:w-64"
+            />
           </div>
         </div>
 
@@ -386,13 +369,12 @@ export default function WeighbridgePage() {
                 <th className="pb-3">Token No</th>
                 <th className="pb-3">Vehicle Number</th>
                 <th className="pb-3">Farmer / Source</th>
-                <th className="pb-3">Gross Wt (KG)</th>
-                <th className="pb-3">Tare Wt (KG)</th>
-                <th className="pb-3">Net Paddy (KG)</th>
-                <th className="pb-3">Moisture %</th>
-                <th className="pb-3">Godown</th>
+                <th className="pb-3">Assigned Godown</th>
+                <th className="pb-3">Gross Wt</th>
+                <th className="pb-3">Tare Wt</th>
+                <th className="pb-3">Net Paddy</th>
                 <th className="pb-3">Status</th>
-                <th className="pb-3 text-right">Weigh Slip</th>
+                <th className="pb-3 text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
@@ -404,6 +386,9 @@ export default function WeighbridgePage() {
                     <div className="font-semibold text-slate-800">{row.farmer}</div>
                     <div className="text-[10px] text-slate-400">{row.variety}</div>
                   </td>
+                  <td className="py-3.5 font-semibold text-blue-700">
+                    {row.godown} {row.bay ? `(${row.bay})` : ''}
+                  </td>
                   <td className="py-3.5 font-mono">
                     {row.grossWeight > 0 ? `${row.grossWeight.toLocaleString()} KG` : <span className="text-slate-400">Pending</span>}
                   </td>
@@ -413,16 +398,6 @@ export default function WeighbridgePage() {
                   <td className="py-3.5 font-mono font-bold text-emerald-700">
                     {row.finalPaddyWeight > 0 ? `${row.finalPaddyWeight.toLocaleString()} KG` : <span className="text-slate-400">-</span>}
                   </td>
-                  <td className="py-3.5">
-                    <span className="inline-flex items-center gap-1 font-semibold text-slate-700">
-                      <Droplets className="w-3 h-3 text-blue-500" />
-                      {row.moisture}%
-                    </span>
-                    {row.deduction > 0 && (
-                      <div className="text-[10px] text-rose-500 font-bold">-{row.deduction} KG Cut</div>
-                    )}
-                  </td>
-                  <td className="py-3.5 text-slate-600">{row.godown}</td>
                   <td className="py-3.5">
                     <span
                       className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${
@@ -440,7 +415,16 @@ export default function WeighbridgePage() {
                     </span>
                   </td>
                   <td className="py-3.5 text-right">
-                    {row.finalPaddyWeight > 0 ? (
+                    {isGodownStaff && row.status === 'Unloading in Godown' ? (
+                      <button
+                        onClick={() => handleConfirmUnloadForGodown(row.token)}
+                        className="px-2.5 py-1 rounded-md text-[11px] font-bold text-white shadow-xs cursor-pointer inline-flex items-center gap-1"
+                        style={{ backgroundColor: currentTheme.buttonBg }}
+                      >
+                        <Check className="w-3 h-3" />
+                        <span>Send to Tare</span>
+                      </button>
+                    ) : row.finalPaddyWeight > 0 ? (
                       <button
                         onClick={() => setSelectedSlip(row)}
                         className="px-2.5 py-1 rounded-md text-[11px] font-semibold border border-slate-200 text-slate-700 hover:bg-slate-100 cursor-pointer inline-flex items-center gap-1"
@@ -449,7 +433,7 @@ export default function WeighbridgePage() {
                         <span>Slip</span>
                       </button>
                     ) : (
-                      <span className="text-[10px] text-slate-400 italic">In Progress</span>
+                      <span className="text-[10px] text-slate-400 italic">In Queue</span>
                     )}
                   </td>
                 </tr>
@@ -459,23 +443,16 @@ export default function WeighbridgePage() {
         </div>
       </div>
 
-      {/* ========================================================= */}
-      {/* MODAL: RECORD WEIGHMENT WITH AUTO-CALC (PDF Page 2) */}
-      {/* ========================================================= */}
+      {/* RECORD WEIGHMENT MODAL */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full border border-slate-200 shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-bold text-slate-900">
-                  Record Weighment (Gross & Tare Integration)
-                </h3>
+                <h3 className="text-sm font-bold text-slate-900">Record Weighment (Gross & Tare Integration)</h3>
                 <p className="text-[11px] text-slate-400">PDF Formula: Net Wt = Gross - Tare - Moisture Cut</p>
               </div>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600"
-              >
+              <button onClick={() => setIsModalOpen(false)} className="p-1 rounded-lg text-slate-400 hover:text-slate-600">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -529,7 +506,6 @@ export default function WeighbridgePage() {
                   <input
                     type="number"
                     required
-                    placeholder="e.g. 38400"
                     value={weighForm.grossWeight}
                     onChange={(e) => setWeighForm({ ...weighForm, grossWeight: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono font-bold outline-none focus:border-emerald-500"
@@ -540,7 +516,6 @@ export default function WeighbridgePage() {
                   <label className="text-[11px] font-bold text-slate-700">Tare Weight (Empty Truck) KG</label>
                   <input
                     type="number"
-                    placeholder="e.g. 13600 (leave 0 if 1st weighment)"
                     value={weighForm.tareWeight}
                     onChange={(e) => setWeighForm({ ...weighForm, tareWeight: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono font-bold outline-none focus:border-emerald-500"
@@ -553,44 +528,33 @@ export default function WeighbridgePage() {
                 <input
                   type="number"
                   step="0.1"
-                  placeholder="e.g. 14.5"
                   value={weighForm.moisture}
                   onChange={(e) => setWeighForm({ ...weighForm, moisture: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs outline-none focus:border-emerald-500"
                 />
-                <span className="text-[10px] text-slate-400">Standard base: 14.0%. Excess moisture auto-deducted.</span>
               </div>
 
-              {/* Real-time Calculation Summary Box */}
               <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
                 <div className="flex justify-between text-slate-600">
                   <span>Net Weight (Gross - Tare):</span>
                   <span className="font-mono font-bold text-slate-900">{rawNet.toLocaleString()} KG</span>
                 </div>
                 <div className="flex justify-between text-rose-600">
-                  <span>Moisture Deduction (Cut):</span>
+                  <span>Moisture Deduction:</span>
                   <span className="font-mono font-bold">-{calculatedDeduction.toLocaleString()} KG</span>
                 </div>
                 <div className="flex justify-between border-t border-slate-200 pt-1 font-bold text-emerald-700">
-                  <span>Final Paddy to Godown Stock:</span>
-                  <span className="font-mono text-sm">{finalPaddy.toLocaleString()} KG ({ (finalPaddy/1000).toFixed(2) } MT)</span>
+                  <span>Final Paddy to Godown:</span>
+                  <span className="font-mono text-sm">{finalPaddy.toLocaleString()} KG ({(finalPaddy / 1000).toFixed(2)} MT)</span>
                 </div>
               </div>
 
               <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
-                >
+                <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700">
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-xl text-xs font-bold text-white shadow-sm cursor-pointer"
-                  style={{ backgroundColor: currentTheme.buttonBg }}
-                >
-                  Save & Move to Paddy Stock
+                <button type="submit" className="px-5 py-2 rounded-xl text-xs font-bold text-white shadow-sm" style={{ backgroundColor: currentTheme.buttonBg }}>
+                  Save & Move to Godown Stock
                 </button>
               </div>
             </form>
@@ -598,24 +562,18 @@ export default function WeighbridgePage() {
         </div>
       )}
 
-      {/* ========================================================= */}
-      {/* DHARAM KANTA / WEIGHMENT SLIP MODAL (PDF Dharam Kanta Parchi) */}
-      {/* ========================================================= */}
+      {/* WEIGHMENT SLIP MODAL */}
       {selectedSlip && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4">
           <div className="bg-white rounded-2xl max-w-sm w-full border border-slate-200 shadow-2xl p-6 space-y-4">
             <div className="text-center border-b border-dashed border-slate-200 pb-3">
-              <h4 className="font-black text-sm tracking-tight text-slate-900">
-                KOGNOS RICE MILL • DHARAM KANTA
-              </h4>
-              <p className="text-[10px] uppercase font-bold text-slate-400">
-                Computerized Weighment Slip (Scale #01)
-              </p>
+              <h4 className="font-black text-sm tracking-tight text-slate-900">KOGNOS RICE MILL • DHARAM KANTA</h4>
+              <p className="text-[10px] uppercase font-bold text-slate-400">Computerized Weighment Slip (Scale #01)</p>
             </div>
 
             <div className="space-y-2 text-xs">
               <div className="flex justify-between border-b border-slate-100 pb-1">
-                <span className="text-slate-400">Token / Slip No:</span>
+                <span className="text-slate-400">Token No:</span>
                 <span className="font-mono font-bold text-slate-900">{selectedSlip.token}</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 pb-1">
@@ -623,47 +581,32 @@ export default function WeighbridgePage() {
                 <span className="font-mono font-bold text-slate-900">{selectedSlip.vehicle}</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 pb-1">
-                <span className="text-slate-400">Farmer / Supplier:</span>
+                <span className="text-slate-400">Farmer:</span>
                 <span className="font-semibold text-slate-900">{selectedSlip.farmer}</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 pb-1">
-                <span className="text-slate-400">Gross Weight:</span>
-                <span className="font-mono font-bold text-slate-900">{selectedSlip.grossWeight.toLocaleString()} KG</span>
+                <span className="text-slate-400">Gross Wt:</span>
+                <span className="font-mono font-bold">{selectedSlip.grossWeight.toLocaleString()} KG</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 pb-1">
-                <span className="text-slate-400">Tare Weight:</span>
-                <span className="font-mono font-bold text-slate-900">{selectedSlip.tareWeight.toLocaleString()} KG</span>
-              </div>
-              <div className="flex justify-between border-b border-slate-100 pb-1 text-slate-800">
-                <span className="text-slate-500">Net Paddy Weight:</span>
-                <span className="font-mono font-bold">{selectedSlip.netWeight.toLocaleString()} KG</span>
+                <span className="text-slate-400">Tare Wt:</span>
+                <span className="font-mono font-bold">{selectedSlip.tareWeight.toLocaleString()} KG</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 pb-1 text-rose-600">
-                <span>Moisture Deduction ({selectedSlip.moisture}%):</span>
+                <span>Moisture Cut:</span>
                 <span className="font-mono font-bold">-{selectedSlip.deduction} KG</span>
               </div>
               <div className="flex justify-between pt-1 text-emerald-700 font-bold text-sm">
                 <span>Final Stock Wt:</span>
                 <span className="font-mono">{selectedSlip.finalPaddyWeight.toLocaleString()} KG</span>
               </div>
-              <div className="flex justify-between text-[11px] text-slate-500 pt-1">
-                <span>Godown Destination:</span>
-                <span className="font-semibold text-slate-800">{selectedSlip.godown}</span>
-              </div>
             </div>
 
             <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-              <button
-                onClick={() => setSelectedSlip(null)}
-                className="w-1/2 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50"
-              >
+              <button onClick={() => setSelectedSlip(null)} className="w-1/2 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700">
                 Close
               </button>
-              <button
-                onClick={() => window.print()}
-                className="w-1/2 py-2 rounded-xl text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm"
-                style={{ backgroundColor: currentTheme.buttonBg }}
-              >
+              <button onClick={() => window.print()} className="w-1/2 py-2 rounded-xl text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm" style={{ backgroundColor: currentTheme.buttonBg }}>
                 <Printer className="w-3.5 h-3.5" />
                 <span>Print Slip</span>
               </button>

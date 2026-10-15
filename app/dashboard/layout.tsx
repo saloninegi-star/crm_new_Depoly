@@ -14,6 +14,10 @@ import {
   Send,
   Calculator,
   FileBarChart2,
+  CalendarCheck,
+  HardHat,
+  Banknote,
+  Users,
   Menu,
   X,
   Palette,
@@ -25,7 +29,7 @@ import {
   UserCheck,
 } from 'lucide-react';
 
-// Sabhi menu items
+// Sabhi menu items (Owner has access to EVERYTHING, including all HR modules)
 const ALL_NAV_ITEMS = [
   {
     name: 'Dashboard',
@@ -34,79 +38,109 @@ const ALL_NAV_ITEMS = [
     roles: [
       'superadmin',
       'admin',
+      'owner',
       'gate_guard',
       'weighbridge',
       'paddy_stock',
+      'godown_incharge',
       'milling',
       'finished_stock',
       'sales_dispatch',
       'accounts',
+      'hr',
     ],
   },
+  // HR & Labour Modules (Visible to Owner & HR)
+  {
+    name: 'HR & Labour Hub',
+    href: '/dashboard/hr',
+    icon: Users,
+    roles: ['superadmin', 'admin', 'owner', 'hr'],
+  },
+  {
+    name: 'Staff Attendance & Shifts',
+    href: '/dashboard/hr/attendance',
+    icon: CalendarCheck,
+    roles: ['superadmin', 'admin', 'owner', 'hr'],
+  },
+  {
+    name: 'Palledar & Hamali Labour',
+    href: '/dashboard/hr/labour',
+    icon: HardHat,
+    roles: ['superadmin', 'admin', 'owner', 'hr'],
+  },
+  {
+    name: 'Wages & Advances (Kharcha)',
+    href: '/dashboard/hr/payroll',
+    icon: Banknote,
+    roles: ['superadmin', 'admin', 'owner', 'hr'],
+  },
+  // Mill Operational Modules
   {
     name: 'Gate Inward',
     href: '/dashboard/gate',
     icon: Truck,
-    roles: ['superadmin', 'admin', 'gate_guard'],
+    roles: ['superadmin', 'admin', 'owner', 'gate_guard'],
   },
   {
     name: 'Weighbridge Queue',
     href: '/dashboard/weighment',
     icon: Scale,
-    roles: ['superadmin', 'admin', 'gate_guard', 'weighbridge'],
+    roles: ['superadmin', 'admin', 'owner', 'gate_guard', 'weighbridge', 'godown_incharge'],
   },
   {
     name: 'Paddy Stock (FIFO)',
     href: '/dashboard/godown',
     icon: Warehouse,
-    roles: ['superadmin', 'admin', 'paddy_stock'],
+    roles: ['superadmin', 'admin', 'owner', 'paddy_stock', 'godown_incharge'],
   },
   {
     name: 'Milling & Recovery',
     href: '/dashboard/milling',
     icon: Cog,
-    roles: ['superadmin', 'admin', 'milling'],
+    roles: ['superadmin', 'admin', 'owner', 'milling'],
   },
   {
     name: 'Finished Stock (Bagging)',
     href: '/dashboard/packaging',
     icon: Package,
-    roles: ['superadmin', 'admin', 'finished_stock'],
+    roles: ['superadmin', 'admin', 'owner', 'finished_stock'],
   },
   {
     name: 'Sales & Dispatch (LR)',
     href: '/dashboard/sales',
     icon: Send,
-    roles: ['superadmin', 'admin', 'sales_dispatch'],
+    roles: ['superadmin', 'admin', 'owner', 'sales_dispatch'],
   },
   {
     name: 'Accounts & Ledgers',
     href: '/dashboard/accounts',
     icon: Calculator,
-    roles: ['superadmin', 'admin', 'accounts'],
+    roles: ['superadmin', 'admin', 'owner', 'accounts'],
   },
   {
     name: 'Reports & P&L',
     href: '/dashboard/reports',
     icon: FileBarChart2,
-    roles: ['superadmin', 'admin', 'accounts'],
+    roles: ['superadmin', 'admin', 'owner', 'accounts'],
   },
 ];
 
-// Role details for bottom badge & header
-const ROLE_DETAILS: Record<string, { label: string; desc: string }> = {
-  superadmin: { label: 'Owner / SuperAdmin', desc: 'Full Mill Control & P&L' },
-  admin: { label: 'Owner / SuperAdmin', desc: 'Full Mill Control & P&L' },
-  gate_guard: { label: 'Gate Security Guard', desc: 'Checkpoint #1 Entry' },
-  weighbridge: { label: 'Weighbridge Operator', desc: 'Gross & Tare Weighment' },
-  paddy_stock: { label: 'Paddy Godown In-charge', desc: 'FIFO Stock & Lot Ledgers' },
-  milling: { label: 'Milling Supervisor', desc: 'Shift & Recovery Yield %' },
-  finished_stock: { label: 'Finished Stock Supervisor', desc: 'Bagging & Central Godown' },
-  sales_dispatch: { label: 'Sales & Dispatch Head', desc: 'Sales Order & LR / Bilty' },
-  accounts: { label: 'Accounts Officer', desc: 'Cash, Bank, Ledger & Tax' },
+const ROLE_DETAILS: Record<string, { label: string; defaultName: string }> = {
+  superadmin: { label: 'Owner / SuperAdmin', defaultName: 'Mill Owner' },
+  admin: { label: 'Owner / SuperAdmin', defaultName: 'Mill Owner' },
+  owner: { label: 'Owner / SuperAdmin', defaultName: 'Mill Owner' },
+  gate_guard: { label: 'Gate Security Guard', defaultName: 'Suraj' },
+  weighbridge: { label: 'Weighbridge Operator', defaultName: 'Scale Operator' },
+  godown_incharge: { label: 'Paddy Godown In-charge', defaultName: 'Suresh Gupta' },
+  paddy_stock: { label: 'Paddy Godown In-charge', defaultName: 'Suresh Gupta' },
+  hr: { label: 'HR & Labour Manager', defaultName: 'Saloni Negi' },
+  milling: { label: 'Milling Supervisor', defaultName: 'Milling Head' },
+  finished_stock: { label: 'Packaging Supervisor', defaultName: 'Packaging Head' },
+  sales_dispatch: { label: 'Sales & Dispatch Head', defaultName: 'Dispatch Manager' },
+  accounts: { label: 'Accounts Officer', defaultName: 'Cashier / Accountant' },
 };
 
-// Safe role normalizer
 const getNormalizedRole = (rawRole: string | null): string => {
   if (!rawRole) return 'superadmin';
   try {
@@ -114,9 +148,7 @@ const getNormalizedRole = (rawRole: string | null): string => {
     if (parsed && typeof parsed === 'object' && parsed.id) {
       return getNormalizedRole(parsed.id);
     }
-  } catch {
-    // raw string
-  }
+  } catch {}
   const clean = rawRole.toLowerCase().trim();
   if (clean === 'admin' || clean === 'owner' || clean === 'superadmin') {
     return 'superadmin';
@@ -130,35 +162,77 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const { currentTheme, cycleTheme } = useTheme();
 
   const [userRole, setUserRole] = useState('superadmin');
-  const [userEmail, setUserEmail] = useState('');
+  const [personName, setPersonName] = useState('');
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+
     const directRole = localStorage.getItem('user_role');
     const kognosRoleStr = localStorage.getItem('kognos_role');
-    const email = localStorage.getItem('kognos_user') || '';
-    setUserEmail(email);
+    const storedUserName = localStorage.getItem('kognos_user') || '';
+    const profileStr = localStorage.getItem('user_profile');
 
     const detectedRole = getNormalizedRole(directRole || kognosRoleStr);
     setUserRole(detectedRole);
+
+    let realName = '';
+
+    if (profileStr) {
+      try {
+        const parsedProfile = JSON.parse(profileStr);
+        if (parsedProfile?.name) {
+          realName = parsedProfile.name;
+        }
+      } catch {}
+    }
+
+    if (!realName && storedUserName) {
+      realName = storedUserName.replace(/\s*\(.*?\)\s*/g, '').replace(/Mobile:\s*\d+/gi, '').trim();
+    }
+
+    const meta = ROLE_DETAILS[detectedRole];
+    if (detectedRole === 'hr') {
+      if (!realName || realName.toLowerCase().includes('owner') || realName.toLowerCase().includes('authorized')) {
+        realName = 'Saloni Negi';
+      }
+    } else if (detectedRole === 'godown_incharge' || detectedRole === 'paddy_stock') {
+      if (!realName || realName.toLowerCase().includes('owner') || realName.toLowerCase().includes('authorized')) {
+        realName = 'Suresh Gupta';
+      }
+    } else if (detectedRole === 'gate_guard') {
+      if (!realName || realName.toLowerCase().includes('owner') || realName.toLowerCase().includes('authorized')) {
+        realName = 'Suraj';
+      }
+    } else if (!realName || realName.toLowerCase().includes('authorized')) {
+      realName = meta?.defaultName || 'Mill Owner';
+    }
+
+    const formatted = realName
+      .split(' ')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+      .join(' ');
+
+    setPersonName(formatted);
   }, []);
 
-  const handleLogout = () => {
+  const handleConfirmLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('token_type');
     localStorage.removeItem('user_role');
     localStorage.removeItem('kognos_role');
     localStorage.removeItem('kognos_user');
+    localStorage.removeItem('user_profile');
+    setShowLogoutModal(false);
     router.push('/');
   };
 
-  // Safe navigation filtering:
-  // Agar user Owner/Superadmin hai toh SARE items dikhenge!
-  // Agar specific staff role hai toh sirf uske allowed items dikhenge.
-  const isOwner = userRole === 'superadmin' || userRole === 'admin';
+  const isOwner = userRole === 'superadmin' || userRole === 'admin' || userRole === 'owner';
   const visibleNavItems = isOwner
     ? ALL_NAV_ITEMS
     : ALL_NAV_ITEMS.filter((item) => item.roles?.includes(userRole));
@@ -208,7 +282,7 @@ export default function DashboardLayout({
             </button>
           </div>
 
-          {/* Menu Items */}
+          {/* Menu Items (Scrollable) */}
           <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
             <div className="text-[10px] font-bold tracking-wider text-slate-400 uppercase px-3 mb-2">
               {currentRoleMeta.label} Menu
@@ -222,7 +296,7 @@ export default function DashboardLayout({
                   key={item.name}
                   href={item.href}
                   onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+                  className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                     isActive
                       ? 'text-white shadow-sm'
                       : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
@@ -244,9 +318,9 @@ export default function DashboardLayout({
           {/* User Profile Card */}
           <div className="p-4 border-t border-slate-100">
             <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-2.5 min-w-0">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  className={`w-8 h-8 rounded-full shrink-0 flex items-center justify-center ${
                     isOwner
                       ? 'bg-slate-200 text-slate-700'
                       : 'bg-emerald-100 text-emerald-800'
@@ -262,8 +336,8 @@ export default function DashboardLayout({
                   <div className="text-xs font-bold text-slate-800 leading-tight truncate">
                     {currentRoleMeta.label}
                   </div>
-                  <div className="text-[10px] text-slate-400 truncate">
-                    {userEmail || currentRoleMeta.desc}
+                  <div className="text-[11px] font-semibold text-emerald-700 truncate">
+                    {personName}
                   </div>
                 </div>
               </div>
@@ -271,7 +345,7 @@ export default function DashboardLayout({
             </div>
 
             <button
-              onClick={handleLogout}
+              onClick={() => setShowLogoutModal(true)}
               className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
@@ -297,7 +371,7 @@ export default function DashboardLayout({
                 {currentRoleMeta.label} Desk
               </h1>
               <p className="text-[11px] text-slate-400 hidden sm:block">
-                {currentRoleMeta.desc} • Shift #1 Active
+                Shift #1 Active • Operations Live
               </p>
             </div>
           </div>
@@ -326,6 +400,49 @@ export default function DashboardLayout({
           {children}
         </main>
       </div>
+
+      {/* Confirmation Modal */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4 animate-in fade-in duration-150">
+          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 space-y-4 animate-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between">
+              <div className="w-11 h-11 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center">
+                <LogOut className="w-5 h-5" />
+              </div>
+              <button
+                onClick={() => setShowLogoutModal(false)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-1">
+              <h3 className="text-base font-bold text-slate-900">Sign Out Confirmation</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Are you sure you want to sign out of your session? You will need to verify your credentials to log in again.
+              </p>
+            </div>
+
+            <div className="pt-2 flex items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => setShowLogoutModal(false)}
+                className="w-1/2 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmLogout}
+                className="w-1/2 py-2.5 rounded-xl bg-rose-600 text-white text-xs font-bold hover:bg-rose-700 transition-colors cursor-pointer shadow-sm shadow-rose-600/20"
+              >
+                Yes, Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

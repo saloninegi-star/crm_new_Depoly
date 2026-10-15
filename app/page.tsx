@@ -3,43 +3,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { THEME_PRESETS, ThemeKey } from './themeConfig';
-import { authService } from '../services/authService'; // <-- Imported from services
+import { authService, StaffRoleType } from '../services/authService';
 import axios from 'axios';
 import {
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  ChevronDown,
-  CheckCircle2,
-  ShieldCheck,
-  Truck,
-  Scale,
-  Warehouse,
-  Cog,
-  Package,
-  Send,
-  Calculator,
-  Radio,
-  Target,
-  Sparkles,
-  Palette,
   Smartphone,
   KeyRound,
+  CheckCircle2,
   AlertCircle,
   RefreshCw,
+  Palette,
+  ArrowRight,
+  ShieldCheck,
+  Target,
+  Radio,
+  Sparkles,
 } from 'lucide-react';
-
-const ROLES = [
-  { id: 'superadmin', label: 'SuperAdmin / Owner', desc: 'Live Dashboard & P&L (OTP Login)', icon: ShieldCheck },
-  { id: 'gate_guard', label: 'Gate Guard / Security', desc: 'Vehicle Entry & Token', icon: Truck },
-  { id: 'weighbridge', label: 'Weighbridge Operator', desc: 'Gross & Tare Weighment', icon: Scale },
-  { id: 'paddy_stock', label: 'Paddy Godown In-charge', desc: 'Lot Creation & FIFO', icon: Warehouse },
-  { id: 'milling', label: 'Milling Supervisor', desc: 'Shift Batches & Recovery %', icon: Cog },
-  { id: 'finished_stock', label: 'Packaging & Finished Stock', desc: '20/50kg Bagging & Godown', icon: Package },
-  { id: 'sales_dispatch', label: 'Sales & Dispatch In-charge', desc: 'Sales Order & LR / Bilty', icon: Send },
-  { id: 'accounts', label: 'Accounts Officer / Cashier', desc: 'Cash Book, Bank & GST', icon: Calculator },
-];
 
 function NeuralAiCanvas({ waveColor }: { waveColor: string }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -192,7 +170,7 @@ function NeuralAiCanvas({ waveColor }: { waveColor: string }) {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 pointer-events-none z-1 opacity-70"
+      className="absolute inset-0 pointer-events-none z-1 opacity-70 w-full h-full"
     />
   );
 }
@@ -200,21 +178,14 @@ function NeuralAiCanvas({ waveColor }: { waveColor: string }) {
 export default function LoginPage() {
   const router = useRouter();
   const [currentThemeKey, setCurrentThemeKey] = useState<ThemeKey>('emerald');
-  const [selectedRole, setSelectedRole] = useState(ROLES[0]);
-  const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
-  // OTP Login States (Owner API via Axios)
-  const [mobile, setMobile] = useState('9876543210');
+  const [mobile, setMobile] = useState('');
   const [otp, setOtp] = useState('');
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+  const [detectedType, setDetectedType] = useState<StaffRoleType>('owner');
   const [apiMessage, setApiMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-
-  // Password Login States (Staff roles fallback)
-  const [email, setEmail] = useState('superadmin@kognosrice.com');
-  const [password, setPassword] = useState('••••••••••••');
 
   const [synapsesActive, setSynapsesActive] = useState(42);
   const [lotIntegrity, setLotIntegrity] = useState(99.98);
@@ -229,21 +200,9 @@ export default function LoginPage() {
     return () => clearInterval(timer);
   }, []);
 
-  const handleRoleSelect = (role: (typeof ROLES)[0]) => {
-    setSelectedRole(role);
-    setIsRoleDropdownOpen(false);
-    setApiMessage(null);
-    setIsOtpSent(false);
-    setOtp('');
-    setEmail(`${role.id}@kognosrice.com`);
-  };
-
-  // -------------------------------------------------------------
-  // 1. SEND OTP USING AXIOS SERVICE
-  // -------------------------------------------------------------
   const handleSendOtp = async () => {
     if (!mobile || mobile.length < 10) {
-      setApiMessage({ type: 'error', text: 'Kripya 10-digit valid mobile number enter karein.' });
+      setApiMessage({ type: 'error', text: 'Please enter a valid 10-digit mobile number.' });
       return;
     }
 
@@ -251,23 +210,24 @@ export default function LoginPage() {
     setApiMessage(null);
 
     try {
-      const data = await authService.sendOtp(mobile.trim());
+      const result = await authService.sendOtp(mobile.trim());
       setIsOtpSent(true);
+      setDetectedType(result.detectedType);
 
-      if (data.otp) {
-        setOtp(data.otp);
+      if (result.data.otp) {
+        setOtp(result.data.otp);
         setApiMessage({
           type: 'success',
-          text: `${data.detail || 'OTP Sent!'} (Test OTP: ${data.otp})`,
+          text: `OTP sent successfully! (Test OTP: ${result.data.otp})`,
         });
       } else {
         setApiMessage({
           type: 'success',
-          text: data.detail || `OTP mobile no. ${mobile} par bhej diya gaya hai.`,
+          text: result.data.detail || `OTP has been sent to +91 ${mobile}.`,
         });
       }
     } catch (err: unknown) {
-      let errorMsg = 'OTP send karne mein samasya aayi. Kripya punah prayas karein.';
+      let errorMsg = 'Mobile number is not registered or server is unreachable.';
       if (axios.isAxiosError(err)) {
         errorMsg = err.response?.data?.detail || err.message || errorMsg;
       }
@@ -277,9 +237,6 @@ export default function LoginPage() {
     }
   };
 
-  // -------------------------------------------------------------
-  // 2. VERIFY OTP & LOGIN USING AXIOS SERVICE
-  // -------------------------------------------------------------
   const handleVerifyOtpAndLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -289,7 +246,7 @@ export default function LoginPage() {
     }
 
     if (!otp || otp.length < 4) {
-      setApiMessage({ type: 'error', text: 'Kripya 6-digit OTP enter karein.' });
+      setApiMessage({ type: 'error', text: 'Please enter the 6-digit OTP.' });
       return;
     }
 
@@ -297,26 +254,35 @@ export default function LoginPage() {
     setApiMessage(null);
 
     try {
-      const data = await authService.loginWithOtp(mobile.trim(), otp.trim());
+      const user = await authService.loginWithOtp(mobile.trim(), otp.trim(), detectedType);
 
-      setApiMessage({ type: 'success', text: 'Login safal! Dashboard load ho raha hai...' });
+      setApiMessage({
+        type: 'success',
+        text: `Authentication successful! Loading ${user.user_name} workspace...`,
+      });
 
-      // Save Tokens & Roles in LocalStorage
-      localStorage.setItem('access_token', data.access_token);
-      localStorage.setItem('token_type', data.token_type || 'bearer');
-      localStorage.setItem('user_role', data.role || 'superadmin');
+      localStorage.setItem('access_token', user.access_token);
+      localStorage.setItem('token_type', user.token_type);
+      localStorage.setItem('user_role', user.role);
       localStorage.setItem(
         'kognos_role',
-        JSON.stringify({ id: data.role || 'superadmin', label: 'Owner / SuperAdmin' })
+        JSON.stringify({ id: user.role, label: user.user_name })
       );
-      localStorage.setItem('kognos_user', `Mobile: ${mobile}`);
+      localStorage.setItem('kognos_user', user.user_name);
+
+      if (user.profile) {
+        localStorage.setItem('user_profile', JSON.stringify(user.profile));
+      } else {
+        localStorage.removeItem('user_profile');
+      }
+
       localStorage.setItem('kognos_theme', currentThemeKey);
 
       setTimeout(() => {
         router.push('/dashboard');
       }, 500);
     } catch (err: unknown) {
-      let errorMsg = 'Galat OTP enter kiya gaya hai. Kripya check karein.';
+      let errorMsg = 'Invalid OTP entered. Please check and try again.';
       if (axios.isAxiosError(err)) {
         errorMsg = err.response?.data?.detail || err.message || errorMsg;
       }
@@ -324,16 +290,6 @@ export default function LoginPage() {
     } finally {
       setIsVerifyingOtp(false);
     }
-  };
-
-  // Staff roles fallback
-  const handleStaffPasswordLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    localStorage.setItem('user_role', selectedRole.id);
-    localStorage.setItem('kognos_role', JSON.stringify(selectedRole));
-    localStorage.setItem('kognos_theme', currentThemeKey);
-    localStorage.setItem('kognos_user', email);
-    router.push('/dashboard');
   };
 
   const cycleTheme = () => {
@@ -346,14 +302,11 @@ export default function LoginPage() {
     }
   };
 
-  const isOwnerSelected = selectedRole.id === 'superadmin';
-
   return (
     <div className="min-h-screen w-full bg-[#f8faf9] flex items-center justify-center p-3 sm:p-6 font-sans">
-      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[590px] border border-slate-100 relative">
-
-        {/* Left Side Graphic */}
-        <div className="lg:col-span-5 relative overflow-hidden flex flex-col justify-between p-8 sm:p-11 text-white min-h-[380px] lg:min-h-[590px]">
+      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[580px] border border-slate-100 relative">
+        {/* Left Side: Neural AI Branding */}
+        <div className="lg:col-span-5 relative overflow-hidden flex flex-col justify-between p-8 sm:p-11 text-white min-h-[380px] lg:min-h-[580px]">
           <div className="absolute inset-0 pointer-events-none z-0">
             <svg
               className="w-full h-full object-cover"
@@ -375,12 +328,16 @@ export default function LoginPage() {
           </div>
 
           <NeuralAiCanvas waveColor={currentTheme.waveSecondary} />
+          <div className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none animate-ai-scanner shadow-[0_0_12px_#ffffff] z-1" />
 
           <div className="relative z-10 space-y-4 pt-1">
             <div className="flex items-center gap-4">
               <div className="relative w-14 h-14 flex items-center justify-center shrink-0">
                 <div className="absolute inset-0 rounded-full border-2 border-dashed border-white/60 animate-ai-clockwise" />
                 <div className="absolute inset-1.5 rounded-full border border-dotted border-white/80 animate-ai-counter" />
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
+                  <Target className="w-12 h-12 text-white" />
+                </div>
                 <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-lg animate-ai-breathe">
                   <div
                     className="w-2.5 h-2.5 rounded-full"
@@ -390,8 +347,8 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <h1 className="text-2xl sm:text-3xl font-black tracking-tight drop-shadow-sm leading-none">
-                  Kognos Rice Mill CRM
+                <h1 className="text-2xl sm:text-3xl font-black tracking-tight drop-shadow-sm leading-none text-white">
+                  Kognos Rice Mill
                 </h1>
                 <div className="flex items-center gap-1.5 mt-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
@@ -407,7 +364,7 @@ export default function LoginPage() {
                 Autonomous Milling Operations
               </p>
               <p className="text-xs sm:text-[13px] text-white/85 leading-relaxed font-normal">
-                Paddy Inward, Weighbridge Tare-Gross, Godown FIFO Ledger, Machine Recovery, aur Accounts realtime AI monitor mein synced hain.
+                Paddy Inward, Weighbridge Tare-Gross, Godown FIFO Ledger, and Accounts synchronized in real-time.
               </p>
             </div>
           </div>
@@ -428,47 +385,46 @@ export default function LoginPage() {
 
             <div className="text-[10px] font-mono text-white/70 flex items-center justify-between px-1">
               <span>NODE: #KOGNOS-MILL-01</span>
-              <span>AXIOS AUTH SERVICE</span>
+              <span>LIVE AI MONITOR</span>
             </div>
           </div>
         </div>
 
-        {/* Right Side Form */}
-        <div className="lg:col-span-7 flex flex-col justify-center px-8 sm:px-14 py-10 sm:py-12 bg-white relative">
-          <div className="absolute top-5 right-6 z-20 flex items-center gap-2">
+        {/* Right Side: Login Form */}
+        <div className="lg:col-span-7 flex flex-col justify-center px-6 sm:px-14 py-8 sm:py-12 bg-white relative">
+          <div className="absolute top-4 right-5 z-20 flex items-center gap-2">
             <button
               type="button"
               onClick={cycleTheme}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-sm cursor-pointer transition-all"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-xs cursor-pointer transition-all"
             >
               <Palette className="w-3.5 h-3.5" style={{ color: currentTheme.buttonBg }} />
               <span className="text-[11px]">{currentTheme.name}</span>
-              <span
-                className="w-2.5 h-2.5 rounded-full inline-block"
-                style={{ backgroundColor: currentTheme.dotColor }}
-              />
             </button>
           </div>
 
-          <div className="max-w-md w-full mx-auto space-y-6 pt-2">
-            <div className="text-center sm:text-left space-y-1">
+          <div className="max-w-md w-full mx-auto space-y-6">
+            <div className="space-y-1 text-center sm:text-left">
+              <div className="flex items-center gap-2 mb-1">
+                <ShieldCheck className="w-5 h-5" style={{ color: currentTheme.buttonBg }} />
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  Authorized Sign In
+                </span>
+              </div>
               <h2
-                className="text-2xl sm:text-3xl font-bold tracking-tight"
+                className="text-2xl sm:text-3xl font-black tracking-tight"
                 style={{ color: currentTheme.headingColor }}
               >
-                Sign In to Kognos CRM
+                Sign In to Kognos
               </h2>
-              <p className="text-xs font-normal text-slate-500">
-                {isOwnerSelected
-                  ? 'Owner OTP Login — Mobile par OTP prapt karke login karein'
-                  : 'Apne staff role credentials se sign in karein'}
+              <p className="text-xs text-slate-500">
+                Enter your registered mobile number to receive an OTP and sign in.
               </p>
             </div>
 
-            {/* Notification Alert Box */}
             {apiMessage && (
               <div
-                className={`p-3 rounded-xl text-xs flex items-center gap-2.5 transition-all ${
+                className={`p-3.5 rounded-2xl text-xs flex items-center gap-2.5 transition-all ${
                   apiMessage.type === 'success'
                     ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
                     : 'bg-rose-50 text-rose-800 border border-rose-200'
@@ -483,211 +439,93 @@ export default function LoginPage() {
               </div>
             )}
 
-            {/* Role Dropdown */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
-                className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-xs transition-all border border-slate-200/60 hover:border-slate-300"
-                style={{ backgroundColor: currentTheme.inputBg }}
-              >
-                <div className="flex items-center gap-3">
-                  <selectedRole.icon
-                    className="w-4 h-4 shrink-0"
-                    style={{ color: currentTheme.buttonBg }}
-                  />
-                  <div>
-                    <div className="font-semibold text-slate-800">{selectedRole.label}</div>
-                    <div className="text-[10px] text-slate-400">{selectedRole.desc}</div>
-                  </div>
-                </div>
-                <ChevronDown
-                  className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
-                    isRoleDropdownOpen ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-
-              {isRoleDropdownOpen && (
-                <div className="absolute top-full left-0 right-0 mt-2 max-h-56 overflow-y-auto rounded-xl bg-white border border-slate-100 shadow-xl z-50 p-1.5 space-y-1">
-                  {ROLES.map((role) => {
-                    const RoleIcon = role.icon;
-                    const isSelected = role.id === selectedRole.id;
-                    return (
-                      <button
-                        key={role.id}
-                        type="button"
-                        onClick={() => handleRoleSelect(role)}
-                        className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left text-xs transition-colors cursor-pointer ${
-                          isSelected
-                            ? 'bg-slate-100 text-slate-900 font-semibold'
-                            : 'hover:bg-slate-50 text-slate-700'
-                        }`}
-                      >
-                        <RoleIcon className="w-3.5 h-3.5" style={{ color: currentTheme.buttonBg }} />
-                        <div className="flex-1">
-                          <div>{role.label}</div>
-                          <div className="text-[10px] text-slate-400">{role.desc}</div>
-                        </div>
-                        {isSelected && (
-                          <CheckCircle2 className="w-3.5 h-3.5" style={{ color: currentTheme.buttonBg }} />
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* OWNER AXIOS OTP FORM */}
-            {isOwnerSelected ? (
-              <form onSubmit={handleVerifyOtpAndLogin} className="space-y-4">
-                <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-slate-700">Registered Mobile Number</label>
-                  <div
-                    className="flex items-center px-4 py-2.5 rounded-xl border border-slate-200/60 focus-within:border-slate-400"
-                    style={{ backgroundColor: currentTheme.inputBg }}
-                  >
-                    <Smartphone className="w-4 h-4 text-slate-400 mr-2.5 shrink-0" />
-                    <span className="text-xs font-semibold text-slate-500 mr-1.5">+91</span>
-                    <input
-                      type="tel"
-                      required
-                      maxLength={10}
-                      value={mobile}
-                      onChange={(e) => setMobile(e.target.value.replace(/\D/g, ''))}
-                      placeholder="9876543210"
-                      className="w-full bg-transparent text-xs font-mono font-bold text-slate-900 outline-none"
-                    />
-                    <button
-                      type="button"
-                      disabled={isSendingOtp || !mobile || mobile.length < 10}
-                      onClick={handleSendOtp}
-                      className="px-3 py-1.5 rounded-lg text-white text-[11px] font-bold shrink-0 transition-all cursor-pointer disabled:opacity-50"
-                      style={{ backgroundColor: currentTheme.buttonBg }}
-                    >
-                      {isSendingOtp ? (
-                        <RefreshCw className="w-3 h-3 animate-spin" />
-                      ) : isOtpSent ? (
-                        'Resend OTP'
-                      ) : (
-                        'Send OTP'
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                {/* OTP Input appeared on successful send */}
-                {isOtpSent && (
-                  <div className="space-y-1 animate-in fade-in duration-200">
-                    <div className="flex justify-between items-center">
-                      <label className="text-[11px] font-bold text-slate-700">Enter 6-Digit OTP</label>
-                      <span className="text-[10px] text-emerald-600 font-semibold font-mono">
-                        Sent to {mobile}
-                      </span>
-                    </div>
-                    <div
-                      className="flex items-center px-4 py-3 rounded-xl border border-slate-200/60 focus-within:border-emerald-500"
-                      style={{ backgroundColor: currentTheme.inputBg }}
-                    >
-                      <KeyRound className="w-4 h-4 text-slate-400 mr-3 shrink-0" />
-                      <input
-                        type="text"
-                        required
-                        maxLength={6}
-                        value={otp}
-                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                        placeholder="e.g. 123456"
-                        className="w-full bg-transparent text-sm font-mono font-black tracking-widest text-slate-900 outline-none"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    disabled={isVerifyingOtp || isSendingOtp}
-                    className="w-full py-3.5 rounded-full text-white font-bold text-xs tracking-wider uppercase transition-all duration-300 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-50"
-                    style={{
-                      backgroundColor: currentTheme.buttonBg,
-                      boxShadow: currentTheme.buttonShadow,
-                    }}
-                  >
-                    {isVerifyingOtp ? (
-                      <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                    ) : isOtpSent ? (
-                      <span>VERIFY & LOG IN AS OWNER</span>
-                    ) : (
-                      <span>SEND OTP TO LOGIN</span>
-                    )}
-                  </button>
-                </div>
-              </form>
-            ) : (
-              /* STAFF ROLE PASSWORD FORM */
-              <form onSubmit={handleStaffPasswordLogin} className="space-y-4">
+            <form onSubmit={handleVerifyOtpAndLogin} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-700">Registered Mobile Number</label>
                 <div
-                  className="flex items-center px-4 py-3.5 rounded-xl border border-slate-200/60"
+                  className="flex items-center px-4 py-3 rounded-2xl border border-slate-200/80 focus-within:border-emerald-500 transition-all shadow-xs"
                   style={{ backgroundColor: currentTheme.inputBg }}
                 >
-                  <Mail className="w-4 h-4 text-slate-400 mr-3 shrink-0" />
+                  <Smartphone className="w-4 h-4 text-slate-400 mr-2.5 shrink-0" />
+                  <span className="text-xs font-semibold text-slate-500 mr-1.5">+91</span>
                   <input
-                    type="email"
+                    type="tel"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Staff Official Email"
-                    className="w-full bg-transparent text-xs text-slate-800 placeholder-slate-400 outline-none"
-                  />
-                </div>
-
-                <div
-                  className="flex items-center px-4 py-3.5 rounded-xl border border-slate-200/60"
-                  style={{ backgroundColor: currentTheme.inputBg }}
-                >
-                  <Lock className="w-4 h-4 text-slate-400 mr-3 shrink-0" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Security Password"
-                    className="w-full bg-transparent text-xs text-slate-800 placeholder-slate-400 outline-none"
+                    maxLength={10}
+                    value={mobile}
+                    onChange={(e) => setMobile(e.target.value.replace(/\D/g, ''))}
+                    placeholder="Enter 10-digit number"
+                    className="w-full bg-transparent text-sm font-mono font-bold text-slate-900 outline-none"
                   />
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="text-slate-400 hover:text-slate-600 ml-2 cursor-pointer"
+                    disabled={isSendingOtp || !mobile || mobile.length < 10}
+                    onClick={handleSendOtp}
+                    className="px-3.5 py-1.5 rounded-xl text-white text-xs font-bold shrink-0 cursor-pointer disabled:opacity-40 transition-all shadow-xs"
+                    style={{ backgroundColor: currentTheme.buttonBg }}
                   >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {isSendingOtp ? (
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    ) : isOtpSent ? (
+                      'Resend'
+                    ) : (
+                      'Send OTP'
+                    )}
                   </button>
                 </div>
+              </div>
 
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    className="w-full py-3.5 rounded-full text-white font-bold text-xs tracking-wider uppercase transition-all duration-300 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-                    style={{
-                      backgroundColor: currentTheme.buttonBg,
-                      boxShadow: currentTheme.buttonShadow,
-                    }}
+              {isOtpSent && (
+                <div className="space-y-1.5 animate-in fade-in zoom-in-95 duration-200">
+                  <div className="flex justify-between items-center">
+                    <label className="text-xs font-bold text-slate-700">Enter 6-Digit OTP</label>
+                    <span className="text-[11px] text-emerald-600 font-mono font-semibold">
+                      Sent to +91 {mobile}
+                    </span>
+                  </div>
+                  <div
+                    className="flex items-center px-4 py-3 rounded-2xl border border-slate-200/80 focus-within:border-emerald-500 transition-all shadow-xs"
+                    style={{ backgroundColor: currentTheme.inputBg }}
                   >
-                    <span>SIGN IN AS {selectedRole.label.split('/')[0].toUpperCase()}</span>
-                  </button>
+                    <KeyRound className="w-4 h-4 text-slate-400 mr-3 shrink-0" />
+                    <input
+                      type="text"
+                      required
+                      maxLength={6}
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                      placeholder="e.g. 123456"
+                      className="w-full bg-transparent text-base font-mono font-black tracking-widest text-slate-900 outline-none"
+                    />
+                  </div>
                 </div>
-              </form>
-            )}
+              )}
 
-            <div className="pt-3 text-center text-[11px] text-slate-400 border-t border-slate-100">
-              Axios Service Connected:{' '}
-              <span className="font-mono text-emerald-600 font-semibold">
-                authService.loginWithOtp()
-              </span>
-            </div>
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  disabled={isVerifyingOtp || isSendingOtp}
+                  className="w-full py-4 rounded-full text-white font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-50 transition-all active:scale-[0.99]"
+                  style={{
+                    backgroundColor: currentTheme.buttonBg,
+                    boxShadow: currentTheme.buttonShadow,
+                  }}
+                >
+                  {isVerifyingOtp ? (
+                    <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                  ) : isOtpSent ? (
+                    <span className="flex items-center gap-1.5">
+                      <span>VERIFY & OPEN DASHBOARD</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </span>
+                  ) : (
+                    <span>SEND OTP TO LOGIN</span>
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-
       </div>
     </div>
   );

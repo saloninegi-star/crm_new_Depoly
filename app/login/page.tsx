@@ -177,9 +177,28 @@ function NeuralAiCanvas({ waveColor }: { waveColor: string }) {
   );
 }
 
+// Helper: Safely extract error string
+function extractErrorMessage(err: unknown): string {
+  if (axios.isAxiosError(err)) {
+    const detail = err.response?.data?.detail;
+    if (typeof detail === 'string') return detail;
+    if (Array.isArray(detail)) {
+      return detail
+        .map((item: any) => (typeof item === 'string' ? item : item.msg || JSON.stringify(item)))
+        .join(' | ');
+    }
+    if (detail && typeof detail === 'object') return JSON.stringify(detail);
+    return err.response?.data?.message || err.message || 'Server request failed';
+  }
+  if (err instanceof Error) return err.message;
+  return 'An unexpected error occurred';
+}
+
 export default function LoginPage() {
   const router = useRouter();
-  const [currentThemeKey, setCurrentThemeKey] = useState<ThemeKey>('darkGreen');
+
+  // Valid ThemeKey: 'emerald' (Deep Forest Green)
+  const [currentThemeKey, setCurrentThemeKey] = useState<ThemeKey>('emerald');
 
   const [mobile, setMobile] = useState('');
   const [otp, setOtp] = useState('');
@@ -192,7 +211,8 @@ export default function LoginPage() {
   const [synapsesActive, setSynapsesActive] = useState(42);
   const [lotIntegrity, setLotIntegrity] = useState(99.98);
 
-  const currentTheme = THEME_PRESETS[currentThemeKey] || Object.values(THEME_PRESETS)[0];
+  // Safe fallback to prevent undefined
+  const currentTheme = THEME_PRESETS[currentThemeKey] || THEME_PRESETS.emerald;
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -238,11 +258,7 @@ export default function LoginPage() {
         });
       }
     } catch (err: unknown) {
-      let errorMsg = 'Mobile number is not registered or server is unreachable.';
-      if (axios.isAxiosError(err)) {
-        errorMsg = err.response?.data?.detail || err.message || errorMsg;
-      }
-      setApiMessage({ type: 'error', text: errorMsg });
+      setApiMessage({ type: 'error', text: extractErrorMessage(err) });
     } finally {
       setIsSendingOtp(false);
     }
@@ -293,11 +309,7 @@ export default function LoginPage() {
         router.push('/dashboard');
       }, 500);
     } catch (err: unknown) {
-      let errorMsg = 'Invalid OTP entered. Please verify and try again.';
-      if (axios.isAxiosError(err)) {
-        errorMsg = err.response?.data?.detail || err.message || errorMsg;
-      }
-      setApiMessage({ type: 'error', text: errorMsg });
+      setApiMessage({ type: 'error', text: extractErrorMessage(err) });
     } finally {
       setIsVerifyingOtp(false);
     }
@@ -315,10 +327,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen w-full bg-[#f8faf9] flex items-center justify-center p-3 sm:p-6 font-sans relative">
-      
-      {/* ========================================================= */}
-      {/* TOP LEFT: BACK TO HOMEPAGE BUTTON                         */}
-      {/* ========================================================= */}
+      {/* Top Left: Back to Home Button */}
       <Link
         href="/"
         className="absolute top-4 left-4 sm:top-6 sm:left-6 z-40 inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/90 hover:bg-white text-slate-700 hover:text-slate-900 border border-slate-200/80 shadow-xs text-xs font-bold backdrop-blur-md transition-all active:scale-95 cursor-pointer"
@@ -329,13 +338,9 @@ export default function LoginPage() {
 
       {/* Main Container Card */}
       <div className="w-full max-w-5xl bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[580px] border border-slate-100 relative mt-12 sm:mt-0">
-        
-        {/* ========================================================= */}
-        {/* LEFT SIDE: NEURAL AI BRANDING (RESPONSIVE & PADDED)       */}
-        {/* ========================================================= */}
+        {/* Left Side: Neural AI Branding */}
         <div className="lg:col-span-5 relative overflow-hidden flex flex-col justify-between p-6 sm:p-9 lg:p-10 text-white min-h-[360px] lg:min-h-[580px]">
-          
-          {/* Background SVG Wave - Enhanced width for safe padding */}
+          {/* Background SVG Wave */}
           <div className="absolute inset-0 pointer-events-none z-0 w-full h-full overflow-hidden">
             <svg
               className="w-full h-full object-cover"
@@ -359,7 +364,7 @@ export default function LoginPage() {
           <NeuralAiCanvas waveColor={currentTheme.waveSecondary} />
           <div className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none animate-ai-scanner shadow-[0_0_12px_#ffffff] z-1" />
 
-          {/* Text Content - Safe Max Width & Right Padding prevents clipping */}
+          {/* Text Content - Safe Padding & Width */}
           <div className="relative z-10 space-y-4 pt-1 pr-6 sm:pr-8 max-w-[88%] sm:max-w-[85%]">
             <div className="flex items-center gap-3.5">
               <div className="relative w-12 h-12 sm:w-13 sm:h-13 flex items-center justify-center shrink-0">
@@ -421,12 +426,8 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* ========================================================= */}
-        {/* RIGHT SIDE: LOGIN FORM                                    */}
-        {/* ========================================================= */}
+        {/* Right Side: Login Form */}
         <div className="lg:col-span-7 flex flex-col justify-center px-6 sm:px-12 lg:px-14 py-8 sm:py-12 bg-white relative">
-          
-          {/* Theme Palette Button */}
           <div className="absolute top-4 right-5 z-20 flex items-center gap-2">
             <button
               type="button"
@@ -564,7 +565,6 @@ export default function LoginPage() {
             </form>
           </div>
         </div>
-
       </div>
     </div>
   );

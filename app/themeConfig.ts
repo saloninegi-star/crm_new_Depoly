@@ -1,8 +1,21 @@
-// themeConfig.ts
 export type ThemeKey = 'emerald' | 'amber' | 'sapphire' | 'graphite';
 
+// Added missing ThemeColors Interface
+export interface ThemeColors {
+  name: string;
+  dotColor: string;
+  wavePrimary: string;
+  waveSecondary: string;
+  headingColor: string;
+  subHeadingColor: string;
+  buttonBg: string;
+  buttonHover: string;
+  buttonShadow: string;
+  inputBg: string;
+}
+
 export const THEME_PRESETS: Record<ThemeKey, ThemeColors> = {
-  // Dark Green Theme
+  // Dark Green Theme (Default)
   emerald: {
     name: 'Deep Forest Green',
     dotColor: '#065f46',
@@ -44,7 +57,7 @@ export const THEME_PRESETS: Record<ThemeKey, ThemeColors> = {
     inputBg: '#f0f4f9',
   },
 
-  // Graphite Theme (Same)
+  // Graphite Theme
   graphite: {
     name: 'Modern Graphite',
     dotColor: '#334155',

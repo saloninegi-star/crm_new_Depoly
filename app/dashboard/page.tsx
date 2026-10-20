@@ -26,7 +26,28 @@ import {
   ArrowRight,
   Flame,
   FileCheck,
+  DollarSign,
+  AlertTriangle,
+  Users,
+  HardHat,
+  CalendarCheck,
+  Banknote,
 } from 'lucide-react';
+
+const getNormalizedRole = (rawRole: string | null): string => {
+  if (!rawRole) return 'superadmin';
+  try {
+    const parsed = JSON.parse(rawRole);
+    if (parsed && typeof parsed === 'object' && parsed.id) {
+      return getNormalizedRole(parsed.id);
+    }
+  } catch {}
+  const clean = rawRole.toLowerCase().trim();
+  if (clean === 'admin' || clean === 'owner' || clean === 'superadmin') {
+    return 'superadmin';
+  }
+  return clean;
+};
 
 export default function DashboardPage() {
   const { currentTheme } = useTheme();
@@ -37,21 +58,184 @@ export default function DashboardPage() {
     const directRole = localStorage.getItem('user_role');
     const kognosRole = localStorage.getItem('kognos_role');
 
-    let detected = directRole || '';
-    if (!detected && kognosRole) {
-      try {
-        const parsed = JSON.parse(kognosRole);
-        detected = parsed.id || '';
-      } catch {}
-    }
-
-    if (detected) {
-      setRole(detected.toLowerCase().trim());
-    }
+    const detected = getNormalizedRole(directRole || kognosRole);
+    setRole(detected);
   }, []);
 
   // =========================================================================
-  // 1. PADDY GODOWN IN-CHARGE DASHBOARD (PDF Page 2 & 3: FIFO Queue & Stock)
+  // 1. ACCOUNTS OFFICER DASHBOARD (PDF Page 5 & 6: Cash, Bank, Receivables, Payables)
+  // =========================================================================
+  if (role === 'accounts') {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <div className="flex items-center justify-between text-slate-400">
+              <span className="text-xs font-semibold">Cash in Hand (Petty Cash)</span>
+              <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600">
+                <Wallet className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="text-2xl font-black text-slate-900">₹3,45,200</div>
+            <div className="text-[11px] text-emerald-600 font-semibold">Daily Cash Book Closed</div>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <div className="flex items-center justify-between text-slate-400">
+              <span className="text-xs font-semibold">Bank Balance (RTGS/NEFT)</span>
+              <div className="p-2 rounded-xl bg-blue-50 text-blue-600">
+                <Building className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="text-2xl font-black text-blue-600">₹48,92,400</div>
+            <div className="text-[11px] text-slate-400">Farmer RTGS Reconciled</div>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <div className="flex items-center justify-between text-slate-400">
+              <span className="text-xs font-semibold">Buyer Receivables</span>
+              <div className="p-2 rounded-xl bg-amber-50 text-amber-600">
+                <CreditCard className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="text-2xl font-black text-amber-600">₹18,40,000</div>
+            <div className="text-[11px] text-amber-700 font-bold">2 Parties Overdue Alert</div>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <div className="flex items-center justify-between text-slate-400">
+              <span className="text-xs font-semibold">Farmer & Mandi Payables</span>
+              <div className="p-2 rounded-xl bg-rose-50 text-rose-600">
+                <FileSpreadsheet className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="text-2xl font-black text-rose-600">₹12,75,000</div>
+            <div className="text-[11px] text-slate-400">Paddy purchase settlements</div>
+          </div>
+        </div>
+
+        {/* Payments Settlement Pipeline & Quick Actions */}
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 className="text-base font-bold text-slate-900">Operations Payment Pipeline </h2>
+              <p className="text-xs text-slate-400">Auto-linked from Paddy Purchase & Rice Sales to Cash/Bank ledger</p>
+            </div>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Ledger Synchronized
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="p-4 rounded-xl border border-slate-100 bg-slate-50 space-y-1.5">
+              <div className="flex justify-between text-xs text-slate-500">
+                <span>1. Farmer Payments (Paddy)</span>
+                <span className="font-bold text-rose-600">Due Today</span>
+              </div>
+              <div className="text-xl font-bold text-slate-900">₹8,40,000</div>
+              <div className="text-[11px] text-slate-400">Settled directly via Bank RTGS</div>
+            </div>
+
+            <div className="p-4 rounded-xl border border-slate-100 bg-slate-50 space-y-1.5">
+              <div className="flex justify-between text-xs text-slate-500">
+                <span>2. Transport & Freight</span>
+                <span className="font-bold text-blue-600">12 Trucks</span>
+              </div>
+              <div className="text-xl font-bold text-slate-900">₹1,18,000</div>
+              <div className="text-[11px] text-slate-400">Bilty & LR auto-cleared</div>
+            </div>
+
+            <div className="p-4 rounded-xl border border-slate-100 bg-slate-50 space-y-1.5">
+              <div className="flex justify-between text-xs text-slate-500">
+                <span>3. Mandi Commission (Arhat)</span>
+                <span className="font-bold text-amber-600">Rate 1.5%</span>
+              </div>
+              <div className="text-xl font-bold text-slate-900">₹45,200</div>
+              <div className="text-[11px] text-slate-400">Agent brokerage ledger credit</div>
+            </div>
+          </div>
+
+          <div className="border-t border-slate-100 pt-4 flex flex-wrap items-center justify-between gap-3">
+            <span className="text-xs font-semibold text-slate-600">Accounts Action Desk</span>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                className="px-3 py-1.5 rounded-xl text-white text-xs font-semibold shadow-xs flex items-center gap-1.5 cursor-pointer"
+                style={{ backgroundColor: currentTheme.buttonBg }}
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Record RTGS Payment</span>
+              </button>
+              <button className="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 cursor-pointer">
+                Record Sales Inward
+              </button>
+              <button className="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 cursor-pointer">
+                Daily Cash Denomination Close
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Receivables & Mill Running Expenses */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+            <div className="flex justify-between items-center">
+              <h3 className="font-bold text-sm text-slate-900">Buyer Receivables Aging Alerts</h3>
+              <span className="text-xs font-bold text-amber-700">₹18,40,000 Due</span>
+            </div>
+            <div className="space-y-2 text-xs">
+              <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200 flex justify-between items-center">
+                <div>
+                  <div className="font-bold text-amber-950">Shree Krishna Traders (Delhi)</div>
+                  <div className="text-[10px] text-amber-800">Invoice #INV-401 • Overdue by 12 Days</div>
+                </div>
+                <span className="font-mono font-bold text-amber-950">₹7,50,000</span>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
+                <div>
+                  <div className="font-bold text-slate-800">Aggarwal Foods (Kanpur)</div>
+                  <div className="text-[10px] text-slate-400">Invoice #INV-403 • Due in 5 days</div>
+                </div>
+                <span className="font-mono font-bold text-slate-900">₹6,20,000</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+            <div className="flex justify-between items-center">
+              <h3 className="font-bold text-sm text-slate-900">Mill Running Expenses (PDF Note 5)</h3>
+              <span className="text-xs font-bold text-rose-600">Total: ₹2,71,600</span>
+            </div>
+            <div className="space-y-2 text-xs">
+              <div className="p-3 rounded-xl bg-slate-50 flex justify-between items-center">
+                <div>
+                  <div className="font-bold text-slate-800">Electricity & Power (Discom)</div>
+                  <div className="text-[10px] text-slate-400">Main grid power + Boiler steam fuel</div>
+                </div>
+                <span className="font-mono font-bold text-slate-900">₹1,85,000</span>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-50 flex justify-between items-center">
+                <div>
+                  <div className="font-bold text-slate-800">Palledar Labour & Hamali</div>
+                  <div className="text-[10px] text-slate-400">3 Gangs • Bag unloading & godown stacking</div>
+                </div>
+                <span className="font-mono font-bold text-slate-900">₹64,200</span>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-50 flex justify-between items-center">
+                <div>
+                  <div className="font-bold text-slate-800">Machine Maintenance & Spares</div>
+                  <div className="text-[10px] text-slate-400">Rubber rollers, grease, elevator belts</div>
+                </div>
+                <span className="font-mono font-bold text-slate-900">₹22,400</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // =========================================================================
+  // 2. PADDY GODOWN IN-CHARGE (PDF Page 2 & 3: FIFO Queue & Stock)
   // =========================================================================
   if (role === 'godown_incharge' || role === 'paddy_stock') {
     return (
@@ -197,7 +381,7 @@ export default function DashboardPage() {
   }
 
   // =========================================================================
-  // 2. HR & LABOUR MANAGEMENT DASHBOARD (PDF Page 6: Labour Charges & Shifts)
+  // 3. HR & LABOUR MANAGEMENT DASHBOARD (PDF Page 6: Labour Charges & Shifts)
   // =========================================================================
   if (role === 'hr') {
     return (
@@ -228,7 +412,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Live Labour Gang Tracking */}
         <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex justify-between items-center">
             <div>
@@ -284,7 +467,7 @@ export default function DashboardPage() {
   }
 
   // =========================================================================
-  // 3. GATE GUARD DASHBOARD (PDF Page 1 & 2: Checkpoint #1)
+  // 4. GATE GUARD DASHBOARD (PDF Page 1 & 2: Checkpoint #1)
   // =========================================================================
   if (role === 'gate_guard') {
     return (
@@ -339,7 +522,7 @@ export default function DashboardPage() {
                     <td className="py-3">{row.farmer}</td>
                     <td className="py-3">{row.variety}</td>
                     <td className="py-3">
-                      <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">
                         {row.status}
                       </span>
                     </td>
@@ -354,7 +537,7 @@ export default function DashboardPage() {
   }
 
   // =========================================================================
-  // 4. WEIGHBRIDGE OPERATOR DASHBOARD (PDF Page 2: Weighment & Moisture Cut)
+  // 5. WEIGHBRIDGE OPERATOR DASHBOARD (PDF Page 2: Weighment & Moisture Cut)
   // =========================================================================
   if (role === 'weighbridge') {
     return (
@@ -434,7 +617,185 @@ export default function DashboardPage() {
   }
 
   // =========================================================================
-  // 5. SUPERADMIN / OWNER DASHBOARD (PDF Pages 1 to 6 Complete Overview)
+  // 6. MILLING SUPERVISOR DASHBOARD (PDF Page 3 & 4: Milling Yield & Shift)
+  // =========================================================================
+  if (role === 'milling') {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <span className="text-xs font-semibold text-slate-400">Current Recovery Rate</span>
+            <div className="text-2xl font-black text-slate-900">64.8%</div>
+            <div className="text-[11px] text-emerald-600 font-semibold">Standard 60-65% Target OK</div>
+          </div>
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <span className="text-xs font-semibold text-slate-400">Active Batch Running</span>
+            <div className="text-2xl font-black text-amber-600">Batch #B-102</div>
+            <div className="text-[11px] text-slate-400">Machine Line #1 & #2 Active</div>
+          </div>
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <span className="text-xs font-semibold text-slate-400">Shift Paddy Issued</span>
+            <div className="text-2xl font-black text-slate-900">120 MT</div>
+            <div className="text-[11px] text-slate-400">Shift #1 (Morning)</div>
+          </div>
+        </div>
+
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+          <h2 className="text-base font-bold text-slate-900">Milling Split & Output Yield Breakdown</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200">
+              <div className="text-xs text-emerald-800 font-bold">Head Rice (Grade A)</div>
+              <div className="text-xl font-black text-emerald-900">61.2%</div>
+              <div className="text-[10px] text-emerald-700">Auto-moves to Packaging</div>
+            </div>
+            <div className="p-4 rounded-xl bg-amber-50 border border-amber-200">
+              <div className="text-xs text-amber-800 font-bold">Broken Rice</div>
+              <div className="text-xl font-black text-amber-900">11.4%</div>
+              <div className="text-[10px] text-amber-700">Small / Big Broken split</div>
+            </div>
+            <div className="p-4 rounded-xl bg-teal-50 border border-teal-200">
+              <div className="text-xs text-teal-800 font-bold">Rice Bran (Oil)</div>
+              <div className="text-xl font-black text-teal-900">8.6%</div>
+              <div className="text-[10px] text-teal-700">Solvent extraction sale</div>
+            </div>
+            <div className="p-4 rounded-xl bg-slate-100 border border-slate-200">
+              <div className="text-xs text-slate-700 font-bold">Husk (Boiler Fuel)</div>
+              <div className="text-xl font-black text-slate-900">18.8%</div>
+              <div className="text-[10px] text-slate-500">Boiler running stock</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // =========================================================================
+  // 7. PACKAGING & FINISHED INVENTORY DASHBOARD (PDF Page 4: Bagging 20/50kg)
+  // =========================================================================
+  if (role === 'finished_stock') {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <span className="text-xs font-semibold text-slate-400">Total Bags Packed Today</span>
+            <div className="text-2xl font-black text-slate-900">1,840 Bags</div>
+            <div className="text-[11px] text-emerald-600 font-semibold">Quality Passed</div>
+          </div>
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <span className="text-xs font-semibold text-slate-400">50kg Master Bags</span>
+            <div className="text-2xl font-black text-blue-600">1,200 Bags</div>
+            <div className="text-[11px] text-slate-400">Central Finished Godown</div>
+          </div>
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <span className="text-xs font-semibold text-slate-400">20kg Retail Packs</span>
+            <div className="text-2xl font-black text-amber-600">640 Bags</div>
+            <div className="text-[11px] text-slate-400">Ready for dispatch</div>
+          </div>
+        </div>
+
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+          <h2 className="text-base font-bold text-slate-900">Grade-wise Finished Stock (Central Godown)</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="border-b border-slate-100 text-slate-400">
+                  <th className="pb-3">Batch Code</th>
+                  <th className="pb-3">Grade / Product</th>
+                  <th className="pb-3">Packing Type</th>
+                  <th className="pb-3">Stock (Bags)</th>
+                  <th className="pb-3">Net Metric Tonnes</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+                {[
+                  { batch: '#B-101', grade: 'Grade A Head Rice (Basmati 1121)', pack: '50 KG HDPE', bags: 940, mt: '47.0 MT' },
+                  { batch: '#B-102', grade: 'Grade A Head Rice (PR-126)', pack: '20 KG Non-Woven', bags: 520, mt: '10.4 MT' },
+                  { batch: '#B-098', grade: 'Broken Rice (Secondary)', pack: '50 KG Bag', bags: 380, mt: '19.0 MT' },
+                ].map((row) => (
+                  <tr key={row.batch} className="hover:bg-slate-50/70">
+                    <td className="py-3 font-bold text-slate-900">{row.batch}</td>
+                    <td className="py-3 font-semibold">{row.grade}</td>
+                    <td className="py-3">{row.pack}</td>
+                    <td className="py-3 font-mono font-bold">{row.bags} Bags</td>
+                    <td className="py-3 font-mono text-emerald-700">{row.mt}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // =========================================================================
+  // 8. SALES & DISPATCH IN-CHARGE DASHBOARD (PDF Page 4: Sales Orders & LR)
+  // =========================================================================
+  if (role === 'sales_dispatch') {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <span className="text-xs font-semibold text-slate-400">Today Sales Dispatches</span>
+            <div className="text-2xl font-black text-slate-900">₹42.8 Lakh</div>
+            <div className="text-[11px] text-emerald-600 font-semibold">12 Trucks Cleared</div>
+          </div>
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <span className="text-xs font-semibold text-slate-400">Loading Slips Issued</span>
+            <div className="text-2xl font-black text-blue-600">3 Trucks Loading</div>
+            <div className="text-[11px] text-slate-400">At finished godown</div>
+          </div>
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <span className="text-xs font-semibold text-slate-400">Pending Sales Orders</span>
+            <div className="text-2xl font-black text-amber-600">5 Orders</div>
+            <div className="text-[11px] text-slate-400">Bilty to generate</div>
+          </div>
+          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+            <span className="text-xs font-semibold text-slate-400">LR / Bilty Created</span>
+            <div className="text-2xl font-black text-slate-900">12 Slips</div>
+            <div className="text-[11px] text-emerald-600">Transporter assigned</div>
+          </div>
+        </div>
+
+        <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+          <h2 className="text-base font-bold text-slate-900">Live Sales Orders & LR Dispatch Queue</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="border-b border-slate-100 text-slate-400">
+                  <th className="pb-3">Order ID</th>
+                  <th className="pb-3">Buyer / Party</th>
+                  <th className="pb-3">Truck Number</th>
+                  <th className="pb-3">LR / Bilty No</th>
+                  <th className="pb-3">Qty (MT)</th>
+                  <th className="pb-3">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+                {[
+                  { order: '#SO-1089', party: 'Shree Krishna Traders (Delhi)', truck: 'HR 55 C 2019', lr: 'LR-8921', qty: '32.0 MT', status: 'Dispatched & Billed' },
+                  { order: '#SO-1090', party: 'Aggarwal Foods (Kanpur)', truck: 'UP 78 BT 4101', lr: 'LR-8922', qty: '28.0 MT', status: 'Loading in Progress' },
+                  { order: '#SO-1091', party: 'Jai Bharat Rice Overseas', truck: 'PB 10 X 7712', lr: 'LR-8923', qty: '35.0 MT', status: 'Weighment Check' },
+                ].map((row) => (
+                  <tr key={row.order} className="hover:bg-slate-50/70">
+                    <td className="py-3 font-bold text-slate-900">{row.order}</td>
+                    <td className="py-3 font-semibold">{row.party}</td>
+                    <td className="py-3 font-mono">{row.truck}</td>
+                    <td className="py-3 font-mono text-blue-700 font-bold">{row.lr}</td>
+                    <td className="py-3 font-mono">{row.qty}</td>
+                    <td className="py-3"><span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">{row.status}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // =========================================================================
+  // 9. SUPERADMIN / OWNER MASTER DASHBOARD (PDF Pages 1 to 6 Complete Overview)
   // =========================================================================
   return (
     <div className="space-y-6">

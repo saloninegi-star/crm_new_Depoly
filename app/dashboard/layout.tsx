@@ -14,9 +14,6 @@ import {
   Send,
   Calculator,
   FileBarChart2,
-  CalendarCheck,
-  HardHat,
-  Banknote,
   Users,
   Menu,
   X,
@@ -29,7 +26,6 @@ import {
   UserCheck,
 } from 'lucide-react';
 
-// Sabhi menu items (Owner has access to EVERYTHING, including all HR modules)
 const ALL_NAV_ITEMS = [
   {
     name: 'Dashboard',
@@ -50,32 +46,12 @@ const ALL_NAV_ITEMS = [
       'hr',
     ],
   },
-  // HR & Labour Modules (Visible to Owner & HR)
   {
     name: 'HR & Labour Hub',
     href: '/dashboard/hr',
     icon: Users,
     roles: ['superadmin', 'admin', 'owner', 'hr'],
   },
-  {
-    name: 'Staff Attendance & Shifts',
-    href: '/dashboard/hr/attendance',
-    icon: CalendarCheck,
-    roles: ['superadmin', 'admin', 'owner', 'hr'],
-  },
-  {
-    name: 'Palledar & Hamali Labour',
-    href: '/dashboard/hr/labour',
-    icon: HardHat,
-    roles: ['superadmin', 'admin', 'owner', 'hr'],
-  },
-  {
-    name: 'Wages & Advances (Kharcha)',
-    href: '/dashboard/hr/payroll',
-    icon: Banknote,
-    roles: ['superadmin', 'admin', 'owner', 'hr'],
-  },
-  // Mill Operational Modules
   {
     name: 'Gate Inward',
     href: '/dashboard/gate',
@@ -130,15 +106,15 @@ const ROLE_DETAILS: Record<string, { label: string; defaultName: string }> = {
   superadmin: { label: 'Owner / SuperAdmin', defaultName: 'Mill Owner' },
   admin: { label: 'Owner / SuperAdmin', defaultName: 'Mill Owner' },
   owner: { label: 'Owner / SuperAdmin', defaultName: 'Mill Owner' },
+  accounts: { label: 'Accounts Officer', defaultName: 'Accounts Dummy' },
   gate_guard: { label: 'Gate Security Guard', defaultName: 'Suraj' },
-  weighbridge: { label: 'Weighbridge Operator', defaultName: 'Scale Operator' },
+  weighbridge: { label: 'Weighbridge Operator', defaultName: 'Mohan Sharma' },
   godown_incharge: { label: 'Paddy Godown In-charge', defaultName: 'Suresh Gupta' },
   paddy_stock: { label: 'Paddy Godown In-charge', defaultName: 'Suresh Gupta' },
   hr: { label: 'HR & Labour Manager', defaultName: 'Saloni Negi' },
   milling: { label: 'Milling Supervisor', defaultName: 'Milling Head' },
   finished_stock: { label: 'Packaging Supervisor', defaultName: 'Packaging Head' },
   sales_dispatch: { label: 'Sales & Dispatch Head', defaultName: 'Dispatch Manager' },
-  accounts: { label: 'Accounts Officer', defaultName: 'Cashier / Accountant' },
 };
 
 const getNormalizedRole = (rawRole: string | null): string => {
@@ -183,6 +159,7 @@ export default function DashboardLayout({
 
     let realName = '';
 
+    // 1. First priority: Check user_profile object from backend
     if (profileStr) {
       try {
         const parsedProfile = JSON.parse(profileStr);
@@ -192,25 +169,38 @@ export default function DashboardLayout({
       } catch {}
     }
 
+    // 2. Second priority: Check kognos_user
     if (!realName && storedUserName) {
       realName = storedUserName.replace(/\s*\(.*?\)\s*/g, '').replace(/Mobile:\s*\d+/gi, '').trim();
     }
 
+    // 3. Strict fallback based on role (Non-owners will NEVER see "Mill Owner")
     const meta = ROLE_DETAILS[detectedRole];
-    if (detectedRole === 'hr') {
+
+    if (detectedRole === 'accounts') {
       if (!realName || realName.toLowerCase().includes('owner') || realName.toLowerCase().includes('authorized')) {
-        realName = 'Saloni Negi';
+        realName = 'Accounts Dummy';
       }
     } else if (detectedRole === 'godown_incharge' || detectedRole === 'paddy_stock') {
       if (!realName || realName.toLowerCase().includes('owner') || realName.toLowerCase().includes('authorized')) {
         realName = 'Suresh Gupta';
       }
+    } else if (detectedRole === 'hr') {
+      if (!realName || realName.toLowerCase().includes('owner') || realName.toLowerCase().includes('authorized')) {
+        realName = 'Saloni Negi';
+      }
     } else if (detectedRole === 'gate_guard') {
       if (!realName || realName.toLowerCase().includes('owner') || realName.toLowerCase().includes('authorized')) {
         realName = 'Suraj';
       }
+    } else if (detectedRole === 'weighbridge') {
+      if (!realName || realName.toLowerCase().includes('owner') || realName.toLowerCase().includes('authorized')) {
+        realName = 'Mohan Sharma';
+      }
+    } else if (detectedRole === 'superadmin' || detectedRole === 'owner') {
+      realName = 'Mill Owner';
     } else if (!realName || realName.toLowerCase().includes('authorized')) {
-      realName = meta?.defaultName || 'Mill Owner';
+      realName = meta?.defaultName || 'Staff Member';
     }
 
     const formatted = realName
@@ -282,7 +272,7 @@ export default function DashboardLayout({
             </button>
           </div>
 
-          {/* Menu Items (Scrollable) */}
+          {/* Clean Menu Items */}
           <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
             <div className="text-[10px] font-bold tracking-wider text-slate-400 uppercase px-3 mb-2">
               {currentRoleMeta.label} Menu
@@ -290,13 +280,16 @@ export default function DashboardLayout({
 
             {visibleNavItems.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.href;
+              const isActive =
+                pathname === item.href ||
+                (item.href !== '/dashboard' && pathname.startsWith(item.href));
+
               return (
                 <Link
                   key={item.name}
                   href={item.href}
                   onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                     isActive
                       ? 'text-white shadow-sm'
                       : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
@@ -336,6 +329,7 @@ export default function DashboardLayout({
                   <div className="text-xs font-bold text-slate-800 leading-tight truncate">
                     {currentRoleMeta.label}
                   </div>
+                  {/* Clean User Name from Backend */}
                   <div className="text-[11px] font-semibold text-emerald-700 truncate">
                     {personName}
                   </div>

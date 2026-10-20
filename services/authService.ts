@@ -33,7 +33,8 @@ export interface UnifiedLoginResult {
   profile?: UserProfile | null;
 }
 
-export type StaffRoleType = 'owner' | 'gate_guard' | 'godown_incharge' | 'hr';
+// Added 'accounts'
+export type StaffRoleType = 'owner' | 'gate_guard' | 'godown_incharge' | 'hr' | 'accounts';
 
 const ENDPOINTS: Record<StaffRoleType, { sendOtp: string; login: string }> = {
   owner: {
@@ -52,14 +53,18 @@ const ENDPOINTS: Record<StaffRoleType, { sendOtp: string; login: string }> = {
     sendOtp: '/staff/hr/send-otp',
     login: '/staff/hr/login',
   },
+  accounts: {
+    sendOtp: '/staff/accounts/send-otp',
+    login: '/staff/accounts/verify-otp', // Accounts uses verify-otp
+  },
 };
 
 export const authService = {
-  // 1. SMART SEND OTP: Auto-detects endpoint based on registered role
+  // 1. SMART SEND OTP: Auto-detects across all 5 roles
   sendOtp: async (
     mobile: string
   ): Promise<{ data: SendOtpResponse; detectedType: StaffRoleType }> => {
-    const rolesToTry: StaffRoleType[] = ['owner', 'gate_guard', 'godown_incharge', 'hr'];
+    const rolesToTry: StaffRoleType[] = ['owner', 'gate_guard', 'godown_incharge', 'hr', 'accounts'];
     let lastError: unknown = null;
 
     for (const type of rolesToTry) {
@@ -74,7 +79,7 @@ export const authService = {
     throw lastError;
   },
 
-  // 2. SMART LOGIN: Extracts backend profile name and formats to title case
+  // 2. SMART LOGIN: Extracts backend profile name & returns role
   loginWithOtp: async (
     mobile: string,
     otp: string,
@@ -86,7 +91,9 @@ export const authService = {
 
       const rawName =
         profile?.name ||
-        (detectedType === 'godown_incharge'
+        (detectedType === 'accounts'
+          ? 'Accounts Officer'
+          : detectedType === 'godown_incharge'
           ? 'Suresh Gupta'
           : detectedType === 'gate_guard'
           ? 'Suraj'
@@ -122,21 +129,12 @@ export const authService = {
       };
     } catch {
       // Fallback across staff endpoints
-      const staffList: StaffRoleType[] = ['godown_incharge', 'gate_guard', 'hr'];
+      const staffList: StaffRoleType[] = ['accounts', 'godown_incharge', 'gate_guard', 'hr'];
       for (const type of staffList) {
         try {
           const res = await api.post<LoginResponse>(ENDPOINTS[type].login, { mobile, otp });
           const profile = res.data.profile;
-          const rawName =
-            profile?.name ||
-            (type === 'godown_incharge'
-              ? 'Suresh Gupta'
-              : type === 'gate_guard'
-              ? 'Suraj'
-              : type === 'hr'
-              ? 'Saloni Negi'
-              : 'Staff Member');
-
+          const rawName = profile?.name || type;
           const formattedName = rawName
             .split(' ')
             .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
@@ -152,7 +150,7 @@ export const authService = {
           };
         } catch {}
       }
-      throw new Error('Invalid OTP or login failed. Please verify your credentials.');
+      throw new Error('Invalid OTP or login failed. Please check credentials.');
     }
   },
 

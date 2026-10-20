@@ -1,55 +1,50 @@
+// themeConfig.ts
 export type ThemeKey = 'emerald' | 'amber' | 'sapphire' | 'graphite';
 
-export interface ThemeColors {
-  name: string;
-  dotColor: string;
-  wavePrimary: string;
-  waveSecondary: string;
-  headingColor: string;
-  subHeadingColor: string;
-  buttonBg: string;
-  buttonHover: string;
-  buttonShadow: string;
-  inputBg: string;
-}
-
 export const THEME_PRESETS: Record<ThemeKey, ThemeColors> = {
+  // Dark Green Theme
   emerald: {
-    name: 'Emerald Paddy',
-    dotColor: '#1bb080',
-    wavePrimary: '#1bb080',
-    waveSecondary: '#79dfbf',
-    headingColor: '#0a3622',
-    subHeadingColor: '#64748b',
-    buttonBg: '#0d9488',
-    buttonHover: '#0f766e',
-    buttonShadow: '0 10px 25px -5px rgba(13, 148, 136, 0.45)',
-    inputBg: '#f2f6f4',
+    name: 'Deep Forest Green',
+    dotColor: '#065f46',
+    wavePrimary: '#064e3b',
+    waveSecondary: '#10b981',
+    headingColor: '#022c22',
+    subHeadingColor: '#475569',
+    buttonBg: '#064e3b',
+    buttonHover: '#022c22',
+    buttonShadow: '0 10px 25px -5px rgba(6, 78, 59, 0.45)',
+    inputBg: '#f0fdf4',
   },
+
+  // Dark Purple Theme
   amber: {
-    name: 'Golden Grain',
-    dotColor: '#d97706',
-    wavePrimary: '#d97706',
-    waveSecondary: '#fcd34d',
-    headingColor: '#451a03',
-    subHeadingColor: '#78716c',
-    buttonBg: '#b45309',
-    buttonHover: '#92400e',
-    buttonShadow: '0 10px 25px -5px rgba(180, 83, 9, 0.45)',
-    inputBg: '#fbf8f2',
-  },
-  sapphire: {
-    name: 'Cyber Sapphire',
-    dotColor: '#2563eb',
-    wavePrimary: '#2563eb',
-    waveSecondary: '#93c5fd',
-    headingColor: '#0f172a',
+    name: 'Royal Dark Purple',
+    dotColor: '#6b21a8',
+    wavePrimary: '#581c87',
+    waveSecondary: '#a855f7',
+    headingColor: '#2e1065',
     subHeadingColor: '#64748b',
-    buttonBg: '#1d4ed8',
-    buttonHover: '#1e40af',
-    buttonShadow: '0 10px 25px -5px rgba(29, 78, 216, 0.45)',
-    inputBg: '#f1f5f9',
+    buttonBg: '#581c87',
+    buttonHover: '#3b0764',
+    buttonShadow: '0 10px 25px -5px rgba(88, 28, 135, 0.45)',
+    inputBg: '#faf5ff',
   },
+
+  // Dark Blue Theme
+  sapphire: {
+    name: 'Midnight Dark Blue',
+    dotColor: '#1e3a8a',
+    wavePrimary: '#172554',
+    waveSecondary: '#3b82f6',
+    headingColor: '#091833',
+    subHeadingColor: '#475569',
+    buttonBg: '#172554',
+    buttonHover: '#0b1329',
+    buttonShadow: '0 10px 25px -5px rgba(23, 37, 84, 0.45)',
+    inputBg: '#f0f4f9',
+  },
+
+  // Graphite Theme (Same)
   graphite: {
     name: 'Modern Graphite',
     dotColor: '#334155',

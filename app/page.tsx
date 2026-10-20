@@ -1,532 +1,611 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { THEME_PRESETS, ThemeKey } from './themeConfig';
-import { authService, StaffRoleType } from '../services/authService';
-import axios from 'axios';
+import React, { useState } from 'react';
+import Link from 'next/link';
 import {
-  Smartphone,
-  KeyRound,
+  Wheat,
+  Truck,
+  Scale,
+  Warehouse,
+  Cog,
+  Package,
+  Send,
+  Calculator,
+  Users,
   CheckCircle2,
-  AlertCircle,
-  RefreshCw,
-  Palette,
+  ChevronDown,
   ArrowRight,
   ShieldCheck,
-  Target,
-  Radio,
   Sparkles,
+  Clock,
+  Layers,
+  ArrowUpRight,
+  Lock,
+  Menu,
+  X,
+  FileText,
+  Activity,
+  Cpu,
+  Droplets,
+  HardHat,
+  Banknote,
+  Check,
 } from 'lucide-react';
 
-function NeuralAiCanvas({ waveColor }: { waveColor: string }) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+const FAQS = [
+  {
+    question: 'How does the weighbridge integration with automated moisture deduction work?',
+    answer:
+      'The platform captures gross weight from the weighbridge sensor directly. When moisture content exceeds the standard 14.0% base, our auto-calc formula automatically computes and applies the deduction in kilograms before transferring the lot to Godown stock.',
+  },
+  {
+    question: 'How does the FIFO (First-In, First-Out) queue improve milling yield?',
+    answer:
+      'Paddy lots that arrive earlier are prioritized for machine lines to prevent moisture loss, yellowing, and breakage during storage. The Godown In-charge can monitor queue priority ranks and issue lots directly to milling shifts.',
+  },
+  {
+    question: 'Are staff roles restricted from viewing confidential profit and banking data?',
+    answer:
+      'Yes. Gate Guards, Weighbridge Operators, Godown In-charges, and HR Managers only have access to their operational desks. Sensitive financial statements, bank RTGS balances, and net profit margins are strictly reserved for the Mill Owner/SuperAdmin.',
+  },
+  {
+    question: 'How are Palledar and hamali contractor wages calculated?',
+    answer:
+      'The HR & Labour desk tracks daily piece-rate handling per bag (e.g., ₹4.50 for unloading and ₹5.00 for loading). Multiplying total bags handled by the gang rate computes daily wages and syncs directly into the mill running expenses ledger.',
+  },
+  {
+    question: 'Can the system be accessed using mobile OTP without remembering passwords?',
+    answer:
+      'Yes. Our unified login system lets authorized personnel simply enter their registered 10-digit mobile number to receive and verify a secure 6-digit OTP, automatically directing them to their specific workspace.',
+  },
+  {
+    question: 'Does the sales module auto-generate Bilty and Lorry Receipts (LR)?',
+    answer:
+      'Yes. When a sales order is dispatched, the system reserves stock from the finished inventory, records vehicle tare/gross weighment, and generates printable LR and Loading Slips with full batch traceability.',
+  },
+];
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+export default function HomePage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-    let animationFrameId: number;
-    let width = (canvas.width = canvas.parentElement?.clientWidth || 500);
-    let height = (canvas.height = canvas.parentElement?.clientHeight || 650);
-
-    const handleResize = () => {
-      if (!canvas || !canvas.parentElement) return;
-      width = canvas.width = canvas.parentElement.clientWidth;
-      height = canvas.height = canvas.parentElement.clientHeight;
-    };
-    window.addEventListener('resize', handleResize);
-
-    const nodeCount = 38;
-    const nodes: Array<{
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      radius: number;
-      pulse: number;
-    }> = [];
-
-    for (let i = 0; i < nodeCount; i++) {
-      nodes.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.7,
-        vy: (Math.random() - 0.5) * 0.7,
-        radius: 1.8 + Math.random() * 2.2,
-        pulse: Math.random() * Math.PI,
-      });
-    }
-
-    const packets: Array<{
-      fromIdx: number;
-      toIdx: number;
-      progress: number;
-      speed: number;
-    }> = [];
-
-    const spawnPacket = () => {
-      if (packets.length > 7) return;
-      const from = Math.floor(Math.random() * nodes.length);
-      for (let to = 0; to < nodes.length; to++) {
-        if (from === to) continue;
-        const dx = nodes[from].x - nodes[to].x;
-        const dy = nodes[from].y - nodes[to].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 115) {
-          packets.push({
-            fromIdx: from,
-            toIdx: to,
-            progress: 0,
-            speed: 0.012 + Math.random() * 0.02,
-          });
-          break;
-        }
-      }
-    };
-
-    const render = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      if (Math.random() < 0.08) spawnPacket();
-
-      for (let i = 0; i < nodes.length; i++) {
-        const n = nodes[i];
-        n.x += n.vx;
-        n.y += n.vy;
-        n.pulse += 0.04;
-
-        if (n.x < 0 || n.x > width) n.vx *= -1;
-        if (n.y < 0 || n.y > height) n.vy *= -1;
-
-        for (let j = i + 1; j < nodes.length; j++) {
-          const n2 = nodes[j];
-          const dx = n.x - n2.x;
-          const dy = n.y - n2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 115) {
-            const alpha = (1 - dist / 115) * 0.32;
-            ctx.beginPath();
-            ctx.moveTo(n.x, n.y);
-            ctx.lineTo(n2.x, n2.y);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        }
-
-        const currentRadius = n.radius + Math.sin(n.pulse) * 0.6;
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, Math.max(1, currentRadius), 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-        ctx.shadowColor = '#ffffff';
-        ctx.shadowBlur = 8;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      }
-
-      for (let p = packets.length - 1; p >= 0; p--) {
-        const pkt = packets[p];
-        pkt.progress += pkt.speed;
-
-        if (pkt.progress >= 1) {
-          packets.splice(p, 1);
-          continue;
-        }
-
-        const from = nodes[pkt.fromIdx];
-        const to = nodes[pkt.toIdx];
-        if (!from || !to) {
-          packets.splice(p, 1);
-          continue;
-        }
-
-        const px = from.x + (to.x - from.x) * pkt.progress;
-        const py = from.y + (to.y - from.y) * pkt.progress;
-
-        ctx.beginPath();
-        ctx.arc(px, py, 3, 0, Math.PI * 2);
-        ctx.fillStyle = '#ffffff';
-        ctx.shadowColor = waveColor;
-        ctx.shadowBlur = 12;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      }
-
-      animationFrameId = requestAnimationFrame(render);
-    };
-
-    render();
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [waveColor]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 pointer-events-none z-1 opacity-70 w-full h-full"
-    />
-  );
-}
-
-export default function LoginPage() {
-  const router = useRouter();
-  const [currentThemeKey, setCurrentThemeKey] = useState<ThemeKey>('emerald');
-
-  const [mobile, setMobile] = useState('');
-  const [otp, setOtp] = useState('');
-  const [isOtpSent, setIsOtpSent] = useState(false);
-  const [isSendingOtp, setIsSendingOtp] = useState(false);
-  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
-  const [detectedType, setDetectedType] = useState<StaffRoleType>('owner');
-  const [apiMessage, setApiMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-
-  const [synapsesActive, setSynapsesActive] = useState(42);
-  const [lotIntegrity, setLotIntegrity] = useState(99.98);
-
-  const currentTheme = THEME_PRESETS[currentThemeKey];
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setSynapsesActive(Math.floor(38 + Math.random() * 8));
-      setLotIntegrity(+(99.9 + Math.random() * 0.08).toFixed(2));
-    }, 2400);
-    return () => clearInterval(timer);
-  }, []);
-
-  const handleSendOtp = async () => {
-    if (!mobile || mobile.length < 10) {
-      setApiMessage({ type: 'error', text: 'Please enter a valid 10-digit mobile number.' });
-      return;
-    }
-
-    setIsSendingOtp(true);
-    setApiMessage(null);
-
-    try {
-      const result = await authService.sendOtp(mobile.trim());
-      setIsOtpSent(true);
-      setDetectedType(result.detectedType);
-
-      if (result.data.otp) {
-        setOtp(result.data.otp);
-        setApiMessage({
-          type: 'success',
-          text: `OTP sent successfully! (Test OTP: ${result.data.otp})`,
-        });
-      } else {
-        setApiMessage({
-          type: 'success',
-          text: result.data.detail || `OTP has been sent to +91 ${mobile}.`,
-        });
-      }
-    } catch (err: unknown) {
-      let errorMsg = 'Mobile number is not registered or server is unreachable.';
-      if (axios.isAxiosError(err)) {
-        errorMsg = err.response?.data?.detail || err.message || errorMsg;
-      }
-      setApiMessage({ type: 'error', text: errorMsg });
-    } finally {
-      setIsSendingOtp(false);
-    }
-  };
-
-  const handleVerifyOtpAndLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!isOtpSent) {
-      handleSendOtp();
-      return;
-    }
-
-    if (!otp || otp.length < 4) {
-      setApiMessage({ type: 'error', text: 'Please enter the 6-digit OTP.' });
-      return;
-    }
-
-    setIsVerifyingOtp(true);
-    setApiMessage(null);
-
-    try {
-      const user = await authService.loginWithOtp(mobile.trim(), otp.trim(), detectedType);
-
-      setApiMessage({
-        type: 'success',
-        text: `Authentication successful! Loading ${user.user_name} workspace...`,
-      });
-
-      localStorage.setItem('access_token', user.access_token);
-      localStorage.setItem('token_type', user.token_type);
-      localStorage.setItem('user_role', user.role);
-      localStorage.setItem(
-        'kognos_role',
-        JSON.stringify({ id: user.role, label: user.user_name })
-      );
-      localStorage.setItem('kognos_user', user.user_name);
-
-      if (user.profile) {
-        localStorage.setItem('user_profile', JSON.stringify(user.profile));
-      } else {
-        localStorage.removeItem('user_profile');
-      }
-
-      localStorage.setItem('kognos_theme', currentThemeKey);
-
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 500);
-    } catch (err: unknown) {
-      let errorMsg = 'Invalid OTP entered. Please check and try again.';
-      if (axios.isAxiosError(err)) {
-        errorMsg = err.response?.data?.detail || err.message || errorMsg;
-      }
-      setApiMessage({ type: 'error', text: errorMsg });
-    } finally {
-      setIsVerifyingOtp(false);
-    }
-  };
-
-  const cycleTheme = () => {
-    const keys = Object.keys(THEME_PRESETS) as ThemeKey[];
-    const nextIndex = (keys.indexOf(currentThemeKey) + 1) % keys.length;
-    const nextTheme = keys[nextIndex];
-    setCurrentThemeKey(nextTheme);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('kognos_theme', nextTheme);
-    }
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index);
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#f8faf9] flex items-center justify-center p-3 sm:p-6 font-sans">
-      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[580px] border border-slate-100 relative">
-        {/* Left Side: Neural AI Branding */}
-        <div className="lg:col-span-5 relative overflow-hidden flex flex-col justify-between p-8 sm:p-11 text-white min-h-[380px] lg:min-h-[580px]">
-          <div className="absolute inset-0 pointer-events-none z-0">
-            <svg
-              className="w-full h-full object-cover"
-              viewBox="0 0 500 700"
-              preserveAspectRatio="none"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+    <div className="min-h-screen bg-[#f8faf9] text-slate-800 font-sans selection:bg-emerald-500 selection:text-white scroll-smooth">
+      
+      {/* ========================================================= */}
+      {/* NAVBAR */}
+      {/* ========================================================= */}
+      <header className="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-md shadow-emerald-600/20 group-hover:scale-105 transition-transform">
+              <Wheat className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="font-black text-base tracking-tight text-slate-900 block leading-tight">
+                KOGNOS
+              </span>
+              <span className="text-[10px] text-emerald-700 font-bold tracking-wider uppercase block">
+                Rice Mill ERP
+              </span>
+            </div>
+          </Link>
+
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-600">
+            <a href="#features" className="hover:text-emerald-600 transition-colors">Features</a>
+            <a href="#pipeline" className="hover:text-emerald-600 transition-colors">Process Flow</a>
+            <a href="#roles" className="hover:text-emerald-600 transition-colors">Role Desks</a>
+            <a href="#faq" className="hover:text-emerald-600 transition-colors">FAQ</a>
+          </nav>
+
+          {/* Top Right Login CTA */}
+          <div className="hidden sm:flex items-center gap-3">
+            <Link
+              href="/login"
+              className="px-5 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/25 flex items-center gap-2 transition-all active:scale-95 cursor-pointer"
             >
-              <path
-                d="M 0,0 L 320,0 C 390,140 430,220 370,360 C 310,500 370,590 280,700 L 0,700 Z"
-                fill={currentTheme.waveSecondary}
-                opacity="0.45"
-              />
-              <path
-                d="M 0,0 L 270,0 C 350,130 380,240 330,370 C 280,490 340,590 240,700 L 0,700 Z"
-                fill={currentTheme.wavePrimary}
-              />
-            </svg>
+              <Lock className="w-3.5 h-3.5" />
+              <span>Login to Portal</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
 
-          <NeuralAiCanvas waveColor={currentTheme.waveSecondary} />
-          <div className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none animate-ai-scanner shadow-[0_0_12px_#ffffff] z-1" />
+          {/* Mobile Hamburger */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
 
-          <div className="relative z-10 space-y-4 pt-1">
-            <div className="flex items-center gap-4">
-              <div className="relative w-14 h-14 flex items-center justify-center shrink-0">
-                <div className="absolute inset-0 rounded-full border-2 border-dashed border-white/60 animate-ai-clockwise" />
-                <div className="absolute inset-1.5 rounded-full border border-dotted border-white/80 animate-ai-counter" />
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
-                  <Target className="w-12 h-12 text-white" />
-                </div>
-                <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-lg animate-ai-breathe">
-                  <div
-                    className="w-2.5 h-2.5 rounded-full"
-                    style={{ backgroundColor: currentTheme.wavePrimary }}
-                  />
-                </div>
+        {/* Mobile Dropdown Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-b border-slate-200 bg-white px-4 py-4 space-y-3 animate-in fade-in slide-in-from-top-2">
+            <a
+              href="#features"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-xs font-semibold text-slate-700 py-1"
+            >
+              Features
+            </a>
+            <a
+              href="#pipeline"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-xs font-semibold text-slate-700 py-1"
+            >
+              Process Flow
+            </a>
+            <a
+              href="#roles"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-xs font-semibold text-slate-700 py-1"
+            >
+              Role Desks
+            </a>
+            <a
+              href="#faq"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-xs font-semibold text-slate-700 py-1"
+            >
+              FAQ
+            </a>
+            <div className="pt-2 border-t border-slate-100">
+              <Link
+                href="/login"
+                className="w-full py-2.5 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center gap-2"
+              >
+                <Lock className="w-3.5 h-3.5" />
+                <span>Login to Portal</span>
+              </Link>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* ========================================================= */}
+      {/* HERO SECTION */}
+      {/* ========================================================= */}
+      <section className="relative overflow-hidden pt-12 pb-16 sm:pt-20 sm:pb-24">
+        <div className="absolute inset-0 pointer-events-none -z-10">
+          <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-200/40 rounded-full blur-3xl" />
+          <div className="absolute top-60 -left-20 w-80 h-80 bg-teal-200/30 rounded-full blur-3xl" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold shadow-xs">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Autonomous Agro-Tech Milling ERP</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight max-w-4xl mx-auto leading-[1.15]">
+            Run Your Entire Rice Mill from{' '}
+            <span className="text-emerald-600">Gate Inward</span> to{' '}
+            <span className="text-emerald-600">Accounts Ledger</span>
+          </h1>
+
+          <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto font-normal leading-relaxed">
+            Eliminate operational leakages with real-time weighbridge IoT integration, FIFO paddy godown queue, 60–65% milling recovery tracking, and complete accounts governance.
+          </p>
+
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link
+              href="/login"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer"
+            >
+              <span>Launch ERP System</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <a
+              href="#pipeline"
+              className="w-full sm:w-auto px-7 py-3.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-xs"
+            >
+              <span>View Mill Flowchart</span>
+            </a>
+          </div>
+
+          {/* Quick Metrics Strip */}
+          <div className="pt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-0.5">
+              <span className="text-xs text-slate-400 font-semibold">Today Paddy Inward</span>
+              <div className="text-2xl font-black text-slate-900">428.5 MT</div>
+              <div className="text-[11px] text-emerald-600 font-bold">+14% vs Target</div>
+            </div>
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-0.5">
+              <span className="text-xs text-slate-400 font-semibold">Head Rice Yield</span>
+              <div className="text-2xl font-black text-emerald-600">64.8%</div>
+              <div className="text-[11px] text-slate-400">Target 60-65% OK</div>
+            </div>
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-0.5">
+              <span className="text-xs text-slate-400 font-semibold">FIFO Godown Stock</span>
+              <div className="text-2xl font-black text-blue-600">2,410 MT</div>
+              <div className="text-[11px] text-slate-400">3 Godowns Active</div>
+            </div>
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-0.5">
+              <span className="text-xs text-slate-400 font-semibold">Sales Dispatches</span>
+              <div className="text-2xl font-black text-purple-700">₹42.8 Lakh</div>
+              <div className="text-[11px] text-emerald-600 font-bold">12 Trucks Cleared</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================= */}
+      {/* SECTION: CORE FEATURES (ID="FEATURES" FIXED)             */}
+      {/* ========================================================= */}
+      <section id="features" className="py-20 bg-white border-t border-slate-200/80 scroll-mt-18">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          
+          <div className="text-center space-y-3 max-w-3xl mx-auto">
+            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Enterprise Milling Capabilities
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              Engineered Exclusively for Modern Rice Mills
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+              Every feature is built directly around real grain mandi arrivals, boiler operations, automated weighment calibrations, and cash-book reconciliation.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Feature 1 */}
+            <div className="p-7 rounded-3xl bg-slate-50 border border-slate-100 space-y-4 hover:border-emerald-500/50 hover:bg-white hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center shadow-xs">
+                <Scale className="w-6 h-6" />
               </div>
+              <div className="space-y-1.5">
+                <h3 className="text-base font-bold text-slate-900">Digital Weighbridge Integration</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Direct electronic sensor capture for Gross and Tare weights. Prevents manual slip tampering and automatically syncs net weight into purchase records.
+                </p>
+              </div>
+              <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-emerald-700">
+                <span>Auto Zero & Gross Capture</span>
+                <Check className="w-3.5 h-3.5" />
+              </div>
+            </div>
 
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-black tracking-tight drop-shadow-sm leading-none text-white">
-                  Kognos Rice Mill
-                </h1>
-                <div className="flex items-center gap-1.5 mt-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
-                  <span className="text-[10px] font-mono tracking-widest uppercase text-white/90">
-                    AI SYNAPSE v4.0
+            {/* Feature 2 */}
+            <div className="p-7 rounded-3xl bg-slate-50 border border-slate-100 space-y-4 hover:border-blue-500/50 hover:bg-white hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center shadow-xs">
+                <Droplets className="w-6 h-6" />
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="text-base font-bold text-slate-900">Smart Moisture Deduction Engine</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Paddy arrivals above the standard 14.0% moisture base automatically compute exact kilogram deductions to safeguard your milling recovery margins.
+                </p>
+              </div>
+              <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-blue-700">
+                <span>Standard 14.0% Base Cut</span>
+                <Check className="w-3.5 h-3.5" />
+              </div>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="p-7 rounded-3xl bg-slate-50 border border-slate-100 space-y-4 hover:border-amber-500/50 hover:bg-white hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center shadow-xs">
+                <Warehouse className="w-6 h-6" />
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="text-base font-bold text-slate-900">FIFO Godown Stacking & Lots</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  First-In, First-Out lot queues across Basmati, PR, and Sharbati chambers prevent grain aging, yellowing, and optimize milling shift intake.
+                </p>
+              </div>
+              <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-amber-700">
+                <span>Milling Queue Prioritization</span>
+                <Check className="w-3.5 h-3.5" />
+              </div>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="p-7 rounded-3xl bg-slate-50 border border-slate-100 space-y-4 hover:border-purple-500/50 hover:bg-white hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-800 flex items-center justify-center shadow-xs">
+                <Cog className="w-6 h-6" />
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="text-base font-bold text-slate-900">Milling Recovery Yield (60–65%)</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Real-time machine line recovery ratios for Grade A Head Rice, 10–12% Broken Rice split, and lucrative byproduct margins (Husk boiler fuel and Bran).
+                </p>
+              </div>
+              <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-purple-700">
+                <span>Byproduct Profit Contributions</span>
+                <Check className="w-3.5 h-3.5" />
+              </div>
+            </div>
+
+            {/* Feature 5 */}
+            <div className="p-7 rounded-3xl bg-slate-50 border border-slate-100 space-y-4 hover:border-teal-500/50 hover:bg-white hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center shadow-xs">
+                <HardHat className="w-6 h-6" />
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="text-base font-bold text-slate-900">Palledar Hamali & Labour Billing</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Per-bag piece-rate calculation for unloading gangs, godown stacking, and truck dispatch loading. Tracks weekly advances (kharcha) automatically.
+                </p>
+              </div>
+              <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-teal-700">
+                <span>Per-Bag Piece Rate Tracking</span>
+                <Check className="w-3.5 h-3.5" />
+              </div>
+            </div>
+
+            {/* Feature 6 */}
+            <div className="p-7 rounded-3xl bg-slate-50 border border-slate-100 space-y-4 hover:border-rose-500/50 hover:bg-white hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-800 flex items-center justify-center shadow-xs">
+                <Calculator className="w-6 h-6" />
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="text-base font-bold text-slate-900">Integrated Accounts & GST Layer</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Denomination-wise daily cash book closing, farmer RTGS auto-linking, party-wise overdue aging alerts, and GSTR compliance statements.
+                </p>
+              </div>
+              <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-rose-700">
+                <span>Direct Cash/Bank Auto-Sync</span>
+                <Check className="w-3.5 h-3.5" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================= */}
+      {/* 6-STAGE MILL PIPELINE FLOWCHART                          */}
+      {/* ========================================================= */}
+      <section id="pipeline" className="py-18 bg-[#f8faf9] border-t border-slate-200/80 scroll-mt-18">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          <div className="text-center space-y-2 max-w-2xl mx-auto">
+            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Operations Lifecycle
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+              End-to-End Milling Architecture
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Structured strictly according to real mill checkpoints for complete lot traceability.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                step: '01',
+                title: 'Gate Inward & Tokens',
+                icon: Truck,
+                desc: 'First physical checkpoint. Captures vehicle number, farmer details, crop variety, and issues computerized token.',
+                tag: 'Traceability Start',
+              },
+              {
+                step: '02',
+                title: 'Weighbridge & Moisture Cut',
+                icon: Scale,
+                desc: 'Digital scale integration captures gross weight. Automatically computes moisture cut deductions and net paddy weight.',
+                tag: 'Auto-Calc Net Wt',
+              },
+              {
+                step: '03',
+                title: 'Paddy Stock (FIFO Queue)',
+                icon: Warehouse,
+                desc: 'Chamber and stack allocation across Godowns #01, #02, #03. 1st In, 1st Out queue prioritizes lots for milling.',
+                tag: 'FIFO Stock Tracking',
+              },
+              {
+                step: '04',
+                title: 'Milling Shift & Yield Recovery',
+                icon: Cog,
+                desc: 'Tracks 60–65% Grade A Head Rice, 10–12% Broken Rice split, and byproducts (Husk boiler fuel and Bran oil extraction).',
+                tag: 'Yield Monitoring',
+              },
+              {
+                step: '05',
+                title: 'Packaging & Finished Godown',
+                icon: Package,
+                desc: 'Central finished warehouse cataloging 20kg retail bags and 50kg master packs for ready-to-sell inventory.',
+                tag: '20/50kg Bagging',
+              },
+              {
+                step: '06',
+                title: 'Sales, LR & Dispatch',
+                icon: Send,
+                desc: 'Converts sales orders to loading slips, completes dispatch tare-gross weighment, and issues computerized Lorry Receipts (LR).',
+                tag: 'Bilty & Settlement',
+              },
+            ].map((card) => {
+              const Icon = card.icon;
+              return (
+                <div
+                  key={card.step}
+                  className="p-6 rounded-2xl bg-white border border-slate-100 space-y-3 hover:border-emerald-500/50 hover:shadow-sm transition-all"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-emerald-600 shadow-xs">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <span className="text-xs font-black font-mono text-slate-300">{card.step}</span>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900">{card.title}</h3>
+                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">{card.desc}</p>
+                  </div>
+                  <span className="inline-block px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    {card.tag}
                   </span>
                 </div>
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <p className="text-sm sm:text-base font-semibold leading-snug text-white/95">
-                Autonomous Milling Operations
-              </p>
-              <p className="text-xs sm:text-[13px] text-white/85 leading-relaxed font-normal">
-                Paddy Inward, Weighbridge Tare-Gross, Godown FIFO Ledger, and Accounts synchronized in real-time.
-              </p>
-            </div>
-          </div>
-
-          <div className="relative z-10 pt-6 space-y-2">
-            <div className="px-3.5 py-2.5 rounded-2xl bg-black/20 backdrop-blur-md border border-white/25 text-white flex items-center justify-between text-[11px] font-mono">
-              <div className="flex items-center gap-2">
-                <Radio className="w-3.5 h-3.5 text-white animate-pulse" />
-                <span className="font-semibold tracking-wide">
-                  SYNAPSES ACTIVE: {synapsesActive}
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5 font-bold">
-                <Sparkles className="w-3 h-3 text-white" />
-                <span>{lotIntegrity}% OK</span>
-              </div>
-            </div>
-
-            <div className="text-[10px] font-mono text-white/70 flex items-center justify-between px-1">
-              <span>NODE: #KOGNOS-MILL-01</span>
-              <span>LIVE AI MONITOR</span>
-            </div>
+              );
+            })}
           </div>
         </div>
+      </section>
 
-        {/* Right Side: Login Form */}
-        <div className="lg:col-span-7 flex flex-col justify-center px-6 sm:px-14 py-8 sm:py-12 bg-white relative">
-          <div className="absolute top-4 right-5 z-20 flex items-center gap-2">
-            <button
-              type="button"
-              onClick={cycleTheme}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-xs cursor-pointer transition-all"
-            >
-              <Palette className="w-3.5 h-3.5" style={{ color: currentTheme.buttonBg }} />
-              <span className="text-[11px]">{currentTheme.name}</span>
-            </button>
+      {/* ========================================================= */}
+      {/* ROLE DESKS & ACCESS CONTROL                              */}
+      {/* ========================================================= */}
+      <section id="roles" className="py-18 bg-white border-t border-slate-200/80 scroll-mt-18">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          <div className="text-center space-y-2 max-w-2xl mx-auto">
+            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+              Role-Based Access
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+              Tailored Desks for Every Department
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Every staff member sees only what they need. Zero confidential leaks, 100% operational focus.
+            </p>
           </div>
 
-          <div className="max-w-md w-full mx-auto space-y-6">
-            <div className="space-y-1 text-center sm:text-left">
-              <div className="flex items-center gap-2 mb-1">
-                <ShieldCheck className="w-5 h-5" style={{ color: currentTheme.buttonBg }} />
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  Authorized Sign In
-                </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              {
+                title: 'Mill Owner / SuperAdmin',
+                badge: 'Full Access',
+                desc: 'Audits P&L, approving payments, monitoring 6 pipelines, and viewing real-time bank reconciliation.',
+                color: 'border-emerald-200 bg-emerald-50/50',
+              },
+              {
+                title: 'Gate Security Guard',
+                badge: 'Checkpoint #1',
+                desc: 'Captures incoming truck entries, farmer Mandi details, and generates computerized gate passes.',
+                color: 'border-slate-200 bg-white',
+              },
+              {
+                title: 'Paddy Godown In-Charge',
+                badge: 'FIFO Queue',
+                desc: 'Maps lots to godown chambers, oversees unloading bays, and issues batches to the milling plant.',
+                color: 'border-slate-200 bg-white',
+              },
+              {
+                title: 'HR & Labour Manager',
+                badge: 'Workforce Desk',
+                desc: 'Tracks Shift #1 & #2 staff biometric attendance, Palledar bag piece rates, and worker advances.',
+                color: 'border-slate-200 bg-white',
+              },
+            ].map((role) => (
+              <div key={role.title} className={`p-5 rounded-2xl border shadow-xs space-y-2.5 ${role.color}`}>
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-900 text-white">
+                    {role.badge}
+                  </span>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                </div>
+                <h3 className="text-sm font-bold text-slate-900">{role.title}</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">{role.desc}</p>
               </div>
-              <h2
-                className="text-2xl sm:text-3xl font-black tracking-tight"
-                style={{ color: currentTheme.headingColor }}
-              >
-                Sign In to Kognos
-              </h2>
-              <p className="text-xs text-slate-500">
-                Enter your registered mobile number to receive an OTP and sign in.
-              </p>
-            </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-            {apiMessage && (
-              <div
-                className={`p-3.5 rounded-2xl text-xs flex items-center gap-2.5 transition-all ${
-                  apiMessage.type === 'success'
-                    ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                    : 'bg-rose-50 text-rose-800 border border-rose-200'
-                }`}
-              >
-                {apiMessage.type === 'success' ? (
-                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
-                ) : (
-                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
-                )}
-                <span>{apiMessage.text}</span>
-              </div>
-            )}
+      {/* ========================================================= */}
+      {/* FAQ SECTION                                              */}
+      {/* ========================================================= */}
+      <section id="faq" className="py-18 bg-[#f8faf9] border-t border-slate-200/80 scroll-mt-18">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          <div className="text-center space-y-2">
+            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Frequently Asked Questions
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+              Everything You Need to Know
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Clear answers regarding ERP operations, hardware integrations, and security.
+            </p>
+          </div>
 
-            <form onSubmit={handleVerifyOtpAndLogin} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Registered Mobile Number</label>
+          <div className="space-y-3">
+            {FAQS.map((faq, index) => {
+              const isOpen = openFaq === index;
+              return (
                 <div
-                  className="flex items-center px-4 py-3 rounded-2xl border border-slate-200/80 focus-within:border-emerald-500 transition-all shadow-xs"
-                  style={{ backgroundColor: currentTheme.inputBg }}
+                  key={index}
+                  className={`rounded-2xl border transition-all overflow-hidden ${
+                    isOpen ? 'border-emerald-500/60 bg-emerald-50/20' : 'border-slate-200/80 bg-white'
+                  }`}
                 >
-                  <Smartphone className="w-4 h-4 text-slate-400 mr-2.5 shrink-0" />
-                  <span className="text-xs font-semibold text-slate-500 mr-1.5">+91</span>
-                  <input
-                    type="tel"
-                    required
-                    maxLength={10}
-                    value={mobile}
-                    onChange={(e) => setMobile(e.target.value.replace(/\D/g, ''))}
-                    placeholder="Enter 10-digit number"
-                    className="w-full bg-transparent text-sm font-mono font-bold text-slate-900 outline-none"
-                  />
                   <button
-                    type="button"
-                    disabled={isSendingOtp || !mobile || mobile.length < 10}
-                    onClick={handleSendOtp}
-                    className="px-3.5 py-1.5 rounded-xl text-white text-xs font-bold shrink-0 cursor-pointer disabled:opacity-40 transition-all shadow-xs"
-                    style={{ backgroundColor: currentTheme.buttonBg }}
+                    onClick={() => toggleFaq(index)}
+                    className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer"
                   >
-                    {isSendingOtp ? (
-                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                    ) : isOtpSent ? (
-                      'Resend'
-                    ) : (
-                      'Send OTP'
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {isOtpSent && (
-                <div className="space-y-1.5 animate-in fade-in zoom-in-95 duration-200">
-                  <div className="flex justify-between items-center">
-                    <label className="text-xs font-bold text-slate-700">Enter 6-Digit OTP</label>
-                    <span className="text-[11px] text-emerald-600 font-mono font-semibold">
-                      Sent to +91 {mobile}
+                    <span className="text-xs sm:text-sm font-bold text-slate-900">
+                      {faq.question}
                     </span>
-                  </div>
-                  <div
-                    className="flex items-center px-4 py-3 rounded-2xl border border-slate-200/80 focus-within:border-emerald-500 transition-all shadow-xs"
-                    style={{ backgroundColor: currentTheme.inputBg }}
-                  >
-                    <KeyRound className="w-4 h-4 text-slate-400 mr-3 shrink-0" />
-                    <input
-                      type="text"
-                      required
-                      maxLength={6}
-                      value={otp}
-                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                      placeholder="e.g. 123456"
-                      className="w-full bg-transparent text-base font-mono font-black tracking-widest text-slate-900 outline-none"
+                    <ChevronDown
+                      className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${
+                        isOpen ? 'rotate-180 text-emerald-600' : ''
+                      }`}
                     />
-                  </div>
-                </div>
-              )}
-
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  disabled={isVerifyingOtp || isSendingOtp}
-                  className="w-full py-4 rounded-full text-white font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-50 transition-all active:scale-[0.99]"
-                  style={{
-                    backgroundColor: currentTheme.buttonBg,
-                    boxShadow: currentTheme.buttonShadow,
-                  }}
-                >
-                  {isVerifyingOtp ? (
-                    <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                  ) : isOtpSent ? (
-                    <span className="flex items-center gap-1.5">
-                      <span>VERIFY & OPEN DASHBOARD</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </span>
-                  ) : (
-                    <span>SEND OTP TO LOGIN</span>
+                  </button>
+                  {isOpen && (
+                    <div className="px-5 pb-5 text-xs text-slate-600 leading-relaxed animate-in fade-in duration-200 border-t border-slate-100 pt-3">
+                      {faq.answer}
+                    </div>
                   )}
-                </button>
-              </div>
-            </form>
+                </div>
+              );
+            })}
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* ========================================================= */}
+      {/* CTA BANNER                                               */}
+      {/* ========================================================= */}
+      <section className="py-16 bg-slate-900 text-white relative overflow-hidden">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
+            <Activity className="w-3.5 h-3.5 animate-pulse" />
+            <span>Ready for Production Deployment</span>
+          </div>
+
+          <h2 className="text-2xl sm:text-4xl font-black tracking-tight max-w-2xl mx-auto">
+            Streamline Your Mill Operations Today
+          </h2>
+
+          <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
+            Access your department desk with authenticated mobile OTP credentials.
+          </p>
+
+          <div className="pt-2">
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/30 transition-all active:scale-95 cursor-pointer"
+            >
+              <Lock className="w-3.5 h-3.5" />
+              <span>Go to Login Portal</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================= */}
+      {/* FOOTER                                                   */}
+      {/* ========================================================= */}
+      <footer className="bg-white border-t border-slate-200 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+          <div className="flex items-center gap-2">
+            <Wheat className="w-4 h-4 text-emerald-600" />
+            <span className="font-bold text-slate-800">Kognos Rice Mill ERP</span>
+            <span>• Season 2026-27</span>
+          </div>
+
+          <div>
+            Built strictly for modern automated rice milling facilities. All rights reserved.
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

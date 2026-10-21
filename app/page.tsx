@@ -329,7 +329,7 @@ export default function HomePage() {
                 <HardHat className="w-6 h-6" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-base font-bold text-slate-900">Palledar Hamali & Labour Billing</h3>
+                <h3 className="text-base font-bold text-slate-900">Loading, Unloading & Labour Charges</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
                   Per-bag piece-rate calculation for unloading gangs, godown stacking, and truck dispatch loading. Tracks weekly advances (kharcha) automatically.
                 </p>

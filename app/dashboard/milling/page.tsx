@@ -12,7 +12,7 @@ export default function MillingRecoveryPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider text-white" style={{ backgroundColor: currentTheme.buttonBg }}>
-            PDF Checkpoint #4
+             Checkpoint #4
           </span>
           <h1 className="text-xl font-bold text-slate-900 mt-1">Milling Operations & Yield Recovery</h1>
           <p className="text-xs text-slate-500">Track recovery % (60-65% Head Rice), machine-wise production and shift entries</p>
@@ -73,7 +73,7 @@ export default function MillingRecoveryPage() {
         </div>
 
         <div className="lg:col-span-4 p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
-          <h2 className="text-base font-bold text-slate-900">Byproducts Output Log (PDF Page 4)</h2>
+          <h2 className="text-base font-bold text-slate-900">Byproducts Output Log</h2>
           <div className="space-y-3 text-xs">
             <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
               <div><div className="font-bold">Rice Husk</div><div className="text-[10px] text-slate-400">Boiler Fuel / Steam</div></div>

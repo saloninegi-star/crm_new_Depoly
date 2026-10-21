@@ -18,7 +18,7 @@ export default function SalesDispatchPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider text-white" style={{ backgroundColor: currentTheme.buttonBg }}>
-            PDF Checkpoint #6
+             Checkpoint #6
           </span>
           <h1 className="text-xl font-bold text-slate-900 mt-1">Sale & Dispatch (LR / Bilty Desk)</h1>
           <p className="text-xs text-slate-500">Pick from finished stock, generate loading slip, weighment for dispatch, and issue LR/Bilty</p>

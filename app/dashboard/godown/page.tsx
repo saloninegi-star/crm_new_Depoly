@@ -114,7 +114,7 @@ export default function PaddyStockFifoPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider text-white" style={{ backgroundColor: currentTheme.buttonBg }}>
-            PDF Checkpoint #3
+             Checkpoint #3
           </span>
           <h1 className="text-xl font-bold text-slate-900 mt-1">Paddy Stock & FIFO Lot Management</h1>
           <p className="text-xs text-slate-500">Lot Creation, Godown chamber mapping, and 1st-In 1st-Out issue to milling line</p>
@@ -167,7 +167,7 @@ export default function PaddyStockFifoPage() {
       <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-base font-bold text-slate-900">Paddy Lot Ledger & FIFO Tracking (PDF Page 2)</h2>
+            <h2 className="text-base font-bold text-slate-900">Paddy Lot Ledger & FIFO Tracking </h2>
             <p className="text-xs text-slate-400">1st-In 1st-Out priority ensures stock age is managed and moisture loss is avoided</p>
           </div>
           <div className="relative">
@@ -340,7 +340,7 @@ export default function PaddyStockFifoPage() {
             <div className="flex justify-between items-center border-b border-slate-100 pb-3">
               <div>
                 <h3 className="text-sm font-bold text-slate-900">Issue Lot to Milling Line</h3>
-                <p className="text-[11px] text-slate-400">PDF Flow: Issue Paddy Lot &rarr; Start Shift Batch</p>
+                <p className="text-[11px] text-slate-400"> Flow: Issue Paddy Lot &rarr; Start Shift Batch</p>
               </div>
               <button onClick={() => setIsIssueModalOpen(false)} className="text-slate-400 hover:text-slate-600">
                 <X className="w-4 h-4" />

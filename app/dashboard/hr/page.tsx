@@ -27,7 +27,7 @@ export default function HrCentralHubPage() {
             className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider text-white"
             style={{ backgroundColor: currentTheme.buttonBg }}
           >
-            PDF Note 6 • Workforce & Labour
+             • Workforce & Labour
           </span>
           <h1 className="text-xl font-bold text-slate-900 mt-1">HR & Labour Management Hub</h1>
           <p className="text-xs text-slate-500">

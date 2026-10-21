@@ -19,7 +19,7 @@ export default function PackagingFinishedStockPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider text-white" style={{ backgroundColor: currentTheme.buttonBg }}>
-            PDF Checkpoint #5
+            Checkpoint #5
           </span>
           <h1 className="text-xl font-bold text-slate-900 mt-1">Finished Stock & Bagging Godown</h1>
           <p className="text-xs text-slate-500">Grade-wise stock, 20/50 kgs Bagging records, and live stock for sales order allocation</p>

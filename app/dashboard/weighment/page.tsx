@@ -228,7 +228,7 @@ export default function WeighbridgePage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider text-white" style={{ backgroundColor: currentTheme.buttonBg }}>
-            {isGodownStaff ? 'Godown Unloading Desk' : 'PDF Checkpoint #2'}
+            {isGodownStaff ? 'Godown Unloading Desk' : 'Checkpoint #2'}
           </span>
           <h1 className="text-xl font-bold text-slate-900 mt-1">
             {isGodownStaff
@@ -346,7 +346,7 @@ export default function WeighbridgePage() {
               {isGodownStaff ? 'Truck Unloading Register & Tare Handover' : 'Master Weighment Register'}
             </h2>
             <p className="text-xs text-slate-400">
-              PDF Flow: Gross Weight &rarr; Godown Unload &rarr; Tare Weight &rarr; Final Net Stock
+               Gross Weight &rarr; Godown Unload &rarr; Tare Weight &rarr; Final Net Stock
             </p>
           </div>
 
@@ -450,7 +450,7 @@ export default function WeighbridgePage() {
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-bold text-slate-900">Record Weighment (Gross & Tare Integration)</h3>
-                <p className="text-[11px] text-slate-400">PDF Formula: Net Wt = Gross - Tare - Moisture Cut</p>
+                <p className="text-[11px] text-slate-400">Formula: Net Wt = Gross - Tare - Moisture Cut</p>
               </div>
               <button onClick={() => setIsModalOpen(false)} className="p-1 rounded-lg text-slate-400 hover:text-slate-600">
                 <X className="w-4 h-4" />

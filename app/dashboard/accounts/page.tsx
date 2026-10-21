@@ -434,7 +434,7 @@ export default function AccountsLedgersPage() {
       {activeTab === 'expenses' && (
         <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-base font-bold text-slate-900">Mill Running Expenses (PDF Note 5)</h2>
+            <h2 className="text-base font-bold text-slate-900">Mill Running Expenses</h2>
             <span className="text-xs font-bold text-rose-600">Total: ₹2,71,600</span>
           </div>
 

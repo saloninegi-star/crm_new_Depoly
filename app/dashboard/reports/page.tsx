@@ -116,7 +116,7 @@ export default function ReportsProfitLossPage() {
         <div className="p-6 rounded-2xl bg-slate-900 text-white shadow-md space-y-4">
           <div className="flex justify-between items-center">
             <div>
-              <h2 className="text-base font-bold text-white">Byproduct Contribution to Profit Margin (PDF Page 4)</h2>
+              <h2 className="text-base font-bold text-white">Byproduct Contribution to Profit Margin </h2>
               <p className="text-xs text-slate-400">Husk boiler fuel savings and Bran oil extraction sales contribute directly to net margin</p>
             </div>
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">

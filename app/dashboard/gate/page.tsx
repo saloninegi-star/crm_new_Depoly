@@ -20,8 +20,6 @@ import {
   X,
   AlertCircle,
   RefreshCw,
-  QrCode,
-  ArrowRight,
 } from 'lucide-react';
 
 function extractErrorMessage(err: unknown): string {
@@ -77,8 +75,8 @@ export default function GateInwardPage() {
 
   // Second API Gate Pass State
   const [selectedPass, setSelectedPass] = useState<GatePassDetails | null>(null);
-  const [isLoadingPass, setIsLoadingPass] = useState(false);
 
+  // 1. All fields are empty by default
   const initialFormState = {
     vehicle_number: '',
     driver_name: '',
@@ -93,7 +91,7 @@ export default function GateInwardPage() {
     expected_quantity: '',
     expected_quantity_unit: 'Quintals',
     expected_bags: '',
-    remarks: 'Gate check verified and stamped',
+    remarks: '',
   };
 
   const [formData, setFormData] = useState(initialFormState);
@@ -119,38 +117,13 @@ export default function GateInwardPage() {
     }
   };
 
-  // Helper to fetch the driver gate pass with barcode via the Second API
   const handleFetchGatePass = async (gate_token: string) => {
-    setIsLoadingPass(true);
     try {
       const passData = await gateService.getGatePass(gate_token);
       setSelectedPass(passData);
     } catch (err: unknown) {
       alert(extractErrorMessage(err));
-    } finally {
-      setIsLoadingPass(false);
     }
-  };
-
-  const handlePrefillNewTruck = () => {
-    const randomDigits = Math.floor(1000 + Math.random() * 9000);
-    setFormData({
-      vehicle_number: `HR 26 DQ ${randomDigits}`,
-      driver_name: 'Dinesh Sharma',
-      driver_mobile: '9755512345',
-      transporter_name: 'MP State Civil Supplies Transport',
-      material_type: 'Paddy',
-      source_type: 'Government Procurement Centre',
-      source_name: 'MP Mandi Board Centre #4',
-      source_location: 'Hoshangabad, MP',
-      reference_number: `GOVT-ALLOC-${randomDigits}`,
-      challan_number: `CHL-${randomDigits}`,
-      expected_quantity: '420.75',
-      expected_quantity_unit: 'Quintals',
-      expected_bags: '840',
-      remarks: 'Govt dispatch challan verified and stamped',
-    });
-    setErrorMsg(null);
   };
 
   // Handle Form Submission -> Auto triggers Second API
@@ -177,13 +150,13 @@ export default function GateInwardPage() {
         remarks: formData.remarks.trim(),
       };
 
-      // 1. First API Call
+      // 1. Create Inward Entry API Call
       const res = await gateService.createInwardEntry(payload);
       setEntries([res, ...entries]);
       setIsModalOpen(false);
-      setFormData(initialFormState);
+      setFormData(initialFormState); // Form reset
 
-      // 2. Second API Call: Auto-fetch driver barcode pass
+      // 2. Fetch Driver Gate Pass with Barcode API
       await handleFetchGatePass(res.gate_token);
     } catch (err: unknown) {
       setErrorMsg(extractErrorMessage(err));
@@ -221,10 +194,11 @@ export default function GateInwardPage() {
           </p>
         </div>
 
+        {/* 2. BUTTON OPENS 100% EMPTY FORM */}
         <button
           onClick={() => {
             setErrorMsg(null);
-            handlePrefillNewTruck();
+            setFormData(initialFormState); // Clean empty form fields
             setIsModalOpen(true);
           }}
           className="px-4 py-2.5 rounded-xl text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm cursor-pointer transition-transform active:scale-95"
@@ -448,6 +422,7 @@ export default function GateInwardPage() {
                 </div>
               </div>
 
+              {/* Exact Backend Allowed Enums */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                 <div className="space-y-1">
                   <label className="font-bold text-slate-700">Material Type *</label>
@@ -607,13 +582,10 @@ export default function GateInwardPage() {
         </div>
       )}
 
-      {/* ========================================================= */}
-      {/* SECOND API: OFFICIAL DRIVER GATE PASS WITH BARCODE MODAL */}
-      {/* ========================================================= */}
+      {/* Official Driver Gate Pass with Barcode Modal */}
       {selectedPass && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
           <div className="bg-white rounded-3xl max-w-md w-full border border-slate-200 shadow-2xl p-6 space-y-4 max-h-[92vh] overflow-y-auto">
-            {/* Header */}
             <div className="text-center border-b border-dashed border-slate-300 pb-3">
               <div className="flex items-center justify-center gap-2 mb-1">
                 <Wheat className="w-5 h-5 text-emerald-600" />
@@ -626,7 +598,6 @@ export default function GateInwardPage() {
               </p>
             </div>
 
-            {/* Official Barcode Image from Backend */}
             <div className="text-center py-2 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-1.5">
               <div className="flex justify-center items-center py-1 overflow-hidden">
                 {selectedPass.barcode_image ? (
@@ -645,7 +616,6 @@ export default function GateInwardPage() {
               </div>
             </div>
 
-            {/* Pass Metadata */}
             <div className="space-y-2 text-xs divide-y divide-slate-100">
               <div className="flex justify-between pt-1">
                 <span className="text-slate-400">Vehicle Number:</span>
@@ -685,7 +655,6 @@ export default function GateInwardPage() {
               </div>
             </div>
 
-            {/* Driver Instructions from Backend */}
             {selectedPass.instructions && selectedPass.instructions.length > 0 && (
               <div className="p-3 bg-amber-50/70 rounded-xl border border-amber-200/60 space-y-1">
                 <div className="text-[10px] font-bold text-amber-900 uppercase">Driver Instructions:</div>
@@ -697,7 +666,6 @@ export default function GateInwardPage() {
               </div>
             )}
 
-            {/* Actions */}
             <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
               <button
                 onClick={() => setSelectedPass(null)}

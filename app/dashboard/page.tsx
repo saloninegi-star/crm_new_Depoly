@@ -202,7 +202,7 @@ export default function DashboardPage() {
 
           <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="font-bold text-sm text-slate-900">Mill Running Expenses (PDF Note 5)</h3>
+              <h3 className="font-bold text-sm text-slate-900">Mill Running Expenses </h3>
               <span className="text-xs font-bold text-rose-600">Total: ₹2,71,600</span>
             </div>
             <div className="space-y-2 text-xs">
@@ -321,7 +321,7 @@ export default function DashboardPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="text-base font-bold text-slate-900">Active FIFO Milling Priority Queue</h2>
-              <p className="text-xs text-slate-400">1st In &rarr; 1st Out tracking ensures optimal milling recovery (PDF Page 2)</p>
+              <p className="text-xs text-slate-400">1st In &rarr; 1st Out tracking ensures optimal milling recovery </p>
             </div>
             <div className="relative">
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
@@ -408,7 +408,7 @@ export default function DashboardPage() {
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
             <span className="text-xs font-semibold text-slate-400">Today Labour Expense</span>
             <div className="text-2xl font-black text-emerald-700">₹64,200</div>
-            <div className="text-[11px] text-slate-400">Auto-linked to Accounts (PDF Note 5)</div>
+            <div className="text-[11px] text-slate-400">Auto-linked to Accounts </div>
           </div>
         </div>
 
@@ -947,7 +947,7 @@ export default function DashboardPage() {
           </div>
 
           <div className="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-100 text-[11px] text-emerald-900 leading-relaxed">
-            <strong>PDF Keypoint:</strong> Main product recovery 60-65% target ke andar chal rahi hai. Byproducts direct margin contribute kar rahe hain.
+             Main product recovery 60-65% target ke andar chal rahi hai. Byproducts direct margin contribute kar rahe hain.
           </div>
         </div>
       </div>
@@ -957,9 +957,7 @@ export default function DashboardPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                PDF Note 4
-              </span>
+              
               <h2 className="text-base font-bold text-white">Full Accounts Layer (Real-time Operations)</h2>
             </div>
             <p className="text-xs text-slate-400">Cash, Bank, Party-wise Receivables, Farmer Payables & Expenses</p>

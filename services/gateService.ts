@@ -6,6 +6,7 @@ export interface GateInwardPayload {
   driver_mobile: string;
   transporter_name: string;
   material_type: string;
+  material_type_other?: string | null;
   source_type: string;
   source_name: string;
   source_location: string;
@@ -44,7 +45,6 @@ export interface GateInwardResponse {
   cancelled_at: string | null;
 }
 
-// Second API Response Type (Gate Pass for Driver)
 export interface GatePassDetails {
   gate_token: string;
   mill_name: string;
@@ -65,7 +65,7 @@ export interface GatePassDetails {
   status: string;
   operator_name: string;
   barcode_data: string;
-  barcode_image: string; // Base64 SVG Barcode
+  barcode_image: string;
   next_step: string;
   instructions: string[];
 }
@@ -77,7 +77,13 @@ export const gateService = {
     return response.data;
   },
 
-  // 2. Fetch Driver Gate Pass with Barcode: GET /staff/gate_guard/inward/{gate_token}/gate-pass
+  // 2. Direct PATCH update: PATCH /staff/gate_guard/inward/{id} (No 405 error!)
+  updateInwardEntry: async (id: number, payload: GateInwardPayload): Promise<GateInwardResponse> => {
+    const response = await api.patch<GateInwardResponse>(`/staff/gate_guard/inward/${id}`, payload);
+    return response.data;
+  },
+
+  // 3. Fetch Driver Gate Pass with Barcode: GET /staff/gate_guard/inward/{gate_token}/gate-pass
   getGatePass: async (gate_token: string): Promise<GatePassDetails> => {
     const response = await api.get<GatePassDetails>(`/staff/gate_guard/inward/${gate_token}/gate-pass`);
     return response.data;

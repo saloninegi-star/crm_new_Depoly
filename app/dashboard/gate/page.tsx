@@ -20,6 +20,8 @@ import {
   X,
   AlertCircle,
   RefreshCw,
+  Edit2,
+  Check,
 } from 'lucide-react';
 
 function extractErrorMessage(err: unknown): string {
@@ -68,15 +70,16 @@ export default function GateInwardPage() {
   const [isLoadingList, setIsLoadingList] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   
-  // Modals & Slips
+  // Modal & Edit State
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingEntryId, setEditingEntryId] = useState<number | null>(null);
+  const [editingTokenName, setEditingTokenName] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Second API Gate Pass State
+  // Driver Barcode Pass Modal State
   const [selectedPass, setSelectedPass] = useState<GatePassDetails | null>(null);
 
-  // 1. All fields are empty by default
   const initialFormState = {
     vehicle_number: '',
     driver_name: '',
@@ -126,7 +129,40 @@ export default function GateInwardPage() {
     }
   };
 
-  // Handle Form Submission -> Auto triggers Second API
+  // Open Modal for Editing an Existing Entry
+  const handleOpenEditModal = (row: GateInwardResponse) => {
+    setEditingEntryId(row.id);
+    setEditingTokenName(row.gate_token);
+    setErrorMsg(null);
+    setFormData({
+      vehicle_number: row.vehicle_number || '',
+      driver_name: row.driver_name || '',
+      driver_mobile: row.driver_mobile || '',
+      transporter_name: row.transporter_name || '',
+      material_type: row.material_type || 'Paddy',
+      source_type: row.source_type || 'Government Procurement Centre',
+      source_name: row.source_name || '',
+      source_location: row.source_location || '',
+      reference_number: row.reference_number || '',
+      challan_number: row.challan_number || '',
+      expected_quantity: row.expected_quantity ? String(row.expected_quantity) : '',
+      expected_quantity_unit: row.expected_quantity_unit || 'Quintals',
+      expected_bags: row.expected_bags ? String(row.expected_bags) : '',
+      remarks: row.remarks || '',
+    });
+    setIsModalOpen(true);
+  };
+
+  // Open Modal for a Fresh Vehicle
+  const handleOpenNewModal = () => {
+    setEditingEntryId(null);
+    setEditingTokenName('');
+    setErrorMsg(null);
+    setFormData(initialFormState);
+    setIsModalOpen(true);
+  };
+
+  // Handle Form Submission: Edit ke time slip nahi aayegi, sirf new par aayegi!
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -150,14 +186,24 @@ export default function GateInwardPage() {
         remarks: formData.remarks.trim(),
       };
 
-      // 1. Create Inward Entry API Call
-      const res = await gateService.createInwardEntry(payload);
-      setEntries([res, ...entries]);
-      setIsModalOpen(false);
-      setFormData(initialFormState); // Form reset
-
-      // 2. Fetch Driver Gate Pass with Barcode API
-      await handleFetchGatePass(res.gate_token);
+      if (editingEntryId !== null) {
+        // UPDATE API: PUT /staff/gate_guard/inward/{id}
+        const updatedRes = await gateService.updateInwardEntry(editingEntryId, payload);
+        
+        // Update table item in-place
+        setEntries(entries.map((item) => (item.id === editingEntryId ? updatedRes : item)));
+        setIsModalOpen(false);
+        setEditingEntryId(null);
+        // NO slip popup on edit!
+      } else {
+        // CREATE API: POST /staff/gate_guard/inward
+        const newRes = await gateService.createInwardEntry(payload);
+        setEntries([newRes, ...entries]);
+        setIsModalOpen(false);
+        setFormData(initialFormState);
+        // Only open slip popup on NEW entry
+        await handleFetchGatePass(newRes.gate_token);
+      }
     } catch (err: unknown) {
       setErrorMsg(extractErrorMessage(err));
     } finally {
@@ -190,17 +236,12 @@ export default function GateInwardPage() {
             </h1>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
-            Capture arriving truck details, generate barcode tokens, and print official driver gate passes
+            Capture arriving truck details, generate barcode tokens, and manage inward records
           </p>
         </div>
 
-        {/* 2. BUTTON OPENS 100% EMPTY FORM */}
         <button
-          onClick={() => {
-            setErrorMsg(null);
-            setFormData(initialFormState); // Clean empty form fields
-            setIsModalOpen(true);
-          }}
+          onClick={handleOpenNewModal}
           className="px-4 py-2.5 rounded-xl text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm cursor-pointer transition-transform active:scale-95"
           style={{ backgroundColor: currentTheme.buttonBg }}
         >
@@ -234,11 +275,11 @@ export default function GateInwardPage() {
         </div>
 
         <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-          <div className="text-xs font-semibold text-slate-400">Barcode Generation</div>
+          <div className="text-xs font-semibold text-slate-400">Connected Endpoint</div>
           <div className="text-xs font-mono font-bold text-emerald-700 truncate mt-1">
-            Official SVG Barcodes
+            /staff/gate_guard/inward
           </div>
-          <div className="text-[11px] text-slate-400">Scan at Weighbridge</div>
+          <div className="text-[11px] text-slate-400">Live Backend Synchronized</div>
         </div>
       </div>
 
@@ -247,7 +288,7 @@ export default function GateInwardPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 className="text-base font-bold text-slate-900">Live Inward Token Register</h2>
-            <p className="text-xs text-slate-400">Click &apos;Print Pass&apos; to load the official barcode slip from the backend</p>
+            <p className="text-xs text-slate-400">Click &apos;Edit&apos; to update inward details or &apos;Print Pass&apos; to view barcode slip</p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -284,7 +325,7 @@ export default function GateInwardPage() {
                 <th className="pb-3">Material & Bags</th>
                 <th className="pb-3">Expected Qty</th>
                 <th className="pb-3">Status</th>
-                <th className="pb-3 text-right">Gate Pass</th>
+                <th className="pb-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
@@ -324,13 +365,24 @@ export default function GateInwardPage() {
                       </span>
                     </td>
                     <td className="py-3.5 text-right">
-                      <button
-                        onClick={() => handleFetchGatePass(row.gate_token)}
-                        className="px-2.5 py-1 rounded-md text-[11px] font-semibold border border-slate-200 text-slate-700 hover:bg-slate-100 cursor-pointer inline-flex items-center gap-1.5"
-                      >
-                        <Printer className="w-3 h-3 text-emerald-600" />
-                        <span>Print Pass</span>
-                      </button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => handleOpenEditModal(row)}
+                          className="px-2 py-1 rounded-md text-[11px] font-semibold border border-slate-200 text-slate-700 hover:bg-slate-100 cursor-pointer inline-flex items-center gap-1"
+                          title="Edit Inward Entry"
+                        >
+                          <Edit2 className="w-3 h-3 text-blue-600" />
+                          <span>Edit</span>
+                        </button>
+                        
+                        <button
+                          onClick={() => handleFetchGatePass(row.gate_token)}
+                          className="px-2 py-1 rounded-md text-[11px] font-semibold border border-slate-200 text-slate-700 hover:bg-slate-100 cursor-pointer inline-flex items-center gap-1"
+                        >
+                          <Printer className="w-3 h-3 text-emerald-600" />
+                          <span>Print Pass</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -340,16 +392,20 @@ export default function GateInwardPage() {
         </div>
       </div>
 
-      {/* Modal: New Vehicle Inward Entry */}
+      {/* Modal: Create OR Update Inward Entry */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4">
           <div className="bg-white rounded-2xl max-w-2xl w-full border border-slate-200 shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
               <div>
                 <h3 className="text-sm font-bold text-slate-900">
-                  New Gate Inward Entry (Checkpoint #1)
+                  {editingEntryId !== null ? `Update Inward Entry (${editingTokenName})` : 'New Gate Inward Entry (Checkpoint #1)'}
                 </h3>
-                <p className="text-[11px] text-slate-400">Post vehicle entry to generate official gate pass with barcode</p>
+                <p className="text-[11px] text-slate-400">
+                  {editingEntryId !== null
+                    ? `Update record for ID #${editingEntryId} via PUT /staff/gate_guard/inward/${editingEntryId}`
+                    : 'Post vehicle entry to generate official gate pass with barcode'}
+                </p>
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -376,7 +432,7 @@ export default function GateInwardPage() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. HR 26 DQ 5521"
+                    placeholder="e.g. UP32AB9999"
                     value={formData.vehicle_number}
                     onChange={(e) => setFormData({ ...formData, vehicle_number: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 uppercase font-mono font-bold focus:border-emerald-500"
@@ -388,7 +444,7 @@ export default function GateInwardPage() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. MP State Civil Supplies Transport"
+                    placeholder="e.g. Kisan Logistics & Transport"
                     value={formData.transporter_name}
                     onChange={(e) => setFormData({ ...formData, transporter_name: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-emerald-500"
@@ -402,7 +458,7 @@ export default function GateInwardPage() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Dinesh Sharma"
+                    placeholder="e.g. Ramesh Kumar Yadav"
                     value={formData.driver_name}
                     onChange={(e) => setFormData({ ...formData, driver_name: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-emerald-500"
@@ -414,7 +470,7 @@ export default function GateInwardPage() {
                   <input
                     type="tel"
                     required
-                    placeholder="e.g. 9755512345"
+                    placeholder="e.g. 9876543210"
                     value={formData.driver_mobile}
                     onChange={(e) => setFormData({ ...formData, driver_mobile: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono focus:border-emerald-500"
@@ -422,7 +478,6 @@ export default function GateInwardPage() {
                 </div>
               </div>
 
-              {/* Exact Backend Allowed Enums */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                 <div className="space-y-1">
                   <label className="font-bold text-slate-700">Material Type *</label>
@@ -445,8 +500,8 @@ export default function GateInwardPage() {
                     onChange={(e) => setFormData({ ...formData, source_type: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 bg-white"
                   >
-                    <option value="Government Procurement Centre">Government Procurement Centre</option>
                     <option value="Farmer">Farmer</option>
+                    <option value="Government Procurement Centre">Government Procurement Centre</option>
                     <option value="Supplier">Supplier</option>
                     <option value="Other Mill">Other Mill</option>
                     <option value="Internal Transfer">Internal Transfer</option>
@@ -458,7 +513,7 @@ export default function GateInwardPage() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. MP Mandi Board Centre #4"
+                    placeholder="e.g. Suresh Chandra Patel"
                     value={formData.source_name}
                     onChange={(e) => setFormData({ ...formData, source_name: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-emerald-500"
@@ -472,7 +527,7 @@ export default function GateInwardPage() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Hoshangabad, MP"
+                    placeholder="e.g. Bara Banki Mandi, Uttar Pradesh"
                     value={formData.source_location}
                     onChange={(e) => setFormData({ ...formData, source_location: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-emerald-500"
@@ -483,7 +538,7 @@ export default function GateInwardPage() {
                   <label className="font-bold text-slate-700">Reference Number</label>
                   <input
                     type="text"
-                    placeholder="e.g. GOVT-ALLOC-2026-908"
+                    placeholder="e.g. PO-2026-OCT-0045"
                     value={formData.reference_number}
                     onChange={(e) => setFormData({ ...formData, reference_number: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono focus:border-emerald-500"
@@ -494,7 +549,7 @@ export default function GateInwardPage() {
                   <label className="font-bold text-slate-700">Challan Number</label>
                   <input
                     type="text"
-                    placeholder="e.g. GOVT-DSP-4410"
+                    placeholder="e.g. CH-778812"
                     value={formData.challan_number}
                     onChange={(e) => setFormData({ ...formData, challan_number: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono focus:border-emerald-500"
@@ -509,7 +564,7 @@ export default function GateInwardPage() {
                     type="number"
                     step="0.01"
                     required
-                    placeholder="e.g. 420.75"
+                    placeholder="e.g. 275.50"
                     value={formData.expected_quantity}
                     onChange={(e) => setFormData({ ...formData, expected_quantity: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 font-bold focus:border-emerald-500"
@@ -534,7 +589,7 @@ export default function GateInwardPage() {
                   <input
                     type="number"
                     required
-                    placeholder="e.g. 840"
+                    placeholder="e.g. 550"
                     value={formData.expected_bags}
                     onChange={(e) => setFormData({ ...formData, expected_bags: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 font-bold focus:border-emerald-500"
@@ -546,7 +601,7 @@ export default function GateInwardPage() {
                 <label className="font-bold text-slate-700">Remarks / Inspection Notes</label>
                 <input
                   type="text"
-                  placeholder="e.g. Govt dispatch challan verified and stamped"
+                  placeholder="e.g. Driver recount verified at gate, document physically checked"
                   value={formData.remarks}
                   onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-emerald-500"
@@ -570,10 +625,10 @@ export default function GateInwardPage() {
                   {isSubmitting ? (
                     <>
                       <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                      <span>Generating Pass...</span>
+                      <span>{editingEntryId !== null ? 'Updating Record...' : 'Generating Pass...'}</span>
                     </>
                   ) : (
-                    <span>Register Vehicle & Issue Pass</span>
+                    <span>{editingEntryId !== null ? 'Update Inward Entry' : 'Register Vehicle & Issue Pass'}</span>
                   )}
                 </button>
               </div>
@@ -632,7 +687,7 @@ export default function GateInwardPage() {
                 <span className="text-slate-800 font-medium">{selectedPass.transporter_name}</span>
               </div>
               <div className="flex justify-between pt-1.5">
-                <span className="text-slate-400">Source Mandi:</span>
+                <span className="text-slate-400">Source:</span>
                 <span className="text-slate-800">{selectedPass.source_name} ({selectedPass.source_location})</span>
               </div>
               <div className="flex justify-between pt-1.5">

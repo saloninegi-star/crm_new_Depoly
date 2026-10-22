@@ -91,10 +91,10 @@ export default function HomePage() {
                 KOGNOS
               </span>
               <span className="text-[10px] text-emerald-700 font-bold tracking-wider uppercase block">
-                Rice Mill ERP
+                 Mill ERP
               </span>
             </div>
-          </Link>
+          </Link>  
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-600">

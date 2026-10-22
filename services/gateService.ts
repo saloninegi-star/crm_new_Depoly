@@ -77,13 +77,28 @@ export const gateService = {
     return response.data;
   },
 
-  // 2. Direct PATCH update: PATCH /staff/gate_guard/inward/{id} (No 405 error!)
+  // 2. Direct PATCH update: PATCH /staff/gate_guard/inward/{id}
   updateInwardEntry: async (id: number, payload: GateInwardPayload): Promise<GateInwardResponse> => {
     const response = await api.patch<GateInwardResponse>(`/staff/gate_guard/inward/${id}`, payload);
     return response.data;
   },
 
-  // 3. Fetch Driver Gate Pass with Barcode: GET /staff/gate_guard/inward/{gate_token}/gate-pass
+  // 3. Delete Inward Entry: DELETE /staff/gate_guard/inward/delete/{id}
+  deleteInwardEntry: async (id: number): Promise<{ detail: string }> => {
+    try {
+      const response = await api.delete<{ detail: string }>(`/staff/gate_guard/inward/delete/${id}`);
+      return response.data;
+    } catch (err: any) {
+      // Fallback to POST if backend accepts POST for delete
+      if (err.response?.status === 405) {
+        const postRes = await api.post<{ detail: string }>(`/staff/gate_guard/inward/delete/${id}`);
+        return postRes.data;
+      }
+      throw err;
+    }
+  },
+
+  // 4. Fetch Driver Gate Pass with Barcode: GET /staff/gate_guard/inward/{gate_token}/gate-pass
   getGatePass: async (gate_token: string): Promise<GatePassDetails> => {
     const response = await api.get<GatePassDetails>(`/staff/gate_guard/inward/${gate_token}/gate-pass`);
     return response.data;

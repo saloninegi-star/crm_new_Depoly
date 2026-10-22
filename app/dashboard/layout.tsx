@@ -143,7 +143,8 @@ export default function DashboardLayout({
   const router = useRouter();
   const { currentTheme, cycleTheme } = useTheme();
 
-  const [userRole, setUserRole] = useState('superadmin');
+  const [isMounted, setIsMounted] = useState(false);
+  const [userRole, setUserRole] = useState<string>('');
   const [personName, setPersonName] = useState('');
 
   useEffect(() => {
@@ -174,7 +175,7 @@ export default function DashboardLayout({
       realName = storedUserName.replace(/\s*\(.*?\)\s*/g, '').replace(/Mobile:\s*\d+/gi, '').trim();
     }
 
-    // 3. Strict fallback based on role (Non-owners will NEVER see "Mill Owner")
+    // 3. Fallback based strictly on role
     const meta = ROLE_DETAILS[detectedRole];
 
     if (detectedRole === 'accounts') {
@@ -209,6 +210,9 @@ export default function DashboardLayout({
       .join(' ');
 
     setPersonName(formatted);
+
+    // FIXED: Crucial line to complete hydration and display menu!
+    setIsMounted(true);
   }, []);
 
   const handleConfirmLogout = () => {
@@ -223,11 +227,16 @@ export default function DashboardLayout({
   };
 
   const isOwner = userRole === 'superadmin' || userRole === 'admin' || userRole === 'owner';
-  const visibleNavItems = isOwner
+
+  const visibleNavItems = !isMounted
+    ? []
+    : isOwner
     ? ALL_NAV_ITEMS
     : ALL_NAV_ITEMS.filter((item) => item.roles?.includes(userRole));
 
-  const currentRoleMeta = ROLE_DETAILS[userRole] || ROLE_DETAILS.superadmin;
+  const currentRoleMeta = isMounted && userRole
+    ? ROLE_DETAILS[userRole] || ROLE_DETAILS.gate_guard
+    : { label: 'Loading...', defaultName: '' };
 
   return (
     <div className="min-h-screen bg-[#f8faf9] flex font-sans text-slate-800">
@@ -272,40 +281,49 @@ export default function DashboardLayout({
             </button>
           </div>
 
-          {/* Clean Menu Items */}
+          {/* Menu Items */}
           <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
             <div className="text-[10px] font-bold tracking-wider text-slate-400 uppercase px-3 mb-2">
-              {currentRoleMeta.label} Menu
+              {isMounted ? `${currentRoleMeta.label} Menu` : 'Loading Menu...'}
             </div>
 
-            {visibleNavItems.map((item) => {
-              const Icon = item.icon;
-              const isActive =
-                pathname === item.href ||
-                (item.href !== '/dashboard' && pathname.startsWith(item.href));
+            {/* Skeleton placeholder during initial hydration */}
+            {!isMounted ? (
+              <div className="space-y-2 px-3 py-2 animate-pulse">
+                <div className="h-8 bg-slate-100 rounded-xl w-full" />
+                <div className="h-8 bg-slate-100 rounded-xl w-full" />
+                <div className="h-8 bg-slate-100 rounded-xl w-3/4" />
+              </div>
+            ) : (
+              visibleNavItems.map((item) => {
+                const Icon = item.icon;
+                const isActive =
+                  pathname === item.href ||
+                  (item.href !== '/dashboard' && pathname.startsWith(item.href));
 
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                    isActive
-                      ? 'text-white shadow-sm'
-                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                  }`}
-                  style={{
-                    backgroundColor: isActive ? currentTheme.buttonBg : undefined,
-                  }}
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon className="w-4 h-4 shrink-0" />
-                    <span>{item.name}</span>
-                  </div>
-                  {isActive && <ChevronRight className="w-3.5 h-3.5 opacity-80" />}
-                </Link>
-              );
-            })}
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={() => setSidebarOpen(false)}
+                    className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                      isActive
+                        ? 'text-white shadow-sm'
+                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                    }`}
+                    style={{
+                      backgroundColor: isActive ? currentTheme.buttonBg : undefined,
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Icon className="w-4 h-4 shrink-0" />
+                      <span>{item.name}</span>
+                    </div>
+                    {isActive && <ChevronRight className="w-3.5 h-3.5 opacity-80" />}
+                  </Link>
+                );
+              })
+            )}
           </div>
 
           {/* User Profile Card */}
@@ -327,11 +345,10 @@ export default function DashboardLayout({
                 </div>
                 <div className="min-w-0">
                   <div className="text-xs font-bold text-slate-800 leading-tight truncate">
-                    {currentRoleMeta.label}
+                    {isMounted ? currentRoleMeta.label : '...'}
                   </div>
-                  {/* Clean User Name from Backend */}
                   <div className="text-[11px] font-semibold text-emerald-700 truncate">
-                    {personName}
+                    {isMounted ? personName : '...'}
                   </div>
                 </div>
               </div>
@@ -362,7 +379,7 @@ export default function DashboardLayout({
 
             <div>
               <h1 className="text-sm sm:text-base font-bold text-slate-900 leading-tight">
-                {currentRoleMeta.label} Desk
+                {isMounted ? `${currentRoleMeta.label} Desk` : 'Loading Workspace...'}
               </h1>
               <p className="text-[11px] text-slate-400 hidden sm:block">
                 Shift #1 Active • Operations Live

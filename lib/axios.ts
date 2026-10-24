@@ -5,7 +5,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 60000, // 15000 se badha kar 60000 (60 seconds) kar diya gaya hai Render wake-up ke liye
+  timeout: 60000, 
 });
 
 // Request Interceptor

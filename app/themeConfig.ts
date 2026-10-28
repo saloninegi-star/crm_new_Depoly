@@ -1,73 +1,76 @@
-export type ThemeKey = 'emerald' | 'amber' | 'sapphire' | 'graphite';
+export type AccentColorKey = 'lavender' | 'blue' | 'teal' | 'ochre' | 'graphite' | 'green';
+export type ThemeMode = 'light' | 'dark' | 'system';
 
-// Added missing ThemeColors Interface
-export interface ThemeColors {
-  name: string;
+export interface AccentPreset {
+  key: AccentColorKey;
+  label: string;
   dotColor: string;
-  wavePrimary: string;
-  waveSecondary: string;
-  headingColor: string;
-  subHeadingColor: string;
-  buttonBg: string;
-  buttonHover: string;
-  buttonShadow: string;
-  inputBg: string;
+  primary: string;         // Main button & active menu background
+  hover: string;
+  lightBg: string;         // Soft badge/preview background
+  text: string;            // Text color for light badges
+  ring: string;
 }
 
-export const THEME_PRESETS: Record<ThemeKey, ThemeColors> = {
-  // Dark Green Theme (Default)
-  emerald: {
-    name: 'Deep Forest Green',
-    dotColor: '#065f46',
-    wavePrimary: '#064e3b',
-    waveSecondary: '#10b981',
-    headingColor: '#022c22',
-    subHeadingColor: '#475569',
-    buttonBg: '#064e3b',
-    buttonHover: '#022c22',
-    buttonShadow: '0 10px 25px -5px rgba(6, 78, 59, 0.45)',
-    inputBg: '#f0fdf4',
+export const ACCENT_PRESETS: Record<AccentColorKey, AccentPreset> = {
+  lavender: {
+    key: 'lavender',
+    label: 'Lavender',
+    dotColor: '#6851ff',
+    primary: '#6851ff',
+    hover: '#573ef2',
+    lightBg: '#f0edff',
+    text: '#573ef2',
+    ring: '#c4b5fd',
   },
-
-  // Dark Purple Theme
-  amber: {
-    name: 'Royal Dark Purple',
-    dotColor: '#6b21a8',
-    wavePrimary: '#581c87',
-    waveSecondary: '#a855f7',
-    headingColor: '#2e1065',
-    subHeadingColor: '#64748b',
-    buttonBg: '#581c87',
-    buttonHover: '#3b0764',
-    buttonShadow: '0 10px 25px -5px rgba(88, 28, 135, 0.45)',
-    inputBg: '#faf5ff',
+  blue: {
+    key: 'blue',
+    label: 'Blue',
+    dotColor: '#2563eb',
+    primary: '#2563eb',
+    hover: '#1d4ed8',
+    lightBg: '#eff6ff',
+    text: '#1d4ed8',
+    ring: '#93c5fd',
   },
-
-  // Dark Blue Theme
-  sapphire: {
-    name: 'Midnight Dark Blue',
-    dotColor: '#1e3a8a',
-    wavePrimary: '#172554',
-    waveSecondary: '#3b82f6',
-    headingColor: '#091833',
-    subHeadingColor: '#475569',
-    buttonBg: '#172554',
-    buttonHover: '#0b1329',
-    buttonShadow: '0 10px 25px -5px rgba(23, 37, 84, 0.45)',
-    inputBg: '#f0f4f9',
+  teal: {
+    key: 'teal',
+    label: 'Teal',
+    dotColor: '#0d9488',
+    primary: '#0d9488',
+    hover: '#0f766e',
+    lightBg: '#f0fdfa',
+    text: '#0f766e',
+    ring: '#99f6e4',
   },
-
-  // Graphite Theme
+  ochre: {
+    key: 'ochre',
+    label: 'Ochre',
+    dotColor: '#b45309',
+    primary: '#b45309',
+    hover: '#92400e',
+    lightBg: '#fef3c7',
+    text: '#92400e',
+    ring: '#fde68a',
+  },
   graphite: {
-    name: 'Modern Graphite',
+    key: 'graphite',
+    label: 'Graphite',
     dotColor: '#334155',
-    wavePrimary: '#334155',
-    waveSecondary: '#94a3b8',
-    headingColor: '#0f172a',
-    subHeadingColor: '#64748b',
-    buttonBg: '#0f172a',
-    buttonHover: '#1e293b',
-    buttonShadow: '0 10px 25px -5px rgba(15, 23, 42, 0.45)',
-    inputBg: '#f3f4f6',
+    primary: '#334155',
+    hover: '#1e293b',
+    lightBg: '#f1f5f9',
+    text: '#1e293b',
+    ring: '#cbd5e1',
+  },
+  green: {
+    key: 'green',
+    label: 'Green',
+    dotColor: '#16a34a',
+    primary: '#16a34a',
+    hover: '#15803d',
+    lightBg: '#f0fdf4',
+    text: '#15803d',
+    ring: '#bbf7d0',
   },
 };

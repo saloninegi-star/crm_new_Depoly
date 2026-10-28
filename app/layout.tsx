@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { ThemeProvider } from './context/ThemeContext';
+import { LanguageProvider } from './context/LanguageContext'; 
 
 export const metadata: Metadata = {
   title: 'Kognos Rice Mill CRM',
@@ -15,7 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <LanguageProvider> 
+            {children}
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

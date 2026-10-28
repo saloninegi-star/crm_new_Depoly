@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useLanguage } from './context/LanguageContext';
+import LanguageSelector from './components/LanguageSelector';
 import {
   Wheat,
   Truck,
@@ -68,6 +70,7 @@ const FAQS = [
 export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const { t } = useLanguage();
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -98,20 +101,21 @@ export default function HomePage() {
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-600">
-            <a href="#features" className="hover:text-emerald-600 transition-colors">Features</a>
-            <a href="#pipeline" className="hover:text-emerald-600 transition-colors">Process Flow</a>
-            <a href="#roles" className="hover:text-emerald-600 transition-colors">Role Desks</a>
-            <a href="#faq" className="hover:text-emerald-600 transition-colors">FAQ</a>
+            <a href="#features" className="hover:text-emerald-600 transition-colors">{t('home_features')}</a>
+            <a href="#pipeline" className="hover:text-emerald-600 transition-colors">{t('home_process')}</a>
+            <a href="#roles" className="hover:text-emerald-600 transition-colors">{t('home_roles')}</a>
+            <a href="#faq" className="hover:text-emerald-600 transition-colors">{t('home_faq')}</a>
           </nav>
 
           {/* Top Right Login CTA */}
           <div className="hidden sm:flex items-center gap-3">
+            <LanguageSelector />
             <Link
               href="/login"
               className="px-5 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/25 flex items-center gap-2 transition-all active:scale-95 cursor-pointer"
             >
               <Lock className="w-3.5 h-3.5" />
-              <span>Login to Portal</span>
+              <span>{t('home_login')}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -123,6 +127,9 @@ export default function HomePage() {
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
+          <div className="sm:hidden">
+            <LanguageSelector />
+          </div>
         </div>
 
         {/* Mobile Dropdown Menu */}
@@ -133,28 +140,28 @@ export default function HomePage() {
               onClick={() => setMobileMenuOpen(false)}
               className="block text-xs font-semibold text-slate-700 py-1"
             >
-              Features
+              {t('home_features')}
             </a>
             <a
               href="#pipeline"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-xs font-semibold text-slate-700 py-1"
             >
-              Process Flow
+              {t('home_process')}
             </a>
             <a
               href="#roles"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-xs font-semibold text-slate-700 py-1"
             >
-              Role Desks
+              {t('home_roles')}
             </a>
             <a
               href="#faq"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-xs font-semibold text-slate-700 py-1"
             >
-              FAQ
+              {t('home_faq')}
             </a>
             <div className="pt-2 border-t border-slate-100">
               <Link
@@ -162,7 +169,7 @@ export default function HomePage() {
                 className="w-full py-2.5 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center gap-2"
               >
                 <Lock className="w-3.5 h-3.5" />
-                <span>Login to Portal</span>
+                <span>{t('home_login')}</span>
               </Link>
             </div>
           </div>

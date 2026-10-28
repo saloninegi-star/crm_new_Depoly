@@ -28,10 +28,10 @@ export interface UserProfile {
   mobile?: string;
   address?: string | null;
   profile_pic_url?: string | null;
-  role?: string;
+  role?: string;   
   role_display?: string;
   is_active?: boolean;
-}
+}  
 
 export interface LoginResponse {
   access_token: string;

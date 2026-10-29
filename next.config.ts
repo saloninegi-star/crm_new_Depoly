@@ -2,19 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "export",
+  trailingSlash: true, // इससे Static hosting पर 404 CSS paths ठीक होते हैं
   images: {
-    unoptimized: true, // <-- अगर build fail हो तो यह जोड़ें
-  },
-  experimental: {
-    agentFeedback: true,
-  },
-  turbopack: {
-    rules: {
-      "*.css": {
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css",
-      },
-    },
+    unoptimized: true,
   },
 };
 

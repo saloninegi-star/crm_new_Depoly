@@ -41,7 +41,7 @@ function extractErrorMessage(err: unknown): string {
 
 export default function LoginPage() {
   const router = useRouter();
-  const { accent, mode, setThemeMode } = useTheme();
+  const { accent, resolvedMode, setThemeMode } = useTheme();
   const { t } = useLanguage();
 
   // 🟢 Safe Translation Helper (Agar translation na mile toh hamesha exact sentence aayega)
@@ -60,7 +60,7 @@ export default function LoginPage() {
   const [apiMessage, setApiMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const mobileValid = /^\d{10}$/.test(mobile);
-  const isDark = mode === 'dark';
+  const isDark = resolvedMode === 'dark';
 
   useEffect(() => {
     if (step !== 'code' || countdown <= 0) return;

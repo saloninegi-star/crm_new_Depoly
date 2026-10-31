@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
-import LanguageSelector from '../components/LanguageSelector';
 import { authService, normalizeUserRole, type UserProfile } from '../../services/authService';
 import {
   Home,
@@ -212,20 +211,6 @@ const ROLE_LABELS: Record<string, string> = {
   sales_dispatch: 'Sales & Dispatch',
 };
 
-const NAV_TRANSLATION_KEYS: Record<string, string> = {
-  overview: 'nav_overview',
-  gate_entry: 'nav_gate_entry',
-  weighbridge: 'nav_weighbridge',
-  paddy_stock: 'nav_paddy_stock',
-  milling: 'nav_milling',
-  finished_stock: 'nav_finished_stock',
-  schedule: 'nav_schedule',
-  sales_dispatch: 'nav_sales_dispatch',
-  accounts: 'nav_accounts',
-  reports: 'nav_reports',
-  hr_labour: 'nav_hr_labour',
-};
-
 function subscribeToStorage(onStoreChange: () => void) {
   window.addEventListener('storage', onStoreChange);
   return () => window.removeEventListener('storage', onStoreChange);
@@ -300,10 +285,28 @@ function decodeNameFromToken(token: string): string {
   }
 }
 
+function formatLiveDate(date: Date, language: string): string {
+  if (language === 'pa') {
+    const weekdays = ['ਐਤਵਾਰ', 'ਸੋਮਵਾਰ', 'ਮੰਗਲਵਾਰ', 'ਬੁੱਧਵਾਰ', 'ਵੀਰਵਾਰ', 'ਸ਼ੁੱਕਰਵਾਰ', 'ਸ਼ਨੀਵਾਰ'];
+    const months = [
+      'ਜਨਵਰੀ', 'ਫ਼ਰਵਰੀ', 'ਮਾਰਚ', 'ਅਪ੍ਰੈਲ', 'ਮਈ', 'ਜੂਨ',
+      'ਜੁਲਾਈ', 'ਅਗਸਤ', 'ਸਤੰਬਰ', 'ਅਕਤੂਬਰ', 'ਨਵੰਬਰ', 'ਦਸੰਬਰ',
+    ];
+    return `${weekdays[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+  }
+
+  return new Intl.DateTimeFormat(language, {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(date);
+}
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { accent, mode, setThemeMode } = useTheme();
-  const { t } = useLanguage();
+  const { accent, resolvedMode, setThemeMode } = useTheme();
+  const { t, currentLanguage } = useLanguage();
   const normalizedRole = useSyncExternalStore(subscribeToStorage, getStoredRole, () => '');
   const profileSnapshot = useSyncExternalStore(
     subscribeToStorage,
@@ -327,31 +330,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const [liveDateString, setLiveDateString] = useState('');
   const [liveTimeString, setLiveTimeString] = useState('');
-  const [currentShift, setCurrentShift] = useState('Shift 1');
+  const [currentShift, setCurrentShift] = useState('shift_1');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const updateClock = () => {
         const now = new Date();
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const months = [
-          'January', 'February', 'March', 'April', 'May', 'June',
-          'July', 'August', 'September', 'October', 'November', 'December',
-        ];
-
-        const dayName = days[now.getDay()];
-        const date = now.getDate();
-        const monthName = months[now.getMonth()];
-        const year = now.getFullYear();
         const hours = now.getHours();
         const minutes = now.getMinutes().toString().padStart(2, '0');
 
-        let shift = 'Shift 1';
-        if (hours >= 16 && hours < 24) shift = 'Shift 2';
-        else if (hours >= 0 && hours < 8) shift = 'Shift 3';
+        let shift = 'shift_1';
+        if (hours >= 16 && hours < 24) shift = 'shift_2';
+        else if (hours >= 0 && hours < 8) shift = 'shift_3';
 
         setCurrentShift(shift);
-        setLiveDateString(`${dayName}, ${date} ${monthName} ${year}`);
+        setLiveDateString(formatLiveDate(now, currentLanguage));
         setLiveTimeString(`${hours.toString().padStart(2, '0')}:${minutes}`);
       };
 
@@ -359,7 +352,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       const timer = setInterval(updateClock, 10000);
       return () => clearInterval(timer);
     }
-  }, []);
+  }, [currentLanguage]);
 
   useEffect(() => {
     setSidebarOpen(false);
@@ -388,7 +381,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       ? { name: 'Settings', key: 'settings', subtitleKey: 'settings_subtitle' }
       : { name: 'Overview', key: 'overview', subtitleKey: 'overview_subtitle' });
 
-  const activeTranslationKey = NAV_TRANSLATION_KEYS[activeItem.key] || activeItem.key;
+  const activeTranslationKey = activeItem.key;
   const exactPageTitle =
     t(activeTranslationKey) !== activeTranslationKey ? t(activeTranslationKey) : activeItem.name;
   const userInitials = getInitials(userName);
@@ -401,7 +394,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div
       className={`h-screen w-screen flex overflow-hidden font-sans transition-colors duration-200 ${
-        mode === 'dark' ? 'dark bg-[#0b0f19] text-slate-100' : 'bg-[#f7f5ff] text-slate-800'
+        resolvedMode === 'dark' ? 'dark bg-[#0b0f19] text-slate-100' : 'bg-[#f7f5ff] text-slate-800'
       }`}
     >
       {/* Mobile Drawer Overlay */}
@@ -463,7 +456,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       ? pathname === '/dashboard'
                       : pathname.startsWith(item.href);
 
-                  const translationKey = NAV_TRANSLATION_KEYS[item.key] || item.key;
+                  const translationKey = item.key;
                   const displayName =
                     t(translationKey) !== translationKey ? t(translationKey) : item.name;
 
@@ -478,11 +471,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       }`}
                       style={{
                         backgroundColor: isActive
-                          ? mode === 'dark'
+                          ? resolvedMode === 'dark'
                             ? 'rgba(15, 118, 110, 0.25)'
                             : accent.lightBg
                           : undefined,
-                        color: isActive ? (mode === 'dark' ? '#2dd4bf' : accent.text) : undefined,
+                        color: isActive ? (resolvedMode === 'dark' ? '#2dd4bf' : accent.text) : undefined,
                       }}
                     >
                       <div
@@ -511,13 +504,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             style={{
               backgroundColor:
                 pathname === '/dashboard/settings'
-                  ? mode === 'dark'
+                  ? resolvedMode === 'dark'
                     ? 'rgba(15, 118, 110, 0.25)'
                     : accent.lightBg
                   : undefined,
               color:
                 pathname === '/dashboard/settings'
-                  ? mode === 'dark'
+                  ? resolvedMode === 'dark'
                     ? '#2dd4bf'
                     : accent.text
                   : undefined,
@@ -578,28 +571,24 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <p className="text-xs text-slate-400 dark:text-slate-400 mt-0.5 flex items-center gap-1.5 font-medium">
                 <span>{liveDateString || 'Live'}</span>
                 <span>·</span>
-                <span className="font-semibold text-slate-600 dark:text-slate-300">{currentShift}</span>
+                <span className="font-semibold text-slate-600 dark:text-slate-300">{t(currentShift)}</span>
                 <span>·</span>
                 <span className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
                   <Clock className="w-3 h-3 text-emerald-500 inline" />
-                  updated {liveTimeString}
+                  {t('updated')} {liveTimeString}
                 </span>
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2.5 sm:gap-3">
-            <div className="scale-90 sm:scale-100 origin-right">
-              <LanguageSelector />
-            </div>
-
             <button
               type="button"
-              onClick={() => setThemeMode(mode === 'dark' ? 'light' : 'dark')}
+              onClick={() => setThemeMode(resolvedMode === 'dark' ? 'light' : 'dark')}
               className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer shadow-2xs"
-              title={mode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              title={resolvedMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
-              {mode === 'dark' ? (
+              {resolvedMode === 'dark' ? (
                 <Sun className="w-4 h-4 text-amber-400" />
               ) : (
                 <Moon className="w-4 h-4 text-slate-600" />
@@ -684,7 +673,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-6 sm:p-8">{children}</main>
+        <main className={`flex-1 p-6 sm:p-8 ${pathname === '/dashboard' ? 'dashboard-overview' : ''}`}>
+          {children}
+        </main>
       </div>
 
       {/* Confirmation Modal */}

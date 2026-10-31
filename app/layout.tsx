@@ -1,4 +1,5 @@
 import './globals.css';
+import '@fontsource-variable/inter';
 import type { Metadata } from 'next';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext'; 

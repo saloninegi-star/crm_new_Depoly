@@ -1,12 +1,13 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useSyncExternalStore } from 'react';
 import { ACCENT_PRESETS, AccentColorKey, AccentPreset, ThemeMode } from '../themeConfig';
 
 interface ThemeContextType {
   accent: AccentPreset;
   setAccentColor: (key: AccentColorKey) => void;
   mode: ThemeMode;
+  resolvedMode: 'light' | 'dark';
   setThemeMode: (mode: ThemeMode) => void;
   currentTheme: {
     buttonBg: string;
@@ -27,47 +28,73 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [accentKey, setAccentKey] = useState<AccentColorKey>('teal');
-  const [mode, setMode] = useState<ThemeMode>('light');
+const themeListeners = new Set<() => void>();
 
-  // 🟢 Root <html> tag par dark class lagane ka helper
-  const applyThemeMode = (m: ThemeMode) => {
-    if (typeof document === 'undefined') return;
-    const root = document.documentElement;
-    if (m === 'dark') {
-      root.classList.add('dark');
-      root.style.colorScheme = 'dark';
-    } else {
-      root.classList.remove('dark');
-      root.style.colorScheme = 'light';
-    }
+function subscribeToTheme(onStoreChange: () => void) {
+  themeListeners.add(onStoreChange);
+  window.addEventListener('storage', onStoreChange);
+  return () => {
+    themeListeners.delete(onStoreChange);
+    window.removeEventListener('storage', onStoreChange);
   };
+}
+
+function getStoredAccent(): AccentColorKey {
+  const savedAccent = localStorage.getItem('kognos_accent');
+  return savedAccent && Object.prototype.hasOwnProperty.call(ACCENT_PRESETS, savedAccent)
+    ? (savedAccent as AccentColorKey)
+    : 'teal';
+}
+
+function getStoredMode(): ThemeMode {
+  const savedMode = localStorage.getItem('kognos_mode');
+  return savedMode === 'light' || savedMode === 'dark' || savedMode === 'system'
+    ? savedMode
+    : 'light';
+}
+
+function subscribeToSystemTheme(onStoreChange: () => void) {
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  mediaQuery.addEventListener('change', onStoreChange);
+  return () => mediaQuery.removeEventListener('change', onStoreChange);
+}
+
+function getSystemPrefersDark() {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
+function notifyThemeListeners() {
+  themeListeners.forEach((listener) => listener());
+}
+
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+  const accentKey = useSyncExternalStore<AccentColorKey>(
+    subscribeToTheme,
+    getStoredAccent,
+    () => 'teal'
+  );
+  const mode = useSyncExternalStore<ThemeMode>(subscribeToTheme, getStoredMode, () => 'light');
+  const systemPrefersDark = useSyncExternalStore<boolean>(
+    subscribeToSystemTheme,
+    getSystemPrefersDark,
+    () => false
+  );
+  const resolvedMode = mode === 'system' ? (systemPrefersDark ? 'dark' : 'light') : mode;
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedAccent = localStorage.getItem('kognos_accent') as AccentColorKey;
-      const savedMode = localStorage.getItem('kognos_mode') as ThemeMode;
-
-      if (savedAccent && ACCENT_PRESETS[savedAccent]) {
-        setAccentKey(savedAccent);
-      }
-      if (savedMode) {
-        setMode(savedMode);
-        applyThemeMode(savedMode);
-      }
-    }
-  }, []);
+    const root = document.documentElement;
+    root.classList.toggle('dark', resolvedMode === 'dark');
+    root.style.colorScheme = resolvedMode;
+  }, [resolvedMode]);
 
   const handleSetAccent = (key: AccentColorKey) => {
-    setAccentKey(key);
     localStorage.setItem('kognos_accent', key);
+    notifyThemeListeners();
   };
 
   const handleSetMode = (m: ThemeMode) => {
-    setMode(m);
     localStorage.setItem('kognos_mode', m);
-    applyThemeMode(m);
+    notifyThemeListeners();
   };
 
   const activeAccent = ACCENT_PRESETS[accentKey] || ACCENT_PRESETS.teal;
@@ -99,6 +126,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         accent: activeAccent,
         setAccentColor: handleSetAccent,
         mode,
+        resolvedMode,
         setThemeMode: handleSetMode,
         currentTheme,
         cycleTheme,

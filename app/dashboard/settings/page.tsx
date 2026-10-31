@@ -2,12 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { ACCENT_PRESETS, AccentColorKey } from '../../themeConfig';
 import { Check } from 'lucide-react';
 import { authService } from '../../../services/authService';
+import LanguageSelector from '../../components/LanguageSelector';
 
 export default function SettingsPage() {
   const { accent, setAccentColor, mode, setThemeMode } = useTheme();
+  const { t } = useLanguage();
 
   const [userName, setUserName] = useState('');
   const [userRole, setUserRole] = useState('');
@@ -50,8 +53,20 @@ export default function SettingsPage() {
           CARD 1: APPEARANCE (EXACT ALIGNMENT FROM IMAGE 2)
          ======================================================== */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xs p-7 space-y-6 transition-colors">
+        <div className="space-y-3">
+          <div>
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">{t('language')}</h2>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+              {t('language_description')}
+            </p>
+          </div>
+          <LanguageSelector />
+        </div>
+
+        <div className="border-t border-slate-100 dark:border-slate-800" />
+
         {/* Card Title */}
-        <h2 className="text-base font-bold text-slate-900 dark:text-white">Appearance</h2>
+        <h2 className="text-base font-bold text-slate-900 dark:text-white">{t('appearance')}</h2>
 
         {/* 1. Accent colour Section */}
         <div className="space-y-3">
@@ -98,7 +113,7 @@ export default function SettingsPage() {
         {/* 2. Theme Segmented Control */}
         <div className="space-y-3">
           <div>
-            <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100">Theme</h3>
+            <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100">{t('theme')}</h3>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
               Dark is easier on the eyes at night.
             </p>
@@ -114,7 +129,7 @@ export default function SettingsPage() {
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              Light
+              {t('light')}
             </button>
             <button
               type="button"
@@ -125,7 +140,7 @@ export default function SettingsPage() {
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              Dark
+              {t('dark')}
             </button>
             <button
               type="button"
@@ -136,7 +151,7 @@ export default function SettingsPage() {
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              Same as this device
+              {t('system_theme')}
             </button>
           </div>
         </div>

@@ -1,4 +1,218 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.dark .dashboard-overview .bg-white {
+  background-color: #111827;
+}
+
+.dark .dashboard-overview .bg-slate-50,
+.dark .dashboard-overview .bg-gray-50 {
+  background-color: #1e293b;
+}
+
+.dark .dashboard-overview .bg-slate-100 {
+  background-color: #334155;
+}
+
+.dark .dashboard-overview [class~="border-slate-100"],
+.dark .dashboard-overview [class~="border-slate-200"],
+.dark .dashboard-overview [class~="border-slate-200/80"] {
+  border-color: #334155;
+}
+
+.dark .dashboard-overview .text-slate-900,
+.dark .dashboard-overview .text-gray-900 {
+  color: #f8fafc;
+}
+
+.dark .dashboard-overview .text-slate-800,
+.dark .dashboard-overview .text-gray-800 {
+  color: #e2e8f0;
+}
+
+.dark .dashboard-overview .text-slate-700,
+.dark .dashboard-overview .text-slate-600,
+.dark .dashboard-overview .text-gray-700,
+.dark .dashboard-overview .text-gray-600 {
+  color: #cbd5e1;
+}
+
+.dark .dashboard-overview .text-slate-500,
+.dark .dashboard-overview .text-slate-400,
+.dark .dashboard-overview .text-gray-500,
+.dark .dashboard-overview .text-gray-400 {
+  color: #94a3b8;
+}
+
+.dark .dashboard-overview .bg-emerald-50,
+.dark .dashboard-overview .bg-teal-50 {
+  background-color: #064e3b;
+}
+
+.dark .dashboard-overview .bg-blue-50,
+.dark .dashboard-overview .bg-indigo-50 {
+  background-color: #1e3a8a;
+}
+
+.dark .dashboard-overview .bg-amber-50,
+.dark .dashboard-overview .bg-yellow-50 {
+  background-color: #78350f;
+}
+
+.dark .dashboard-overview .bg-rose-50,
+.dark .dashboard-overview .bg-red-50 {
+  background-color: #881337;
+}
+
+.dark .dashboard-overview .bg-violet-50,
+.dark .dashboard-overview .bg-purple-50 {
+  background-color: #4c1d95;
+}
+
+.dark .dashboard-overview .bg-cyan-50 {
+  background-color: #164e63;
+}
+
+.dark .dashboard-overview .text-emerald-600,
+.dark .dashboard-overview .text-emerald-700,
+.dark .dashboard-overview .text-teal-600 {
+  color: #6ee7b7;
+}
+
+.dark .dashboard-overview .text-blue-600,
+.dark .dashboard-overview .text-indigo-600 {
+  color: #93c5fd;
+}
+
+.dark .dashboard-overview .text-amber-600,
+.dark .dashboard-overview .text-amber-700,
+.dark .dashboard-overview .text-yellow-600 {
+  color: #fcd34d;
+}
+
+.dark .dashboard-overview .text-rose-600,
+.dark .dashboard-overview .text-rose-700,
+.dark .dashboard-overview .text-red-600 {
+  color: #fda4af;
+}
+
+.dark .dashboard-overview .text-violet-600,
+.dark .dashboard-overview .text-purple-600 {
+  color: #c4b5fd;
+}
+
+.dark .dashboard-overview .text-cyan-600 {
+  color: #67e8f9;
+}
+
+.dark .gate-entry-page {
+  color: #cbd5e1;
+}
+
+.dark .gate-entry-page .bg-white {
+  background-color: #111827;
+}
+
+.dark .gate-entry-page .bg-slate-50,
+.dark .gate-entry-page .bg-slate-50\/50 {
+  background-color: #1e293b;
+}
+
+.dark .gate-entry-page .bg-slate-100 {
+  background-color: #334155;
+}
+
+.dark .gate-entry-page .border-slate-100,
+.dark .gate-entry-page .border-slate-200,
+.dark .gate-entry-page .border-slate-200\/80 {
+  border-color: #334155;
+}
+
+.dark .gate-entry-page .divide-slate-100 > :not(:last-child) {
+  border-color: #334155;
+}
+
+.dark .gate-entry-page .text-slate-900 {
+  color: #f8fafc;
+}
+
+.dark .gate-entry-page .text-slate-800,
+.dark .gate-entry-page .text-slate-700 {
+  color: #e2e8f0;
+}
+
+.dark .gate-entry-page .text-slate-600,
+.dark .gate-entry-page .text-slate-500,
+.dark .gate-entry-page .text-slate-400 {
+  color: #94a3b8;
+}
+
+.dark .gate-entry-page input,
+.dark .gate-entry-page select,
+.dark .gate-entry-page textarea {
+  color-scheme: dark;
+  background-color: #0f172a;
+  color: #f8fafc;
+  border-color: #475569;
+}
+
+.dark .gate-entry-page input::placeholder,
+.dark .gate-entry-page textarea::placeholder {
+  color: #94a3b8;
+}
+
+.dark .gate-entry-page .bg-emerald-50,
+.dark .gate-entry-page .bg-emerald-100 {
+  background-color: #064e3b;
+}
+
+.dark .gate-entry-page .text-emerald-800,
+.dark .gate-entry-page .text-emerald-700,
+.dark .gate-entry-page .text-emerald-600 {
+  color: #6ee7b7;
+}
+
+.dark .gate-entry-page .bg-amber-50,
+.dark .gate-entry-page .bg-amber-100 {
+  background-color: #78350f;
+}
+
+.dark .gate-entry-page .text-amber-700,
+.dark .gate-entry-page .text-amber-600 {
+  color: #fcd34d;
+}
+
+.dark .gate-entry-page .bg-blue-50,
+.dark .gate-entry-page .bg-blue-100 {
+  background-color: #1e3a8a;
+}
+
+.dark .gate-entry-page .text-blue-800,
+.dark .gate-entry-page .text-blue-700,
+.dark .gate-entry-page .text-blue-600 {
+  color: #93c5fd;
+}
+
+.dark .gate-entry-page .border-emerald-200,
+.dark .gate-entry-page .border-blue-200,
+.dark .gate-entry-page .border-amber-200,
+.dark .gate-entry-page .border-rose-200 {
+  border-color: #475569;
+}
+
+.dark .gate-entry-page .bg-rose-50,
+.dark .gate-entry-page .bg-rose-100 {
+  background-color: #881337;
+}
+
+.dark .gate-entry-page .text-rose-700,
+.dark .gate-entry-page .text-rose-600 {
+  color: #fda4af;
+}
 
 /* --- Holographic AI Core Keyframe Animations --- */
 

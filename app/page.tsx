@@ -101,10 +101,10 @@ export default function HomePage() {
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-600">
-            <a href="#features" className="hover:text-emerald-600 transition-colors">{t('home_features')}</a>
-            <a href="#pipeline" className="hover:text-emerald-600 transition-colors">{t('home_process')}</a>
-            <a href="#roles" className="hover:text-emerald-600 transition-colors">{t('home_roles')}</a>
-            <a href="#faq" className="hover:text-emerald-600 transition-colors">{t('home_faq')}</a>
+            <a href="#features" className="hover:text-emerald-600 transition-colors">{t('features')}</a>
+            <a href="#pipeline" className="hover:text-emerald-600 transition-colors">{t('process')}</a>
+            <a href="#roles" className="hover:text-emerald-600 transition-colors">{t('roles')}</a>
+            <a href="#faq" className="hover:text-emerald-600 transition-colors">{t('faq')}</a>
           </nav>
 
           {/* Top Right Login CTA */}
@@ -115,7 +115,7 @@ export default function HomePage() {
               className="px-5 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/25 flex items-center gap-2 transition-all active:scale-95 cursor-pointer"
             >
               <Lock className="w-3.5 h-3.5" />
-              <span>{t('home_login')}</span>
+              <span>{t('login')}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -140,28 +140,28 @@ export default function HomePage() {
               onClick={() => setMobileMenuOpen(false)}
               className="block text-xs font-semibold text-slate-700 py-1"
             >
-              {t('home_features')}
+              {t('features')}
             </a>
             <a
               href="#pipeline"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-xs font-semibold text-slate-700 py-1"
             >
-              {t('home_process')}
+              {t('process')}
             </a>
             <a
               href="#roles"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-xs font-semibold text-slate-700 py-1"
             >
-              {t('home_roles')}
+              {t('roles')}
             </a>
             <a
               href="#faq"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-xs font-semibold text-slate-700 py-1"
             >
-              {t('home_faq')}
+              {t('faq')}
             </a>
             <div className="pt-2 border-t border-slate-100">
               <Link
@@ -169,7 +169,7 @@ export default function HomePage() {
                 className="w-full py-2.5 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center gap-2"
               >
                 <Lock className="w-3.5 h-3.5" />
-                <span>{t('home_login')}</span>
+                <span>{t('login')}</span>
               </Link>
             </div>
           </div>

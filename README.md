@@ -20,6 +20,10 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Deploy on Render
+
+Deploy this project as a **Static Site**. Use `npm ci && npm run build` as the build command and `out` as the publish directory. The `render.yaml` file contains these settings for Render Blueprint deployments. For an existing Render service, update its build command and publish directory, then trigger a new deploy.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

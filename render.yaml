@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: kognos-rice-mill-crm
+    runtime: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./out

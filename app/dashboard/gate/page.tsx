@@ -25,6 +25,7 @@ import {
   Download,
   Eye,
 } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 function extractErrorMessage(err: unknown): string {
   if (axios.isAxiosError(err)) {
@@ -66,6 +67,7 @@ function formatTimeSafely(dateStr: string) {
 }
 
 export default function GateInwardPage() {
+  const { t } = useLanguage();
   const { currentTheme } = useTheme();
   const [role, setRole] = useState('gate_guard');
   const [isMounted, setIsMounted] = useState(false);
@@ -481,7 +483,7 @@ export default function GateInwardPage() {
               className="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-bold flex items-center gap-1.5 shadow-xs hover:bg-slate-50 cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>Export Audit</span>
+              <span>{t('ui_8de49d04cb02')}</span>
             </button>
           )}
 
@@ -491,7 +493,7 @@ export default function GateInwardPage() {
             style={{ backgroundColor: currentTheme.buttonBg }}
           >
             <Plus className="w-4 h-4" />
-            <span>+ New Vehicle Inward Entry</span>
+            <span>{t('ui_c55c63c61433')}</span>
           </button>
         </div>
       </div>
@@ -499,32 +501,29 @@ export default function GateInwardPage() {
       {/* KPI Status Strip */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-          <div className="text-xs font-semibold text-slate-400">Total Entries In Gate</div>
-          <div className="text-2xl font-black text-slate-900">{entries.length} Vehicles</div>
-          <div className="text-[11px] text-emerald-600 font-semibold">100% Traceability Started</div>
+          <div className="text-xs font-semibold text-slate-400">{t('ui_0c47c4905d57')}</div>
+          <div className="text-2xl font-black text-slate-900">{entries.length} {' '}{t('ui_60261ed2752b')}</div>
+          <div className="text-[11px] text-emerald-600 font-semibold">{t('ui_93d479486534')}</div>
         </div>
 
         <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-          <div className="text-xs font-semibold text-slate-400">Active in Mill</div>
+          <div className="text-xs font-semibold text-slate-400">{t('ui_8e72c417fc02')}</div>
           <div className="text-2xl font-black text-amber-600">
-            {entries.filter((e) => e.status === 'REGISTERED').length} Trucks
-          </div>
-          <div className="text-[11px] text-slate-400">Queued for Gross Weighment</div>
+            {entries.filter((e) => e.status === 'REGISTERED').length} {' '}{t('ui_4ea366be4896')}</div>
+          <div className="text-[11px] text-slate-400">{t('ui_ed2ea427d519')}</div>
         </div>
 
         <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-          <div className="text-xs font-semibold text-slate-400">Total Expected Bags</div>
+          <div className="text-xs font-semibold text-slate-400">{t('ui_f16069c65390')}</div>
           <div className="text-2xl font-black text-blue-700">
-            {totalExpectedBags.toLocaleString()} Bags
-          </div>
-          <div className="text-[11px] text-slate-400">Challan verified bag count</div>
+            {totalExpectedBags.toLocaleString()} {' '}{t('ui_81cf1fc845ed')}</div>
+          <div className="text-[11px] text-slate-400">{t('ui_b8711615a258')}</div>
         </div>
 
         <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-          <div className="text-xs font-semibold text-slate-400">Total Inward Weight (Est.)</div>
+          <div className="text-xs font-semibold text-slate-400">{t('ui_14fe74aa863d')}</div>
           <div className="text-2xl font-black text-emerald-700">
-            {totalExpectedTonnageMT} MT
-          </div>
+            {totalExpectedTonnageMT} {' '}{t('ui_c3c2fa56598a')}</div>
           <div className="text-[11px] text-slate-400">
             {isOwner ? 'Mandi + Farmer Procured' : 'Awaiting Weighbridge Gross Wt'}
           </div>
@@ -539,8 +538,7 @@ export default function GateInwardPage() {
               {isOwner ? 'Gate Inward Master Ledger & Audit Trail' : 'Live Inward Token Register'}
             </h2>
             <p className="text-xs text-slate-400">
-              Click &apos;View&apos; for complete details, &apos;Edit&apos; to update, or &apos;Print&apos; for driver barcode slip
-            </p>
+              {t('ui_d63416b1a504')}</p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -548,7 +546,7 @@ export default function GateInwardPage() {
               onClick={fetchInwardEntries}
               disabled={isLoadingList}
               className="p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer"
-              title="Refresh List"
+              title={t('ui_776799637f6e')}
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isLoadingList ? 'animate-spin' : ''}`} />
             </button>
@@ -556,7 +554,7 @@ export default function GateInwardPage() {
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
               <input
                 type="text"
-                placeholder="Search token, vehicle, driver..."
+                placeholder={t('ui_7568e639f3df')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:outline-none focus:border-emerald-500 w-56 sm:w-64"
@@ -569,24 +567,23 @@ export default function GateInwardPage() {
           <table className="w-full text-left text-xs min-w-[950px]">
             <thead>
               <tr className="border-b border-slate-100 text-slate-400 font-semibold">
-                <th className="pb-3 min-w-[120px]">Gate Token</th>
-                <th className="pb-3 min-w-[80px]">Arrival Time</th>
-                <th className="pb-3 min-w-[120px]">Vehicle Number</th>
-                <th className="pb-3 min-w-[120px]">Driver Info</th>
-                <th className="pb-3 min-w-[150px]">Source Name</th>
-                <th className="pb-3 min-w-[110px]">Material & Bags</th>
-                <th className="pb-3 min-w-[100px]">Expected Qty</th>
-                <th className="pb-3 min-w-[100px]">Status</th>
-                {isOwner && <th className="pb-3 min-w-[90px]">Operator</th>}
-                <th className="pb-3 text-right min-w-[210px]">Actions</th>
+                <th className="pb-3 min-w-[120px]">{t('ui_821571a6fa0a')}</th>
+                <th className="pb-3 min-w-[80px]">{t('ui_83147a9f9d64')}</th>
+                <th className="pb-3 min-w-[120px]">{t('ui_8dc1033116ec')}</th>
+                <th className="pb-3 min-w-[120px]">{t('ui_e40d079553fa')}</th>
+                <th className="pb-3 min-w-[150px]">{t('ui_b8191a52ed11')}</th>
+                <th className="pb-3 min-w-[110px]">{t('ui_847a634f72b1')}</th>
+                <th className="pb-3 min-w-[100px]">{t('ui_64e72a283e5d')}</th>
+                <th className="pb-3 min-w-[100px]">{t('ui_bae7d5be7082')}</th>
+                {isOwner && <th className="pb-3 min-w-[90px]">{t('ui_d0e687b079fb')}</th>}
+                <th className="pb-3 text-right min-w-[210px]">{t('ui_c3cd636a585b')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
               {filteredEntries.length === 0 ? (
                 <tr>
                   <td colSpan={isOwner ? 10 : 9} className="py-8 text-center text-slate-400">
-                    No active vehicles in register. Click <strong>+ New Vehicle Inward Entry</strong> to register a new truck!
-                  </td>
+                    {t('ui_184719e6188a')}{' '}<strong>{t('ui_c55c63c61433')}</strong> {' '}{t('ui_d8e4eb7d7d59')}</td>
                 </tr>
               ) : (
                 filteredEntries.map((row) => (
@@ -606,7 +603,7 @@ export default function GateInwardPage() {
                     </td>
                     <td className="py-3.5">
                       <div className="font-bold text-slate-900">{row.material_type}</div>
-                      <div className="text-[10px] font-mono font-bold text-blue-700">{row.expected_bags} Bags</div>
+                      <div className="text-[10px] font-mono font-bold text-blue-700">{row.expected_bags} {' '}{t('ui_81cf1fc845ed')}</div>
                     </td>
                     <td className="py-3.5 font-mono font-semibold text-slate-900">
                       {row.expected_quantity} {row.expected_quantity_unit}
@@ -615,7 +612,7 @@ export default function GateInwardPage() {
                     <td className="py-3.5">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                        {row.status}
+                        {t(row.status)}
                       </span>
                     </td>
 
@@ -630,37 +627,37 @@ export default function GateInwardPage() {
                         <button
                           onClick={() => setSelectedEntryForDetails(row)}
                           className="px-2 py-1 rounded-md text-[11px] font-semibold border border-slate-200 text-slate-700 hover:bg-slate-100 cursor-pointer inline-flex items-center gap-1"
-                          title="View Full Entry Details"
+                          title={t('ui_b37ce5242175')}
                         >
                           <Eye className="w-3 h-3 text-slate-600" />
-                          <span>View</span>
+                          <span>{t('ui_69bd4ef9fbd0')}</span>
                         </button>
 
                         <button
                           onClick={() => handleOpenEditModal(row)}
                           className="px-2 py-1 rounded-md text-[11px] font-semibold border border-slate-200 text-slate-700 hover:bg-slate-100 cursor-pointer inline-flex items-center gap-1"
-                          title="Edit Inward Entry"
+                          title={t('ui_f72e1fe4d9ef')}
                         >
                           <Edit2 className="w-3 h-3 text-blue-600" />
-                          <span>Edit</span>
+                          <span>{t('ui_5301648dcf6b')}</span>
                         </button>
                         
                         <button
                           onClick={() => handleFetchGatePass(row.gate_token)}
                           className="px-2 py-1 rounded-md text-[11px] font-semibold border border-slate-200 text-slate-700 hover:bg-slate-100 cursor-pointer inline-flex items-center gap-1"
-                          title="Print Barcode Slip"
+                          title={t('ui_e74c19eea8f1')}
                         >
                           <Printer className="w-3 h-3 text-emerald-600" />
-                          <span>Print</span>
+                          <span>{t('ui_5b221e9c2a45')}</span>
                         </button>
 
                         <button
                           onClick={() => setEntryToDelete(row)}
                           className="px-2 py-1 rounded-md text-[11px] font-semibold border border-rose-200 text-rose-600 hover:bg-rose-50 cursor-pointer inline-flex items-center gap-1"
-                          title="Delete Inward Record"
+                          title={t('ui_bdf92d71686b')}
                         >
                           <Trash2 className="w-3 h-3 text-rose-600" />
-                          <span>Delete</span>
+                          <span>{t('ui_f6fdbe48dc54')}</span>
                         </button>
                       </div>
                     </td>
@@ -684,14 +681,13 @@ export default function GateInwardPage() {
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="text-base font-bold text-slate-900">
-                      Vehicle Inward Details
-                    </h3>
+                      {t('ui_c22451ecee40')}</h3>
                     <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                      {selectedEntryForDetails.status}
+                      {t(selectedEntryForDetails.status)}
                     </span>
                   </div>
                   <p className="text-xs text-slate-400 font-mono">
-                    Token: {selectedEntryForDetails.gate_token} • ID #{selectedEntryForDetails.id}
+                    {t('ui_717e44080c0f')}{' '}{selectedEntryForDetails.gate_token} {' '}{t('ui_ebbe727c544f')}{selectedEntryForDetails.id}
                   </p>
                 </div>
               </div>
@@ -708,23 +704,23 @@ export default function GateInwardPage() {
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
                 <div className="font-bold text-slate-900 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
                   <Truck className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Vehicle & Driver Information</span>
+                  <span>{t('ui_0c39d00be3e0')}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-3 pt-1">
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Vehicle Number</span>
+                    <span className="text-slate-400 block text-[11px]">{t('ui_8dc1033116ec')}</span>
                     <strong className="font-mono text-slate-900 text-sm">{selectedEntryForDetails.vehicle_number}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Transporter</span>
+                    <span className="text-slate-400 block text-[11px]">{t('ui_0f9da9fa2f13')}</span>
                     <strong className="text-slate-800">{selectedEntryForDetails.transporter_name}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Driver Name</span>
+                    <span className="text-slate-400 block text-[11px]">{t('ui_297221998e73')}</span>
                     <strong className="text-slate-800">{selectedEntryForDetails.driver_name}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Driver Contact</span>
+                    <span className="text-slate-400 block text-[11px]">{t('ui_9482a67a5571')}</span>
                     <strong className="font-mono text-slate-800">{selectedEntryForDetails.driver_mobile}</strong>
                   </div>
                 </div>
@@ -733,24 +729,23 @@ export default function GateInwardPage() {
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
                 <div className="font-bold text-slate-900 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
                   <Scale className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Material & Load Quantity</span>
+                  <span>{t('ui_f669ba784ae0')}</span>
                 </div>
                 <div className="grid grid-cols-3 gap-3 pt-1">
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Material Type</span>
+                    <span className="text-slate-400 block text-[11px]">{t('ui_839de310ff88')}</span>
                     <strong className="text-slate-900">{selectedEntryForDetails.material_type}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Expected Quantity</span>
+                    <span className="text-slate-400 block text-[11px]">{t('ui_2bca29a307ee')}</span>
                     <strong className="font-mono text-emerald-700 text-sm">
                       {selectedEntryForDetails.expected_quantity} {selectedEntryForDetails.expected_quantity_unit}
                     </strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Expected Bags</span>
+                    <span className="text-slate-400 block text-[11px]">{t('ui_111f32541e4f')}</span>
                     <strong className="font-mono text-blue-700 text-sm">
-                      {selectedEntryForDetails.expected_bags} Bags
-                    </strong>
+                      {selectedEntryForDetails.expected_bags} {' '}{t('ui_81cf1fc845ed')}</strong>
                   </div>
                 </div>
               </div>
@@ -758,23 +753,23 @@ export default function GateInwardPage() {
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
                 <div className="font-bold text-slate-900 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
                   <FileText className="w-3.5 h-3.5 text-amber-600" />
-                  <span>Source Mandi & Documents</span>
+                  <span>{t('ui_48138b2c315f')}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-3 pt-1">
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Source Center Name</span>
+                    <span className="text-slate-400 block text-[11px]">{t('ui_f50cde6fbce1')}</span>
                     <strong className="text-slate-800">{selectedEntryForDetails.source_name}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Source Location</span>
+                    <span className="text-slate-400 block text-[11px]">{t('ui_319ca91ffd92')}</span>
                     <strong className="text-slate-800">{selectedEntryForDetails.source_location} ({selectedEntryForDetails.source_type})</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Challan Number</span>
+                    <span className="text-slate-400 block text-[11px]">{t('ui_bbcec6a90780')}</span>
                     <strong className="font-mono text-slate-800">{selectedEntryForDetails.challan_number || 'N/A'}</strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Reference / PO No</span>
+                    <span className="text-slate-400 block text-[11px]">{t('ui_6416d7da0752')}</span>
                     <strong className="font-mono text-slate-800">{selectedEntryForDetails.reference_number || 'N/A'}</strong>
                   </div>
                 </div>
@@ -783,19 +778,19 @@ export default function GateInwardPage() {
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
                 <div className="font-bold text-slate-900 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
                   <CheckCircle2 className="w-3.5 h-3.5 text-slate-600" />
-                  <span>Audit Information</span>
+                  <span>{t('ui_bb6dbb9d31bd')}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-3 pt-1">
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Arrival Timestamp</span>
+                    <span className="text-slate-400 block text-[11px]">{t('ui_b2ce2db26ac4')}</span>
                     <span className="font-mono text-slate-700">{new Date(selectedEntryForDetails.arrival_date_time).toLocaleString()}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Gate Guard / Operator</span>
+                    <span className="text-slate-400 block text-[11px]">{t('ui_50c84914efc1')}</span>
                     <span className="font-bold text-slate-800 capitalize">{selectedEntryForDetails.created_by_name || 'suraj'}</span>
                   </div>
                   <div className="col-span-2">
-                    <span className="text-slate-400 block text-[11px]">Remarks / Notes</span>
+                    <span className="text-slate-400 block text-[11px]">{t('ui_03910fb8597b')}</span>
                     <span className="text-slate-700 italic">{selectedEntryForDetails.remarks || 'None'}</span>
                   </div>
                 </div>
@@ -807,8 +802,7 @@ export default function GateInwardPage() {
                 onClick={() => setSelectedEntryForDetails(null)}
                 className="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-100 cursor-pointer"
               >
-                Close
-              </button>
+                {t('ui_bbfa773e5a63')}</button>
 
               <div className="flex items-center gap-2">
                 <button
@@ -820,7 +814,7 @@ export default function GateInwardPage() {
                   className="px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-bold hover:bg-slate-100 cursor-pointer inline-flex items-center gap-1.5"
                 >
                   <Edit2 className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Edit Record</span>
+                  <span>{t('ui_0e6ccc8f0ed3')}</span>
                 </button>
 
                 <button
@@ -833,7 +827,7 @@ export default function GateInwardPage() {
                   style={{ backgroundColor: currentTheme.buttonBg }}
                 >
                   <Printer className="w-3.5 h-3.5" />
-                  <span>Print Barcode Slip</span>
+                  <span>{t('ui_e74c19eea8f1')}</span>
                 </button>
               </div>
             </div>
@@ -868,7 +862,7 @@ export default function GateInwardPage() {
               <div className="mx-6 mt-4 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-start gap-2.5">
                 <AlertCircle className="w-4 h-4 shrink-0 text-rose-600 mt-0.5" />
                 <div className="space-y-1">
-                  <div className="font-bold">Backend Error:</div>
+                  <div className="font-bold">{t('ui_152196d7bc04')}</div>
                   <div className="leading-relaxed">{errorMsg}</div>
                 </div>
               </div>
@@ -877,11 +871,11 @@ export default function GateInwardPage() {
             <form onSubmit={handleFormSubmit} className="p-6 space-y-4 overflow-y-auto">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Vehicle Number *</label>
+                  <label className="font-bold text-slate-700">{t('ui_bd0888c6dd89')}</label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. UP32AB9999"
+                    placeholder={t('ui_27e840345198')}
                     value={formData.vehicle_number}
                     onChange={(e) => setFormData({ ...formData, vehicle_number: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 uppercase font-mono font-bold focus:border-emerald-500"
@@ -889,11 +883,11 @@ export default function GateInwardPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Transporter Name *</label>
+                  <label className="font-bold text-slate-700">{t('ui_d0e9a6acba32')}</label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Kisan Logistics & Transport"
+                    placeholder={t('ui_4a06873d1dc8')}
                     value={formData.transporter_name}
                     onChange={(e) => setFormData({ ...formData, transporter_name: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-emerald-500"
@@ -903,11 +897,11 @@ export default function GateInwardPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Driver Name *</label>
+                  <label className="font-bold text-slate-700">{t('ui_201a0989a1ac')}</label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Ramesh Kumar Yadav"
+                    placeholder={t('ui_580fcc545198')}
                     value={formData.driver_name}
                     onChange={(e) => setFormData({ ...formData, driver_name: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-emerald-500"
@@ -915,11 +909,11 @@ export default function GateInwardPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Driver Mobile *</label>
+                  <label className="font-bold text-slate-700">{t('ui_db1c39663353')}</label>
                   <input
                     type="tel"
                     required
-                    placeholder="e.g. 9876543210"
+                    placeholder={t('ui_c8e1e253ac5f')}
                     value={formData.driver_mobile}
                     onChange={(e) => setFormData({ ...formData, driver_mobile: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono focus:border-emerald-500"
@@ -929,40 +923,40 @@ export default function GateInwardPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Material Type *</label>
+                  <label className="font-bold text-slate-700">{t('ui_52675bc28dc1')}</label>
                   <select
                     value={formData.material_type}
                     onChange={(e) => setFormData({ ...formData, material_type: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 font-semibold focus:border-emerald-500 bg-white"
                   >
-                    <option value="Paddy">Paddy</option>
-                    <option value="Wheat">Wheat</option>
-                    <option value="Mustard Seed">Mustard Seed</option>
-                    <option value="Other">Other</option>
+                    <option value="Paddy">{t('ui_39ff90b098aa')}</option>
+                    <option value="Wheat">{t('ui_ea3580dfefc8')}</option>
+                    <option value="Mustard Seed">{t('ui_2a329b08ab44')}</option>
+                    <option value="Other">{t('ui_6e6a6f2086bb')}</option>
                   </select>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Source Type *</label>
+                  <label className="font-bold text-slate-700">{t('ui_35d702985c05')}</label>
                   <select
                     value={formData.source_type}
                     onChange={(e) => setFormData({ ...formData, source_type: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 bg-white"
                   >
-                    <option value="Farmer">Farmer</option>
-                    <option value="Government Procurement Centre">Government Procurement Centre</option>
-                    <option value="Supplier">Supplier</option>
-                    <option value="Other Mill">Other Mill</option>
-                    <option value="Internal Transfer">Internal Transfer</option>
+                    <option value="Farmer">{t('ui_e5c4e470299e')}</option>
+                    <option value="Government Procurement Centre">{t('ui_de6631f86e40')}</option>
+                    <option value="Supplier">{t('ui_55edd462872a')}</option>
+                    <option value="Other Mill">{t('ui_9e946842f7e7')}</option>
+                    <option value="Internal Transfer">{t('ui_e06d014aa7a8')}</option>
                   </select>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Source Name *</label>
+                  <label className="font-bold text-slate-700">{t('ui_8572ec2c1b12')}</label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Suresh Chandra Patel"
+                    placeholder={t('ui_4d0a3e1e60f5')}
                     value={formData.source_name}
                     onChange={(e) => setFormData({ ...formData, source_name: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-emerald-500"
@@ -972,11 +966,11 @@ export default function GateInwardPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Source Location *</label>
+                  <label className="font-bold text-slate-700">{t('ui_53fc5bfbb317')}</label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Bara Banki Mandi, Uttar Pradesh"
+                    placeholder={t('ui_1d0d4905e5d8')}
                     value={formData.source_location}
                     onChange={(e) => setFormData({ ...formData, source_location: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-emerald-500"
@@ -984,10 +978,10 @@ export default function GateInwardPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Reference Number</label>
+                  <label className="font-bold text-slate-700">{t('ui_74195db59dc9')}</label>
                   <input
                     type="text"
-                    placeholder="e.g. PO-2026-OCT-0045"
+                    placeholder={t('ui_090989ea8035')}
                     value={formData.reference_number}
                     onChange={(e) => setFormData({ ...formData, reference_number: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono focus:border-emerald-500"
@@ -995,10 +989,10 @@ export default function GateInwardPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Challan Number</label>
+                  <label className="font-bold text-slate-700">{t('ui_bbcec6a90780')}</label>
                   <input
                     type="text"
-                    placeholder="e.g. CH-778812"
+                    placeholder={t('ui_2d48d6e76bfa')}
                     value={formData.challan_number}
                     onChange={(e) => setFormData({ ...formData, challan_number: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono focus:border-emerald-500"
@@ -1008,12 +1002,12 @@ export default function GateInwardPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Expected Quantity *</label>
+                  <label className="font-bold text-slate-700">{t('ui_b0f55a1ca42d')}</label>
                   <input
                     type="number"
                     step="0.01"
                     required
-                    placeholder="e.g. 275.50"
+                    placeholder={t('ui_60af2e968724')}
                     value={formData.expected_quantity}
                     onChange={(e) => setFormData({ ...formData, expected_quantity: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 font-bold focus:border-emerald-500"
@@ -1021,24 +1015,24 @@ export default function GateInwardPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Unit</label>
+                  <label className="font-bold text-slate-700">{t('ui_f6b935ab3371')}</label>
                   <select
                     value={formData.expected_quantity_unit}
                     onChange={(e) => setFormData({ ...formData, expected_quantity_unit: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-emerald-500 bg-white"
                   >
-                    <option value="Quintals">Quintals</option>
-                    <option value="Metric Tonnes">Metric Tonnes (MT)</option>
-                    <option value="Kilograms">Kilograms (KG)</option>
+                    <option value="Quintals">{t('ui_1b72732d5b53')}</option>
+                    <option value="Metric Tonnes">{t('ui_0be78421f9d3')}</option>
+                    <option value="Kilograms">{t('ui_afeb2e60ff68')}</option>
                   </select>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Expected Bags *</label>
+                  <label className="font-bold text-slate-700">{t('ui_3f417f586307')}</label>
                   <input
                     type="number"
                     required
-                    placeholder="e.g. 550"
+                    placeholder={t('ui_a2990b748d30')}
                     value={formData.expected_bags}
                     onChange={(e) => setFormData({ ...formData, expected_bags: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl border border-slate-200 font-bold focus:border-emerald-500"
@@ -1047,10 +1041,10 @@ export default function GateInwardPage() {
               </div>
 
               <div className="space-y-1 text-xs">
-                <label className="font-bold text-slate-700">Remarks / Inspection Notes</label>
+                <label className="font-bold text-slate-700">{t('ui_dc16c1a65f8f')}</label>
                 <input
                   type="text"
-                  placeholder="e.g. Driver recount verified at gate, document physically checked"
+                  placeholder={t('ui_6143e40d8227')}
                   value={formData.remarks}
                   onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-emerald-500"
@@ -1063,8 +1057,7 @@ export default function GateInwardPage() {
                   onClick={() => setIsModalOpen(false)}
                   className="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
                 >
-                  Cancel
-                </button>
+                  {t('ui_77dfd2135f4d')}</button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -1103,10 +1096,9 @@ export default function GateInwardPage() {
             </div>
 
             <div className="space-y-1">
-              <h3 className="text-base font-bold text-slate-900">Delete Inward Entry</h3>
+              <h3 className="text-base font-bold text-slate-900">{t('ui_f4188221c360')}</h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Are you sure you want to delete gate token <strong className="text-slate-800 font-mono">{entryToDelete.gate_token}</strong> ({entryToDelete.vehicle_number})? This action will permanently remove it from the backend database.
-              </p>
+                {t('ui_1c19db292584')}{' '}<strong className="text-slate-800 font-mono">{entryToDelete.gate_token}</strong> ({entryToDelete.vehicle_number}{t('ui_9dea1abcb3eb')}</p>
             </div>
 
             <div className="pt-2 flex items-center gap-2.5">
@@ -1115,8 +1107,7 @@ export default function GateInwardPage() {
                 onClick={() => setEntryToDelete(null)}
                 className="w-1/2 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
               >
-                Cancel
-              </button>
+                {t('ui_77dfd2135f4d')}</button>
               <button
                 type="button"
                 disabled={isDeleting}
@@ -1145,8 +1136,7 @@ export default function GateInwardPage() {
                 </h4>
               </div>
               <p className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
-                Official Computerized Driver Gate Pass • Checkpoint #1
-              </p>
+                {t('ui_10be91076840')}</p>
             </div>
 
             {/* Barcode Image */}
@@ -1164,46 +1154,45 @@ export default function GateInwardPage() {
                 )}
               </div>
               <div className="text-[10px] text-slate-500 font-mono" suppressHydrationWarning>
-                Arrival Time: {new Date(selectedPass.arrival_date_time).toLocaleString()}
+                {t('ui_b5acca0c9b0b')}{' '}{new Date(selectedPass.arrival_date_time).toLocaleString()}
               </div>
             </div>
 
             {/* Slip Meta */}
             <div className="space-y-2 text-xs divide-y divide-slate-100">
               <div className="flex justify-between pt-1">
-                <span className="text-slate-400">Vehicle Number:</span>
+                <span className="text-slate-400">{t('ui_71d6b7067c56')}</span>
                 <span className="font-mono font-black text-slate-900">{selectedPass.vehicle_number}</span>
               </div>
               <div className="flex justify-between pt-1.5">
-                <span className="text-slate-400">Driver:</span>
+                <span className="text-slate-400">{t('ui_b5b7f6b7f66a')}</span>
                 <span className="font-semibold text-slate-900">
                   {selectedPass.driver_name} ({selectedPass.driver_mobile})
                 </span>
               </div>
               <div className="flex justify-between pt-1.5">
-                <span className="text-slate-400">Transporter:</span>
+                <span className="text-slate-400">{t('ui_84adc74e7d98')}</span>
                 <span className="text-slate-800 font-medium">{selectedPass.transporter_name}</span>
               </div>
               <div className="flex justify-between pt-1.5">
-                <span className="text-slate-400">Source Mandi:</span>
+                <span className="text-slate-400">{t('ui_832f1a74465c')}</span>
                 <span className="text-slate-800">{selectedPass.source_name} ({selectedPass.source_location})</span>
               </div>
               <div className="flex justify-between pt-1.5">
-                <span className="text-slate-400">Challan / Ref No:</span>
+                <span className="text-slate-400">{t('ui_704e90a79b8f')}</span>
                 <span className="font-mono text-slate-700">{selectedPass.challan_number || selectedPass.reference_number}</span>
               </div>
               <div className="flex justify-between pt-1.5">
-                <span className="text-slate-400">Material & Weight:</span>
+                <span className="text-slate-400">{t('ui_6f1f12737208')}</span>
                 <span className="font-mono font-bold text-emerald-700">
-                  {selectedPass.expected_quantity} {selectedPass.expected_quantity_unit} ({selectedPass.expected_bags} Bags)
-                </span>
+                  {selectedPass.expected_quantity} {selectedPass.expected_quantity_unit} ({selectedPass.expected_bags} {' '}{t('ui_227bfb83e10f')}</span>
               </div>
               <div className="flex justify-between pt-1.5">
-                <span className="text-slate-400">Gate Operator:</span>
+                <span className="text-slate-400">{t('ui_23524fe6bff7')}</span>
                 <span className="font-bold text-slate-700 capitalize">{selectedPass.operator_name}</span>
               </div>
               <div className="flex justify-between pt-1.5">
-                <span className="text-slate-400">Next Destination:</span>
+                <span className="text-slate-400">{t('ui_815b087c9fcb')}</span>
                 <span className="font-bold text-amber-600">{selectedPass.next_step}</span>
               </div>
             </div>
@@ -1211,7 +1200,7 @@ export default function GateInwardPage() {
             {/* Driver Instructions */}
             {selectedPass.instructions && selectedPass.instructions.length > 0 && (
               <div className="p-3 bg-amber-50/70 rounded-xl border border-amber-200/60 space-y-1">
-                <div className="text-[10px] font-bold text-amber-900 uppercase">Driver Instructions:</div>
+                <div className="text-[10px] font-bold text-amber-900 uppercase">{t('ui_3c65b2cb4d54')}</div>
                 <ul className="text-[10px] text-amber-800 space-y-0.5 list-none">
                   {selectedPass.instructions.map((inst, idx) => (
                     <li key={idx} className="leading-tight">{inst}</li>
@@ -1226,17 +1215,16 @@ export default function GateInwardPage() {
                 onClick={() => setSelectedPass(null)}
                 className="py-2.5 px-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
               >
-                Close
-              </button>
+                {t('ui_bbfa773e5a63')}</button>
 
               {/* DOWNLOAD BUTTON: Downloads Gate Pass directly to computer */}
               <button
                 onClick={handleDownloadSlip}
                 className="py-2.5 px-3.5 rounded-xl border border-emerald-600 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-xs"
-                title="Download Gate Pass to computer"
+                title={t('ui_269ba8b39cf5')}
               >
                 <Download className="w-3.5 h-3.5" />
-                <span>Download Slip</span>
+                <span>{t('ui_7b7d677d62a2')}</span>
               </button>
 
               {/* PRINT BUTTON: Opens clean thermal/printer view */}
@@ -1244,10 +1232,10 @@ export default function GateInwardPage() {
                 onClick={handlePrintSlip}
                 className="py-2.5 px-3.5 rounded-xl text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm cursor-pointer transition-all active:scale-95"
                 style={{ backgroundColor: currentTheme.buttonBg }}
-                title="Print Gate Pass or Save as PDF"
+                title={t('ui_6878d9869241')}
               >
                 <Printer className="w-3.5 h-3.5" />
-                <span>Print Slip</span>
+                <span>{t('ui_68a24eb1f4f9')}</span>
               </button>
             </div>
           </div>

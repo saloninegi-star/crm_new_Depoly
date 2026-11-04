@@ -3,6 +3,7 @@
 import React, { useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 import { normalizeUserRole } from '../../services/authService';
 import {
   Truck,
@@ -51,10 +52,11 @@ function getStoredRole() {
 
 export default function DashboardPage() {
   const { accent, currentTheme } = useTheme();
+  const { t } = useLanguage();
   const role = useSyncExternalStore(subscribeToStorage, getStoredRole, () => '');
 
   if (!role) {
-    return <div className="p-6 text-sm text-slate-500">Loading your dashboard...</div>;
+    return <div className="p-6 text-sm text-slate-500">{t('loading')}</div>;
   }
 
   // 14-Day Paddy received chart data (from screenshot)
@@ -86,46 +88,46 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-xs font-semibold">Cash in Hand (Petty Cash)</span>
+              <span className="text-xs font-semibold">{t('cash_hand')}</span>
               <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600">
                 <Wallet className="w-4 h-4" />
               </div>
             </div>
             <div className="text-2xl font-black text-slate-900">₹3,45,200</div>
-            <div className="text-[11px] text-emerald-600 font-semibold">Daily Cash Book Closed</div>
+            <div className="text-[11px] text-emerald-600 font-semibold">{t('cash_book_closed')}</div>
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-xs font-semibold">Bank Balance (RTGS/NEFT)</span>
+              <span className="text-xs font-semibold">{t('bank_balance')}</span>
               <div className="p-2 rounded-xl bg-blue-50 text-blue-600">
                 <Building className="w-4 h-4" />
               </div>
             </div>
             <div className="text-2xl font-black text-blue-600">₹48,92,400</div>
-            <div className="text-[11px] text-slate-400">Farmer RTGS Reconciled</div>
+            <div className="text-[11px] text-slate-400">{t('ui_459e7cdc1841')}</div>
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-xs font-semibold">Buyer Receivables</span>
+              <span className="text-xs font-semibold">{t('buyer_receivables')}</span>
               <div className="p-2 rounded-xl bg-amber-50 text-amber-600">
                 <CreditCard className="w-4 h-4" />
               </div>
             </div>
             <div className="text-2xl font-black text-amber-600">₹18,40,000</div>
-            <div className="text-[11px] text-amber-700 font-bold">2 Parties Overdue Alert</div>
+            <div className="text-[11px] text-amber-700 font-bold">{t('ui_e1e4e45e2de5')}</div>
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-xs font-semibold">Farmer & Mandi Payables</span>
+              <span className="text-xs font-semibold">{t('farmer_payables')}</span>
               <div className="p-2 rounded-xl bg-rose-50 text-rose-600">
                 <FileSpreadsheet className="w-4 h-4" />
               </div>
             </div>
             <div className="text-2xl font-black text-rose-600">₹12,75,000</div>
-            <div className="text-[11px] text-slate-400">Paddy purchase settlements</div>
+            <div className="text-[11px] text-slate-400">{t('ui_58a24b0e7d3d')}</div>
           </div>
         </div>
 
@@ -133,59 +135,57 @@ export default function DashboardPage() {
         <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-base font-bold text-slate-900">Operations Payment Pipeline </h2>
-              <p className="text-xs text-slate-400">Auto-linked from Paddy Purchase & Rice Sales to Cash/Bank ledger</p>
+              <h2 className="text-base font-bold text-slate-900">{t('operations_pipeline')}</h2>
+              <p className="text-xs text-slate-400">{t('ui_4154991cffdd')}</p>
             </div>
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              Ledger Synchronized
+              {t('ledger_synced')}
             </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="p-4 rounded-xl border border-slate-100 bg-slate-50 space-y-1.5">
               <div className="flex justify-between text-xs text-slate-500">
-                <span>1. Farmer Payments (Paddy)</span>
-                <span className="font-bold text-rose-600">Due Today</span>
+                <span>{t('ui_f2d7bcd7b8f9')}</span>
+                <span className="font-bold text-rose-600">{t('due_today')}</span>
               </div>
               <div className="text-xl font-bold text-slate-900">₹8,40,000</div>
-              <div className="text-[11px] text-slate-400">Settled directly via Bank RTGS</div>
+              <div className="text-[11px] text-slate-400">{t('ui_6b50dbbe2ebe')}</div>
             </div>
 
             <div className="p-4 rounded-xl border border-slate-100 bg-slate-50 space-y-1.5">
               <div className="flex justify-between text-xs text-slate-500">
-                <span>2. Transport & Freight</span>
-                <span className="font-bold text-blue-600">12 Trucks</span>
+                <span>{t('ui_d0a0365a8b01')}</span>
+                <span className="font-bold text-blue-600">{t('ui_adc3a8f8c301')}</span>
               </div>
               <div className="text-xl font-bold text-slate-900">₹1,18,000</div>
-              <div className="text-[11px] text-slate-400">Bilty & LR auto-cleared</div>
+              <div className="text-[11px] text-slate-400">{t('ui_bade261cbf6a')}</div>
             </div>
 
             <div className="p-4 rounded-xl border border-slate-100 bg-slate-50 space-y-1.5">
               <div className="flex justify-between text-xs text-slate-500">
-                <span>3. Mandi Commission (Arhat)</span>
-                <span className="font-bold text-amber-600">Rate 1.5%</span>
+                <span>{t('ui_2da9ef71be38')}</span>
+                <span className="font-bold text-amber-600">{t('ui_176f2c6db9a5')}</span>
               </div>
               <div className="text-xl font-bold text-slate-900">₹45,200</div>
-              <div className="text-[11px] text-slate-400">Agent brokerage ledger credit</div>
+              <div className="text-[11px] text-slate-400">{t('ui_a408316a78fb')}</div>
             </div>
           </div>
 
           <div className="border-t border-slate-100 pt-4 flex flex-wrap items-center justify-between gap-3">
-            <span className="text-xs font-semibold text-slate-600">Accounts Action Desk</span>
+            <span className="text-xs font-semibold text-slate-600">{t('ui_06a32f0b2fdf')}</span>
             <div className="flex flex-wrap items-center gap-2">
               <button
                 className="px-3 py-1.5 rounded-xl text-white text-xs font-semibold shadow-xs flex items-center gap-1.5 cursor-pointer"
                 style={{ backgroundColor: currentTheme.buttonBg }}
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Record RTGS Payment</span>
+                <span>{t('ui_5498df61fb92')}</span>
               </button>
               <button className="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 cursor-pointer">
-                Record Sales Inward
-              </button>
+                {t('ui_0c0e6adbc970')}</button>
               <button className="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 cursor-pointer">
-                Daily Cash Denomination Close
-              </button>
+                {t('ui_68967c35ac24')}</button>
             </div>
           </div>
         </div>
@@ -194,8 +194,8 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="font-bold text-sm text-slate-900">Buyer Receivables Aging Alerts</h3>
-              <span className="text-xs font-bold text-amber-700">₹18,40,000 Due</span>
+              <h3 className="font-bold text-sm text-slate-900">{t('ui_8889514ef329')}</h3>
+              <span className="text-xs font-bold text-amber-700">{t('ui_4b879c2b8d73')}</span>
             </div>
             <div className="space-y-2 text-xs">
               <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200 flex justify-between items-center">
@@ -217,28 +217,28 @@ export default function DashboardPage() {
 
           <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="font-bold text-sm text-slate-900">Mill Running Expenses </h3>
-              <span className="text-xs font-bold text-rose-600">Total: ₹2,71,600</span>
+              <h3 className="font-bold text-sm text-slate-900">{t('ui_e35e336176ed')}{' '}</h3>
+              <span className="text-xs font-bold text-rose-600">{t('ui_576d436d61ff')}</span>
             </div>
             <div className="space-y-2 text-xs">
               <div className="p-3 rounded-xl bg-slate-50 flex justify-between items-center">
                 <div>
                   <div className="font-bold text-slate-800">Electricity & Power (Discom)</div>
-                  <div className="text-[10px] text-slate-400">Main grid power + Boiler steam fuel</div>
+                  <div className="text-[10px] text-slate-400">{t('ui_c74742b595b9')}</div>
                 </div>
                 <span className="font-mono font-bold text-slate-900">₹1,85,000</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 flex justify-between items-center">
                 <div>
-                  <div className="font-bold text-slate-800">Palledar Labour & Hamali</div>
-                  <div className="text-[10px] text-slate-400">3 Gangs • Bag unloading & godown stacking</div>
+                  <div className="font-bold text-slate-800">{t('ui_d88867be3f28')}</div>
+                  <div className="text-[10px] text-slate-400">{t('ui_2b5d4a34972e')}</div>
                 </div>
                 <span className="font-mono font-bold text-slate-900">₹64,200</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 flex justify-between items-center">
                 <div>
-                  <div className="font-bold text-slate-800">Machine Maintenance & Spares</div>
-                  <div className="text-[10px] text-slate-400">Rubber rollers, grease, elevator belts</div>
+                  <div className="font-bold text-slate-800">{t('ui_315db35fb2da')}</div>
+                  <div className="text-[10px] text-slate-400">{t('ui_6cc2a7044e5a')}</div>
                 </div>
                 <span className="font-mono font-bold text-slate-900">₹22,400</span>
               </div>
@@ -258,46 +258,46 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-xs font-semibold">Total Paddy in Stock</span>
+              <span className="text-xs font-semibold">{t('ui_6c4a1ec99507')}</span>
               <div className="p-2 rounded-xl bg-blue-50 text-blue-600">
                 <Warehouse className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-2xl font-black text-slate-900">2,410 MT</div>
-            <div className="text-[11px] text-blue-600 font-semibold">Across 3 Storage Godowns</div>
+            <div className="text-2xl font-black text-slate-900">{t('ui_39bb57f05d0c')}</div>
+            <div className="text-[11px] text-blue-600 font-semibold">{t('ui_7ac6eba41d5f')}</div>
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-xs font-semibold">FIFO Priority Queue</span>
+              <span className="text-xs font-semibold">{t('ui_754cc49cdc2d')}</span>
               <div className="p-2 rounded-xl bg-amber-50 text-amber-600">
                 <Clock className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-2xl font-black text-amber-600">Lot #849</div>
-            <div className="text-[11px] text-slate-400">Next for Milling Line #1</div>
+            <div className="text-2xl font-black text-amber-600">{t('ui_42e6d1e45f8e')}</div>
+            <div className="text-[11px] text-slate-400">{t('ui_52090863b69e')}</div>
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-xs font-semibold">Unloading at Bays</span>
+              <span className="text-xs font-semibold">{t('ui_7040c3e921ce')}</span>
               <div className="p-2 rounded-xl bg-purple-50 text-purple-600">
                 <Scale className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-2xl font-black text-purple-700">3 Trucks</div>
-            <div className="text-[11px] text-slate-400">Gross Wt done &rarr; Stacking</div>
+            <div className="text-2xl font-black text-purple-700">{t('ui_9544864429c7')}</div>
+            <div className="text-[11px] text-slate-400">{t('ui_168ac84ce48a')}</div>
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-xs font-semibold">Paddy Issued Today</span>
+              <span className="text-xs font-semibold">{t('ui_44dbc1d95a1e')}</span>
               <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600">
                 <Cog className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-2xl font-black text-emerald-700">120 MT</div>
-            <div className="text-[11px] text-emerald-600 font-semibold">Shift #1 In Progress</div>
+            <div className="text-2xl font-black text-emerald-700">{t('ui_5691c3ab946e')}</div>
+            <div className="text-[11px] text-emerald-600 font-semibold">{t('ui_ce53fd4cdbfd')}</div>
           </div>
         </div>
 
@@ -313,18 +313,18 @@ export default function DashboardPage() {
               <div key={g.name} className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-900">{g.name}</span>
-                  <span className="text-xs font-mono font-bold text-slate-700">{percent}% Full</span>
+                  <span className="text-xs font-mono font-bold text-slate-700">{percent}{t('ui_5418230f2fc5')}</span>
                 </div>
                 <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
                   <div className={`h-full rounded-full ${g.color}`} style={{ width: `${percent}%` }} />
                 </div>
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-slate-500">Live Stock: <strong className="text-slate-800">{g.stock} MT</strong></span>
-                  <span className="text-slate-400">Capacity: {g.capacity} MT</span>
+                  <span className="text-slate-500">{t('ui_208914f4658a')}{' '}<strong className="text-slate-800">{g.stock} {' '}{t('ui_c3c2fa56598a')}</strong></span>
+                  <span className="text-slate-400">{t('ui_218347e0b411')}{' '}{g.capacity} {' '}{t('ui_c3c2fa56598a')}</span>
                 </div>
                 <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-                  <span className="flex items-center gap-1"><Droplets className="w-3 h-3 text-blue-500" /> Moisture: {g.moisture}</span>
-                  <span className="flex items-center gap-1"><Thermometer className="w-3 h-3 text-rose-500" /> Temp: {g.temp}</span>
+                  <span className="flex items-center gap-1"><Droplets className="w-3 h-3 text-blue-500" /> {' '}{t('ui_7e9a5383ca43')}{' '}{g.moisture}</span>
+                  <span className="flex items-center gap-1"><Thermometer className="w-3 h-3 text-rose-500" /> {' '}{t('ui_fa0c1752542d')}{' '}{g.temp}</span>
                 </div>
               </div>
             );
@@ -335,12 +335,12 @@ export default function DashboardPage() {
         <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-base font-bold text-slate-900">Active FIFO Milling Priority Queue</h2>
-              <p className="text-xs text-slate-400">1st In &rarr; 1st Out tracking ensures optimal milling recovery </p>
+              <h2 className="text-base font-bold text-slate-900">{t('ui_072a10a87928')}</h2>
+              <p className="text-xs text-slate-400">{t('ui_1facbfe6b854')}{' '}</p>
             </div>
             <div className="relative">
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
-              <input type="text" placeholder="Search lot or variety..." className="pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:outline-none w-52" />
+              <input type="text" placeholder={t('ui_862114e07da0')} className="pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:outline-none w-52" />
             </div>
           </div>
 
@@ -348,15 +348,15 @@ export default function DashboardPage() {
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-100 text-slate-400 font-semibold">
-                  <th className="pb-3">FIFO Priority</th>
-                  <th className="pb-3">Lot Number</th>
-                  <th className="pb-3">Godown Chamber</th>
-                  <th className="pb-3">Paddy Variety</th>
-                  <th className="pb-3">Arrival Date</th>
-                  <th className="pb-3">Initial Inward</th>
-                  <th className="pb-3">Current Balance</th>
-                  <th className="pb-3">Status</th>
-                  <th className="pb-3 text-right">Action</th>
+                  <th className="pb-3">{t('ui_02b7571d4322')}</th>
+                  <th className="pb-3">{t('ui_f5a61d589fd1')}</th>
+                  <th className="pb-3">{t('ui_3af160965068')}</th>
+                  <th className="pb-3">{t('ui_641235432197')}</th>
+                  <th className="pb-3">{t('ui_4769e056cfcf')}</th>
+                  <th className="pb-3">{t('ui_7af8933ade08')}</th>
+                  <th className="pb-3">{t('ui_61a6163ed333')}</th>
+                  <th className="pb-3">{t('ui_bae7d5be7082')}</th>
+                  <th className="pb-3 text-right">{t('ui_97c89a4d6630')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
@@ -376,12 +376,12 @@ export default function DashboardPage() {
                     <td className="py-3.5 font-mono font-bold text-emerald-700">{row.balance}</td>
                     <td className="py-3.5">
                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        {row.status}
+                        {t(row.status)}
                       </span>
                     </td>
                     <td className="py-3.5 text-right">
                       <button className="text-[11px] font-bold text-emerald-700 hover:underline inline-flex items-center gap-1">
-                        <span>Issue to Mill</span>
+                        <span>{t('ui_b187f08ddc96')}</span>
                         <ArrowRight className="w-3 h-3" />
                       </button>
                     </td>
@@ -403,53 +403,52 @@ export default function DashboardPage() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">Total Staff On Duty</span>
-            <div className="text-2xl font-black text-slate-900">42 Workers</div>
-            <div className="text-[11px] text-emerald-600 font-semibold">Shift #1 Active (95% Present)</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_9e77d20471e8')}</span>
+            <div className="text-2xl font-black text-slate-900">{t('ui_73e09f16d77b')}</div>
+            <div className="text-[11px] text-emerald-600 font-semibold">{t('ui_477d4dea5464')}</div>
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">Palledar / Loading Gangs</span>
-            <div className="text-2xl font-black text-blue-600">3 Gangs</div>
-            <div className="text-[11px] text-slate-400">24 Labourers Active</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_5ec1d2c9e102')}</span>
+            <div className="text-2xl font-black text-blue-600">{t('ui_d5e2b858b276')}</div>
+            <div className="text-[11px] text-slate-400">{t('ui_4fdac1b1ae06')}</div>
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">Today Bags Handled</span>
-            <div className="text-2xl font-black text-amber-600">3,640 Bags</div>
-            <div className="text-[11px] text-slate-400">Unloading & Godown Stacking</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_7587eb546c19')}</span>
+            <div className="text-2xl font-black text-amber-600">{t('ui_10d923fd9a59')}</div>
+            <div className="text-[11px] text-slate-400">{t('ui_7c4a71fa6e59')}</div>
           </div>
 
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">Today Labour Expense</span>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_0b5e426939f3')}</span>
             <div className="text-2xl font-black text-emerald-700">₹64,200</div>
-            <div className="text-[11px] text-slate-400">Auto-linked to Accounts </div>
+            <div className="text-[11px] text-slate-400">{t('ui_aaa016ef7ba5')}{' '}</div>
           </div>
         </div>
 
         <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex justify-between items-center">
             <div>
-              <h2 className="text-base font-bold text-slate-900">Palledar Hamali & Stacking Gangs</h2>
-              <p className="text-xs text-slate-400">Per-bag piece rate tracking for unloading and finished loading</p>
+              <h2 className="text-base font-bold text-slate-900">{t('ui_1fb15a2c208e')}</h2>
+              <p className="text-xs text-slate-400">{t('ui_7ef95f1ce12b')}</p>
             </div>
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
-              Shift #1 Running
-            </span>
+              {t('ui_859de79a522d')}</span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-100 text-slate-400 font-semibold">
-                  <th className="pb-3">Gang Leader (Mukaddam)</th>
-                  <th className="pb-3">Assigned Location</th>
-                  <th className="pb-3">Labour Count</th>
-                  <th className="pb-3">Task Description</th>
-                  <th className="pb-3">Bags Handled</th>
-                  <th className="pb-3">Hamali Rate</th>
-                  <th className="pb-3">Total Earned</th>
-                  <th className="pb-3 text-right">Status</th>
+                  <th className="pb-3">{t('ui_3223a5f828d2')}</th>
+                  <th className="pb-3">{t('ui_c08b8993770d')}</th>
+                  <th className="pb-3">{t('ui_e5998732a87b')}</th>
+                  <th className="pb-3">{t('ui_b2386426a37d')}</th>
+                  <th className="pb-3">{t('ui_54eefccf79d9')}</th>
+                  <th className="pb-3">{t('ui_6c4d0deb1e56')}</th>
+                  <th className="pb-3">{t('ui_ce51b597733d')}</th>
+                  <th className="pb-3 text-right">{t('ui_bae7d5be7082')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
@@ -461,14 +460,14 @@ export default function DashboardPage() {
                   <tr key={row.gang} className="hover:bg-slate-50/70">
                     <td className="py-3.5 font-bold text-slate-900">{row.gang}</td>
                     <td className="py-3.5 text-slate-800">{row.location}</td>
-                    <td className="py-3.5 font-mono">{row.workers} Persons</td>
+                    <td className="py-3.5 font-mono">{row.workers} {' '}{t('ui_f3cf96e91976')}</td>
                     <td className="py-3.5">{row.task}</td>
-                    <td className="py-3.5 font-mono font-bold text-blue-700">{row.bags} Bags</td>
+                    <td className="py-3.5 font-mono font-bold text-blue-700">{row.bags} {' '}{t('ui_81cf1fc845ed')}</td>
                     <td className="py-3.5">{row.rate}</td>
                     <td className="py-3.5 font-mono font-bold text-emerald-700">{row.total}</td>
                     <td className="py-3.5 text-right">
                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        {row.status}
+                        {t(row.status)}
                       </span>
                     </td>
                   </tr>
@@ -489,39 +488,39 @@ export default function DashboardPage() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">Today Vehicles Entered</span>
-            <div className="text-2xl font-black text-slate-900">18 Trucks</div>
-            <div className="text-[11px] text-slate-400">Checkpoint #1: Traceability Started</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_f859d28debfd')}</span>
+            <div className="text-2xl font-black text-slate-900">{t('ui_f59c719f7fca')}</div>
+            <div className="text-[11px] text-slate-400">{t('ui_5a0b55ea1d4a')}</div>
           </div>
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">In Weighbridge Queue</span>
-            <div className="text-2xl font-black text-amber-600">4 Trucks</div>
-            <div className="text-[11px] text-slate-400">Gross Wt Pending</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_25b03cbaea1c')}</span>
+            <div className="text-2xl font-black text-amber-600">{t('ui_ce1b3c30ade3')}</div>
+            <div className="text-[11px] text-slate-400">{t('ui_e56cdda85d44')}</div>
           </div>
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">Inside Mill Premises</span>
-            <div className="text-2xl font-black text-blue-600">7 Vehicles</div>
-            <div className="text-[11px] text-slate-400">Unloading in Godowns</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_f5c98663f3eb')}</span>
+            <div className="text-2xl font-black text-blue-600">{t('ui_054fd135b99a')}</div>
+            <div className="text-[11px] text-slate-400">{t('ui_a0f6833d23d1')}</div>
           </div>
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">Tare & Exit Stamped</span>
-            <div className="text-2xl font-black text-emerald-600">11 Trucks</div>
-            <div className="text-[11px] text-slate-400">Exit Cleared Today</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_65c0b8522ded')}</span>
+            <div className="text-2xl font-black text-emerald-600">{t('ui_3857ab037d70')}</div>
+            <div className="text-[11px] text-slate-400">{t('ui_0193f198c13f')}</div>
           </div>
         </div>
 
         <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
-          <h2 className="text-base font-bold text-slate-900">Gate Checkpoint Live Queue (Tokens)</h2>
+          <h2 className="text-base font-bold text-slate-900">{t('ui_5f0c40da58b3')}</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-100 text-slate-400">
-                  <th className="pb-3">Token</th>
-                  <th className="pb-3">Time</th>
-                  <th className="pb-3">Vehicle</th>
-                  <th className="pb-3">Farmer / Source</th>
-                  <th className="pb-3">Variety</th>
-                  <th className="pb-3">Status</th>
+                  <th className="pb-3">{t('ui_a1141eb96836')}</th>
+                  <th className="pb-3">{t('ui_6c82e6dd8680')}</th>
+                  <th className="pb-3">{t('ui_9bb28c0dd307')}</th>
+                  <th className="pb-3">{t('ui_93f2d33c62c1')}</th>
+                  <th className="pb-3">{t('ui_85e646fbb9f6')}</th>
+                  <th className="pb-3">{t('ui_bae7d5be7082')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
@@ -538,7 +537,7 @@ export default function DashboardPage() {
                     <td className="py-3">{row.variety}</td>
                     <td className="py-3">
                       <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">
-                        {row.status}
+                        {t(row.status)}
                       </span>
                     </td>
                   </tr>
@@ -560,51 +559,51 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
           <div className="lg:col-span-5 p-6 rounded-2xl bg-slate-900 text-white shadow-md flex flex-col justify-between border border-slate-800">
             <div className="flex items-center justify-between text-emerald-400 text-xs font-mono">
-              <span className="flex items-center gap-1.5"><Gauge className="w-4 h-4 animate-pulse" /> SCALE #01 DIGITAL</span>
-              <span className="px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/30">Stable 60MT</span>
+              <span className="flex items-center gap-1.5"><Gauge className="w-4 h-4 animate-pulse" /> {' '}{t('ui_1da6f6e2d7d4')}</span>
+              <span className="px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/30">{t('ui_7718e4daa0f1')}</span>
             </div>
             <div className="text-center py-6">
-              <div className="font-mono text-5xl font-black text-white">38,420 <span className="text-xl text-slate-400 font-bold">KG</span></div>
-              <div className="text-xs text-slate-400 font-mono mt-1">38.42 Metric Tonnes</div>
+              <div className="font-mono text-5xl font-black text-white">38,420 <span className="text-xl text-slate-400 font-bold">{t('ui_e3187e6dd6ab')}</span></div>
+              <div className="text-xs text-slate-400 font-mono mt-1">{t('ui_b750cafa153f')}</div>
             </div>
             <div className="text-xs text-slate-400 flex justify-between border-t border-slate-800 pt-3">
-              <span>Platform: Pitless Heavy</span>
-              <span className="text-emerald-400 font-semibold">Moisture Base: 14.0%</span>
+              <span>{t('ui_d963c6fcf941')}</span>
+              <span className="text-emerald-400 font-semibold">{t('ui_aca4af5f43ce')}</span>
             </div>
           </div>
 
           <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-              <span className="text-xs font-semibold text-slate-400">Waiting Gross Wt</span>
-              <div className="text-2xl font-black text-amber-600">4 Trucks</div>
-              <div className="text-[11px] text-slate-400">Loaded arrivals</div>
+              <span className="text-xs font-semibold text-slate-400">{t('ui_7a7d8410d824')}</span>
+              <div className="text-2xl font-black text-amber-600">{t('ui_ce1b3c30ade3')}</div>
+              <div className="text-[11px] text-slate-400">{t('ui_a8fe2de8df21')}</div>
             </div>
             <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-              <span className="text-xs font-semibold text-slate-400">Waiting Tare Wt</span>
-              <div className="text-2xl font-black text-blue-600">2 Trucks</div>
-              <div className="text-[11px] text-slate-400">Empty / Unloaded</div>
+              <span className="text-xs font-semibold text-slate-400">{t('ui_db97805dc9ae')}</span>
+              <div className="text-2xl font-black text-blue-600">{t('ui_2bd1bf83019b')}</div>
+              <div className="text-[11px] text-slate-400">{t('ui_039eb3f6563c')}</div>
             </div>
             <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-              <span className="text-xs font-semibold text-slate-400">Today Net Paddy</span>
-              <div className="text-2xl font-black text-slate-900">84.4 MT</div>
-              <div className="text-[11px] text-emerald-600 font-semibold">Auto-calculated</div>
+              <span className="text-xs font-semibold text-slate-400">{t('ui_f524d1b4e576')}</span>
+              <div className="text-2xl font-black text-slate-900">{t('ui_2c25bebfb262')}</div>
+              <div className="text-[11px] text-emerald-600 font-semibold">{t('ui_9ef21c6260f7')}</div>
             </div>
           </div>
         </div>
 
         <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
-          <h2 className="text-base font-bold text-slate-900">Weighment Register & Moisture Deductions</h2>
+          <h2 className="text-base font-bold text-slate-900">{t('ui_593977bcdfc5')}</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-100 text-slate-400">
-                  <th className="pb-3">Token</th>
-                  <th className="pb-3">Vehicle</th>
-                  <th className="pb-3">Gross (KG)</th>
-                  <th className="pb-3">Tare (KG)</th>
-                  <th className="pb-3">Net Paddy (KG)</th>
-                  <th className="pb-3">Moisture %</th>
-                  <th className="pb-3">Godown</th>
+                  <th className="pb-3">{t('ui_a1141eb96836')}</th>
+                  <th className="pb-3">{t('ui_9bb28c0dd307')}</th>
+                  <th className="pb-3">{t('ui_b39f1f0247f7')}</th>
+                  <th className="pb-3">{t('ui_50f542c6825c')}</th>
+                  <th className="pb-3">{t('ui_56260a614874')}</th>
+                  <th className="pb-3">{t('ui_91238e5e582e')}</th>
+                  <th className="pb-3">{t('ui_53d77a34224e')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
@@ -616,9 +615,9 @@ export default function DashboardPage() {
                   <tr key={row.token} className="hover:bg-slate-50/70">
                     <td className="py-3 font-bold text-slate-900">{row.token}</td>
                     <td className="py-3 font-mono">{row.vehicle}</td>
-                    <td className="py-3 font-mono">{row.gross.toLocaleString()} KG</td>
-                    <td className="py-3 font-mono">{row.tare.toLocaleString()} KG</td>
-                    <td className="py-3 font-mono font-bold text-emerald-700">{row.net.toLocaleString()} KG</td>
+                    <td className="py-3 font-mono">{row.gross.toLocaleString()} {' '}{t('ui_e3187e6dd6ab')}</td>
+                    <td className="py-3 font-mono">{row.tare.toLocaleString()} {' '}{t('ui_e3187e6dd6ab')}</td>
+                    <td className="py-3 font-mono font-bold text-emerald-700">{row.net.toLocaleString()} {' '}{t('ui_e3187e6dd6ab')}</td>
                     <td className="py-3">{row.moisture}%</td>
                     <td className="py-3">{row.godown}</td>
                   </tr>
@@ -639,44 +638,44 @@ export default function DashboardPage() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">Current Recovery Rate</span>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_13fde940f29f')}</span>
             <div className="text-2xl font-black text-slate-900">64.8%</div>
-            <div className="text-[11px] text-emerald-600 font-semibold">Standard 60-65% Target OK</div>
+            <div className="text-[11px] text-emerald-600 font-semibold">{t('ui_18016a0a60ed')}</div>
           </div>
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">Active Batch Running</span>
-            <div className="text-2xl font-black text-amber-600">Batch #B-102</div>
-            <div className="text-[11px] text-slate-400">Machine Line #1 & #2 Active</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_cb511ff87a9e')}</span>
+            <div className="text-2xl font-black text-amber-600">{t('ui_aac3dd89a5b3')}</div>
+            <div className="text-[11px] text-slate-400">{t('ui_c2b755da4bd2')}</div>
           </div>
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">Shift Paddy Issued</span>
-            <div className="text-2xl font-black text-slate-900">120 MT</div>
-            <div className="text-[11px] text-slate-400">Shift #1 (Morning)</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_09b4b3c6faa6')}</span>
+            <div className="text-2xl font-black text-slate-900">{t('ui_5691c3ab946e')}</div>
+            <div className="text-[11px] text-slate-400">{t('ui_aca3a3e17cbe')}</div>
           </div>
         </div>
 
         <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
-          <h2 className="text-base font-bold text-slate-900">Milling Split & Output Yield Breakdown</h2>
+          <h2 className="text-base font-bold text-slate-900">{t('ui_b27cbc31e429')}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
             <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200">
-              <div className="text-xs text-emerald-800 font-bold">Head Rice (Grade A)</div>
+              <div className="text-xs text-emerald-800 font-bold">{t('ui_1a3f22b567a2')}</div>
               <div className="text-xl font-black text-emerald-900">61.2%</div>
-              <div className="text-[10px] text-emerald-700">Auto-moves to Packaging</div>
+              <div className="text-[10px] text-emerald-700">{t('ui_82433a487dfc')}</div>
             </div>
             <div className="p-4 rounded-xl bg-amber-50 border border-amber-200">
-              <div className="text-xs text-amber-800 font-bold">Broken Rice</div>
+              <div className="text-xs text-amber-800 font-bold">{t('ui_58a95f7a05ec')}</div>
               <div className="text-xl font-black text-amber-900">11.4%</div>
-              <div className="text-[10px] text-amber-700">Small / Big Broken split</div>
+              <div className="text-[10px] text-amber-700">{t('ui_e0d133f8de48')}</div>
             </div>
             <div className="p-4 rounded-xl bg-teal-50 border border-teal-200">
-              <div className="text-xs text-teal-800 font-bold">Rice Bran (Oil)</div>
+              <div className="text-xs text-teal-800 font-bold">{t('ui_3d8a31d7b813')}</div>
               <div className="text-xl font-black text-teal-900">8.6%</div>
-              <div className="text-[10px] text-teal-700">Solvent extraction sale</div>
+              <div className="text-[10px] text-teal-700">{t('ui_770a7fa8a344')}</div>
             </div>
             <div className="p-4 rounded-xl bg-slate-100 border border-slate-200">
-              <div className="text-xs text-slate-700 font-bold">Husk (Boiler Fuel)</div>
+              <div className="text-xs text-slate-700 font-bold">{t('ui_3e7966b66ba1')}</div>
               <div className="text-xl font-black text-slate-900">18.8%</div>
-              <div className="text-[10px] text-slate-500">Boiler running stock</div>
+              <div className="text-[10px] text-slate-500">{t('ui_6eb0f926c7e4')}</div>
             </div>
           </div>
         </div>
@@ -692,33 +691,33 @@ export default function DashboardPage() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">Total Bags Packed Today</span>
-            <div className="text-2xl font-black text-slate-900">1,840 Bags</div>
-            <div className="text-[11px] text-emerald-600 font-semibold">Quality Passed</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_a7614390d2c2')}</span>
+            <div className="text-2xl font-black text-slate-900">{t('ui_3b88833551a1')}</div>
+            <div className="text-[11px] text-emerald-600 font-semibold">{t('ui_8d57be32d54a')}</div>
           </div>
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">50kg Master Bags</span>
-            <div className="text-2xl font-black text-blue-600">1,200 Bags</div>
-            <div className="text-[11px] text-slate-400">Central Finished Godown</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_397cd47ea027')}</span>
+            <div className="text-2xl font-black text-blue-600">{t('ui_a06c73f47a84')}</div>
+            <div className="text-[11px] text-slate-400">{t('ui_92ba22453099')}</div>
           </div>
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">20kg Retail Packs</span>
-            <div className="text-2xl font-black text-amber-600">640 Bags</div>
-            <div className="text-[11px] text-slate-400">Ready for dispatch</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_7ddf600be72f')}</span>
+            <div className="text-2xl font-black text-amber-600">{t('ui_4c710909df09')}</div>
+            <div className="text-[11px] text-slate-400">{t('ui_ac9d8bf5ba44')}</div>
           </div>
         </div>
 
         <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
-          <h2 className="text-base font-bold text-slate-900">Grade-wise Finished Stock (Central Godown)</h2>
+          <h2 className="text-base font-bold text-slate-900">{t('ui_6077b6439d47')}</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-100 text-slate-400">
-                  <th className="pb-3">Batch Code</th>
-                  <th className="pb-3">Grade / Product</th>
-                  <th className="pb-3">Packing Type</th>
-                  <th className="pb-3">Stock (Bags)</th>
-                  <th className="pb-3">Net Metric Tonnes</th>
+                  <th className="pb-3">{t('ui_f0dee4c99a62')}</th>
+                  <th className="pb-3">{t('ui_c022afaf4373')}</th>
+                  <th className="pb-3">{t('ui_bb9a21d76105')}</th>
+                  <th className="pb-3">{t('ui_bd1bd95ccb3d')}</th>
+                  <th className="pb-3">{t('ui_0bc25c5549a9')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
@@ -731,7 +730,7 @@ export default function DashboardPage() {
                     <td className="py-3 font-bold text-slate-900">{row.batch}</td>
                     <td className="py-3 font-semibold">{row.grade}</td>
                     <td className="py-3">{row.pack}</td>
-                    <td className="py-3 font-mono font-bold">{row.bags} Bags</td>
+                    <td className="py-3 font-mono font-bold">{row.bags} {' '}{t('ui_81cf1fc845ed')}</td>
                     <td className="py-3 font-mono text-emerald-700">{row.mt}</td>
                   </tr>
                 ))}
@@ -751,39 +750,39 @@ export default function DashboardPage() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">Today Sales Dispatches</span>
-            <div className="text-2xl font-black text-slate-900">₹42.8 Lakh</div>
-            <div className="text-[11px] text-emerald-600 font-semibold">12 Trucks Cleared</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_bb1a032ce597')}</span>
+            <div className="text-2xl font-black text-slate-900">{t('ui_97ab094e7b33')}</div>
+            <div className="text-[11px] text-emerald-600 font-semibold">{t('ui_45badfff9b91')}</div>
           </div>
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">Loading Slips Issued</span>
-            <div className="text-2xl font-black text-blue-600">3 Trucks Loading</div>
-            <div className="text-[11px] text-slate-400">At finished godown</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_a6c2fb12603d')}</span>
+            <div className="text-2xl font-black text-blue-600">{t('ui_848cb5216493')}</div>
+            <div className="text-[11px] text-slate-400">{t('ui_2dcdbea312d7')}</div>
           </div>
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">Pending Sales Orders</span>
-            <div className="text-2xl font-black text-amber-600">5 Orders</div>
-            <div className="text-[11px] text-slate-400">Bilty to generate</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_aea3146a407f')}</span>
+            <div className="text-2xl font-black text-amber-600">{t('ui_30afa6686929')}</div>
+            <div className="text-[11px] text-slate-400">{t('ui_477441bb7fc1')}</div>
           </div>
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold text-slate-400">LR / Bilty Created</span>
-            <div className="text-2xl font-black text-slate-900">12 Slips</div>
-            <div className="text-[11px] text-emerald-600">Transporter assigned</div>
+            <span className="text-xs font-semibold text-slate-400">{t('ui_b38662332776')}</span>
+            <div className="text-2xl font-black text-slate-900">{t('ui_0733fd51ec2c')}</div>
+            <div className="text-[11px] text-emerald-600">{t('ui_eeace37531b5')}</div>
           </div>
         </div>
 
         <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
-          <h2 className="text-base font-bold text-slate-900">Live Sales Orders & LR Dispatch Queue</h2>
+          <h2 className="text-base font-bold text-slate-900">{t('ui_23b27aaef0d4')}</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-100 text-slate-400">
-                  <th className="pb-3">Order ID</th>
-                  <th className="pb-3">Buyer / Party</th>
-                  <th className="pb-3">Truck Number</th>
-                  <th className="pb-3">LR / Bilty No</th>
-                  <th className="pb-3">Qty (MT)</th>
-                  <th className="pb-3">Status</th>
+                  <th className="pb-3">{t('ui_814153426d43')}</th>
+                  <th className="pb-3">{t('ui_eccd6cf3ee59')}</th>
+                  <th className="pb-3">{t('ui_271749571c2e')}</th>
+                  <th className="pb-3">{t('ui_6b14a840f1c5')}</th>
+                  <th className="pb-3">{t('ui_0a7168b0c0ba')}</th>
+                  <th className="pb-3">{t('ui_bae7d5be7082')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
@@ -798,7 +797,7 @@ export default function DashboardPage() {
                     <td className="py-3 font-mono">{row.truck}</td>
                     <td className="py-3 font-mono text-blue-700 font-bold">{row.lr}</td>
                     <td className="py-3 font-mono">{row.qty}</td>
-                    <td className="py-3"><span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">{row.status}</span></td>
+                    <td className="py-3"><span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">{t(row.status)}</span></td>
                   </tr>
                 ))}
               </tbody>
@@ -818,42 +817,42 @@ export default function DashboardPage() {
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 dark:divide-slate-800 transition-colors">
         {/* Metric 1 */}
         <div className="px-5 py-2 sm:py-0 first:pl-0 space-y-1">
-          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Paddy received today</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">{t('ui_bc352c8c1414')}</span>
           <div className="flex items-baseline gap-1">
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">84.4</span>
-            <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">t</span>
+            <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">{t('ui_8efd86fb78a5')}</span>
           </div>
-          <p className="text-xs text-slate-400 dark:text-slate-500">3 trucks weighed · +14% on yesterday</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">{t('ui_7ac3fd240bef')}</p>
         </div>
 
         {/* Metric 2 */}
         <div className="px-5 py-2 sm:py-0 space-y-1">
-          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Head rice recovery</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">{t('ui_f540da207bfd')}</span>
           <div className="flex items-baseline gap-1">
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">61.2</span>
             <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">%</span>
           </div>
-          <p className="text-xs text-slate-400 dark:text-slate-500">Target 60–65% · 2 batches running</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">{t('ui_8e9fdaab0d3f')}</p>
         </div>
 
         {/* Metric 3 */}
         <div className="px-5 py-2 sm:py-0 space-y-1">
-          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Finished stock</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">{t('ui_67c9c2abb5da')}</span>
           <div className="flex items-baseline gap-1">
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">227.0</span>
-            <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">t</span>
+            <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">{t('ui_8efd86fb78a5')}</span>
           </div>
-          <p className="text-xs text-slate-400 dark:text-slate-500">87.0 t free · 140.0 t on orders</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">{t('ui_9849a7c47ae7')}</p>
         </div>
 
         {/* Metric 4 */}
         <div className="px-5 py-2 sm:py-0 last:pr-0 space-y-1">
-          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Dispatched today</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">{t('ui_06cefc499f6e')}</span>
           <div className="flex items-baseline gap-1">
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">₹15.76</span>
-            <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">lakh</span>
+            <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">{t('ui_0bea9ff246cd')}</span>
           </div>
-          <p className="text-xs text-slate-400 dark:text-slate-500">2 trucks out · 1 loading</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">{t('ui_0c9bc39be0d8')}</p>
         </div>
       </div>
 
@@ -862,8 +861,8 @@ export default function DashboardPage() {
         {/* Left: Needs your attention (5 items with respective navigation buttons) */}
         <div className="lg:col-span-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs p-6 space-y-3 transition-colors">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-            <h2 className="text-sm font-bold text-slate-900 dark:text-white">Needs your attention</h2>
-            <span className="text-xs text-slate-400">5 items</span>
+            <h2 className="text-sm font-bold text-slate-900 dark:text-white">{t('ui_e51f42663447')}</h2>
+            <span className="text-xs text-slate-400">{t('ui_6b3e582773e9')}</span>
           </div>
 
           <div className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -875,8 +874,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="min-w-0">
                   <div className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
-                    RTGS payment waiting for your approval
-                  </div>
+                    {t('ui_21e5ec941dcb')}</div>
                   <div className="text-[11px] text-slate-400 dark:text-slate-500 truncate mt-0.5">
                     Baldev Singh · lot L-0848 · due today
                   </div>
@@ -889,8 +887,7 @@ export default function DashboardPage() {
                   className="px-4 py-1.5 rounded-lg text-white text-xs font-semibold shadow-xs cursor-pointer transition-transform active:scale-95 inline-block"
                   style={{ backgroundColor: accent?.primary || '#0d9488' }}
                 >
-                  Review
-                </Link>
+                  {t('ui_e29a79fe0c34')}</Link>
               </div>
             </div>
 
@@ -902,8 +899,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="min-w-0">
                   <div className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
-                    Payment overdue by 12 days
-                  </div>
+                    {t('ui_edc16301e05f')}</div>
                   <div className="text-[11px] text-slate-400 dark:text-slate-500 truncate mt-0.5">
                     Shree Krishna Traders, Delhi · invoice INV-401
                   </div>
@@ -915,8 +911,7 @@ export default function DashboardPage() {
                   href="/dashboard/accounts"
                   className="px-4 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer inline-block"
                 >
-                  Open
-                </Link>
+                  {t('ui_cf9b77061f7b')}</Link>
               </div>
             </div>
 
@@ -928,11 +923,9 @@ export default function DashboardPage() {
                 </div>
                 <div className="min-w-0">
                   <div className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
-                    Truck waiting 1 h 45 min for the weighbridge
-                  </div>
+                    {t('ui_94591ee43af4')}</div>
                   <div className="text-[11px] text-slate-400 dark:text-slate-500 truncate mt-0.5">
-                    HR 45 B 9811 · TK-4825 · Surinder Pal, Karnal
-                  </div>
+                    {t('ui_7e93b3f5b158')}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 shrink-0">
@@ -940,8 +933,7 @@ export default function DashboardPage() {
                   href="/dashboard/weighment"
                   className="px-4 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer inline-block"
                 >
-                  Open
-                </Link>
+                  {t('ui_cf9b77061f7b')}</Link>
               </div>
             </div>
 
@@ -953,11 +945,9 @@ export default function DashboardPage() {
                 </div>
                 <div className="min-w-0">
                   <div className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
-                    2 lots above the 14% moisture limit
-                  </div>
+                    {t('ui_0727a8fa8510')}</div>
                   <div className="text-[11px] text-slate-400 dark:text-slate-500 truncate mt-0.5">
-                    L-0846 at 14.6% · L-0848 at 16.0% · both drying
-                  </div>
+                    {t('ui_2cc35361d25f')}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 shrink-0">
@@ -965,8 +955,7 @@ export default function DashboardPage() {
                   href="/dashboard/godown"
                   className="px-4 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer inline-block"
                 >
-                  Open
-                </Link>
+                  {t('ui_cf9b77061f7b')}</Link>
               </div>
             </div>
 
@@ -978,11 +967,9 @@ export default function DashboardPage() {
                 </div>
                 <div className="min-w-0">
                   <div className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
-                    6 staff absent today
-                  </div>
+                    {t('ui_a4ffb45fca30')}</div>
                   <div className="text-[11px] text-slate-400 dark:text-slate-500 truncate mt-0.5">
-                    42 of 48 on duty · 2 in milling, 2 in packaging
-                  </div>
+                    {t('ui_fae53bb08f5b')}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 shrink-0">
@@ -990,8 +977,7 @@ export default function DashboardPage() {
                   href="/dashboard/hr"
                   className="px-4 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer inline-block"
                 >
-                  Open
-                </Link>
+                  {t('ui_cf9b77061f7b')}</Link>
               </div>
             </div>
           </div>
@@ -1001,36 +987,35 @@ export default function DashboardPage() {
         <div className="lg:col-span-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs p-6 flex flex-col justify-between transition-colors">
           <div>
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white">Money</h2>
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white">{t('ui_1dc043bb8eb5')}</h2>
               <Link
                 href="/dashboard/accounts"
                 className="text-xs font-semibold hover:underline"
                 style={{ color: accent?.primary || '#0d9488' }}
               >
-                Accounts
-              </Link>
+                {t('ui_36bae31694f8')}</Link>
             </div>
 
             <div className="divide-y divide-slate-100 dark:divide-slate-800 text-xs font-medium">
               <div className="py-3.5 flex justify-between items-center">
-                <span className="text-slate-500 dark:text-slate-400">Cash in hand</span>
+                <span className="text-slate-500 dark:text-slate-400">{t('ui_e860e75a9a16')}</span>
                 <span className="font-bold text-slate-900 dark:text-white font-mono text-sm">₹3,45,200</span>
               </div>
               <div className="py-3.5 flex justify-between items-center">
-                <span className="text-slate-500 dark:text-slate-400">In bank</span>
+                <span className="text-slate-500 dark:text-slate-400">{t('ui_3e0b8c4a3d38')}</span>
                 <span className="font-bold text-slate-900 dark:text-white font-mono text-sm">₹48,92,400</span>
               </div>
               <div className="py-3.5 flex justify-between items-baseline">
                 <div>
-                  <div className="text-slate-500 dark:text-slate-400">To receive</div>
-                  <div className="text-[10px] text-slate-400">1 buyer overdue</div>
+                  <div className="text-slate-500 dark:text-slate-400">{t('ui_3184f08082c9')}</div>
+                  <div className="text-[10px] text-slate-400">{t('ui_892ba865cdfa')}</div>
                 </div>
                 <span className="font-bold text-slate-900 dark:text-white font-mono text-sm">₹18,40,000</span>
               </div>
               <div className="py-3.5 flex justify-between items-baseline">
                 <div>
-                  <div className="text-slate-500 dark:text-slate-400">To pay</div>
-                  <div className="text-[10px] text-slate-400">₹8,43,200 due today</div>
+                  <div className="text-slate-500 dark:text-slate-400">{t('ui_58d1265ef47e')}</div>
+                  <div className="text-[10px] text-slate-400">{t('ui_6e9ce6b1846d')}</div>
                 </div>
                 <span className="font-bold text-slate-900 dark:text-white font-mono text-sm">₹16,81,000</span>
               </div>
@@ -1044,8 +1029,8 @@ export default function DashboardPage() {
         {/* Left: 14-Day Paddy Received Bar Chart */}
         <div className="lg:col-span-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs p-6 space-y-4 transition-colors">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold text-slate-900 dark:text-white">Paddy received, last 14 days</h2>
-            <span className="text-xs text-slate-400 font-medium">Tonnes, net of moisture cut</span>
+            <h2 className="text-sm font-bold text-slate-900 dark:text-white">{t('ui_c13d757af049')}</h2>
+            <span className="text-xs text-slate-400 font-medium">{t('ui_f7e0a4b800d0')}</span>
           </div>
 
           <div className="pt-8 pb-2">
@@ -1079,8 +1064,7 @@ export default function DashboardPage() {
                     {/* Today Marker (84.4 so far on 24) */}
                     {bar.isToday && (
                       <span className="absolute -top-5 text-[10px] font-bold text-slate-900 dark:text-white whitespace-nowrap">
-                        {bar.value} so far
-                      </span>
+                        {bar.value} {' '}{t('ui_fa03c6b80d18')}</span>
                     )}
 
                     {/* Bar Element */}
@@ -1105,8 +1089,8 @@ export default function DashboardPage() {
         {/* Right: Today's Flow (🟢 "Moves to that page" Navigation Links) */}
         <div className="lg:col-span-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs p-6 space-y-3 transition-colors">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-            <h2 className="text-sm font-bold text-slate-900 dark:text-white">Today’s flow</h2>
-            <span className="text-xs text-slate-400">Gate to dispatch</span>
+            <h2 className="text-sm font-bold text-slate-900 dark:text-white">{t('ui_cae97ac7c85d')}</h2>
+            <span className="text-xs text-slate-400">{t('ui_ab11e5292634')}</span>
           </div>
 
           <div className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
@@ -1116,11 +1100,11 @@ export default function DashboardPage() {
               className="py-2.5 flex items-center justify-between group hover:bg-slate-50/50 dark:hover:bg-slate-800/40 rounded-lg px-1 transition-colors"
             >
               <div>
-                <div className="font-semibold text-slate-900 dark:text-white">At the gate</div>
-                <div className="text-[11px] text-slate-400">Waiting for gross weight</div>
+                <div className="font-semibold text-slate-900 dark:text-white">{t('ui_51ef35029097')}</div>
+                <div className="text-[11px] text-slate-400">{t('ui_48eb140d1d93')}</div>
               </div>
               <div className="flex items-center gap-1 font-bold text-slate-900 dark:text-white">
-                <span>2 trucks</span>
+                <span>{t('ui_44ef7a92859b')}</span>
                 <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </Link>
@@ -1131,11 +1115,11 @@ export default function DashboardPage() {
               className="py-2.5 flex items-center justify-between group hover:bg-slate-50/50 dark:hover:bg-slate-800/40 rounded-lg px-1 transition-colors"
             >
               <div>
-                <div className="font-semibold text-slate-900 dark:text-white">Weighbridge</div>
-                <div className="text-[11px] text-slate-400">1 unloading, waiting for tare</div>
+                <div className="font-semibold text-slate-900 dark:text-white">{t('ui_14309cd8b133')}</div>
+                <div className="text-[11px] text-slate-400">{t('ui_7cc253448224')}</div>
               </div>
               <div className="flex items-center gap-1 font-bold text-slate-900 dark:text-white">
-                <span>3 weighed</span>
+                <span>{t('ui_97dc573dd164')}</span>
                 <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </Link>
@@ -1146,11 +1130,11 @@ export default function DashboardPage() {
               className="py-2.5 flex items-center justify-between group hover:bg-slate-50/50 dark:hover:bg-slate-800/40 rounded-lg px-1 transition-colors"
             >
               <div>
-                <div className="font-semibold text-slate-900 dark:text-white">Paddy stock</div>
-                <div className="text-[11px] text-slate-400">3 godowns · 69% full</div>
+                <div className="font-semibold text-slate-900 dark:text-white">{t('ui_a53b571bd339')}</div>
+                <div className="text-[11px] text-slate-400">{t('ui_a1cc97fa295e')}</div>
               </div>
               <div className="flex items-center gap-1 font-bold text-slate-900 dark:text-white">
-                <span>2,410 t</span>
+                <span>{t('ui_455af16f1f4a')}</span>
                 <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </Link>
@@ -1161,11 +1145,11 @@ export default function DashboardPage() {
               className="py-2.5 flex items-center justify-between group hover:bg-slate-50/50 dark:hover:bg-slate-800/40 rounded-lg px-1 transition-colors"
             >
               <div>
-                <div className="font-semibold text-slate-900 dark:text-white">Milling</div>
-                <div className="text-[11px] text-slate-400">Batches B-102 and B-103 running</div>
+                <div className="font-semibold text-slate-900 dark:text-white">{t('ui_5cdfae8d7dd2')}</div>
+                <div className="text-[11px] text-slate-400">{t('ui_dc5ae11793aa')}</div>
               </div>
               <div className="flex items-center gap-1 font-bold text-slate-900 dark:text-white">
-                <span>62.4 t in</span>
+                <span>{t('ui_b460b492c375')}</span>
                 <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </Link>
@@ -1176,11 +1160,11 @@ export default function DashboardPage() {
               className="py-2.5 flex items-center justify-between group hover:bg-slate-50/50 dark:hover:bg-slate-800/40 rounded-lg px-1 transition-colors"
             >
               <div>
-                <div className="font-semibold text-slate-900 dark:text-white">Finished stock</div>
-                <div className="text-[11px] text-slate-400">5,110 bags</div>
+                <div className="font-semibold text-slate-900 dark:text-white">{t('ui_67c9c2abb5da')}</div>
+                <div className="text-[11px] text-slate-400">{t('ui_c9cb9bac76d5')}</div>
               </div>
               <div className="flex items-center gap-1 font-bold text-slate-900 dark:text-white">
-                <span>227.0 t</span>
+                <span>{t('ui_4c0f16c38e97')}</span>
                 <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </Link>
@@ -1191,11 +1175,11 @@ export default function DashboardPage() {
               className="py-2.5 flex items-center justify-between group hover:bg-slate-50/50 dark:hover:bg-slate-800/40 rounded-lg px-1 transition-colors"
             >
               <div>
-                <div className="font-semibold text-slate-900 dark:text-white">Dispatch</div>
-                <div className="text-[11px] text-slate-400">1 loading · 2 waiting for a truck</div>
+                <div className="font-semibold text-slate-900 dark:text-white">{t('ui_840e1b364a32')}</div>
+                <div className="text-[11px] text-slate-400">{t('ui_5f2dad46d3ff')}</div>
               </div>
               <div className="flex items-center gap-1 font-bold text-slate-900 dark:text-white">
-                <span>2 out</span>
+                <span>{t('ui_263b1dc64047')}</span>
                 <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </Link>

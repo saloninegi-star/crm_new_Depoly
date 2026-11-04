@@ -11,6 +11,7 @@ import {
   AlertTriangle,
   RefreshCw,
 } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface PaddyLotItem {
   order: number;
@@ -115,6 +116,7 @@ const INITIAL_LOTS_DATA: PaddyLotItem[] = [
 ];
 
 export default function PaddyStockFifoPage() {
+  const { t } = useLanguage();
   const { accent } = useTheme();
 
   const [lots, setLots] = useState<PaddyLotItem[]>(INITIAL_LOTS_DATA);
@@ -192,10 +194,9 @@ export default function PaddyStockFifoPage() {
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xs p-6 space-y-6 transition-colors">
         {/* Header */}
         <div className="flex items-center justify-between pb-1">
-          <h2 className="text-base font-bold text-slate-900 dark:text-white">Godowns</h2>
+          <h2 className="text-base font-bold text-slate-900 dark:text-white">{t('ui_084d5190309d')}</h2>
           <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 font-mono">
-            2,410 t <span className="text-slate-400 font-normal">of 3,500 t</span> · 69% full
-          </span>
+            {t('ui_455af16f1f4a')}{' '}<span className="text-slate-400 font-normal">{t('ui_2c5c0c143eea')}</span> {' '}{t('ui_e398d1e43aa7')}</span>
         </div>
 
         {/* 3 Godowns Grid with Teal Progress Bars */}
@@ -204,18 +205,15 @@ export default function PaddyStockFifoPage() {
           <div className="space-y-3 pb-4 md:pb-0 md:pr-6 first:pl-0">
             <div>
               <h3 className="text-xs font-bold text-slate-900 dark:text-white">
-                Godown 1 · Basmati
-              </h3>
+                {t('ui_b9a1a3fa6d1e')}</h3>
               <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
-                1121 and 1509
-              </p>
+                {t('ui_d48500eb97e2')}</p>
             </div>
 
             <div className="flex items-baseline gap-1.5">
               <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                1,040 t
-              </span>
-              <span className="text-xs text-slate-400 font-medium">of 1,500 t</span>
+                {t('ui_bcdb8f1e6f55')}</span>
+              <span className="text-xs text-slate-400 font-medium">{t('ui_a8174b080ed9')}</span>
             </div>
 
             {/* Progress Bar */}
@@ -227,26 +225,22 @@ export default function PaddyStockFifoPage() {
             </div>
 
             <p className="text-xs text-slate-400 dark:text-slate-500 pt-0.5">
-              69% full · 3 stacks · 14 lots
-            </p>
+              {t('ui_190c7d81b527')}</p>
           </div>
 
           {/* Godown 2 */}
           <div className="space-y-3 py-4 md:py-0 md:px-6">
             <div>
               <h3 className="text-xs font-bold text-slate-900 dark:text-white">
-                Godown 2 · PR paddy
-              </h3>
+                {t('ui_5d00d05932ac')}</h3>
               <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
-                PR-126 and PR-114
-              </p>
+                {t('ui_28f9d905f887')}</p>
             </div>
 
             <div className="flex items-baseline gap-1.5">
               <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                980 t
-              </span>
-              <span className="text-xs text-slate-400 font-medium">of 1,200 t</span>
+                {t('ui_940477f54683')}</span>
+              <span className="text-xs text-slate-400 font-medium">{t('ui_b54e6aa59d78')}</span>
             </div>
 
             {/* Progress Bar */}
@@ -258,26 +252,22 @@ export default function PaddyStockFifoPage() {
             </div>
 
             <p className="text-xs text-slate-400 dark:text-slate-500 pt-0.5">
-              82% full · 4 stacks · 17 lots
-            </p>
+              {t('ui_76c97a1b3bd3')}</p>
           </div>
 
           {/* Godown 3 */}
           <div className="space-y-3 pt-4 md:pt-0 md:pl-6">
             <div>
               <h3 className="text-xs font-bold text-slate-900 dark:text-white">
-                Godown 3 · Buffer
-              </h3>
+                {t('ui_dceb818baf78')}</h3>
               <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
-                Any variety, short stay
-              </p>
+                {t('ui_e6aba758d3fd')}</p>
             </div>
 
             <div className="flex items-baseline gap-1.5">
               <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                390 t
-              </span>
-              <span className="text-xs text-slate-400 font-medium">of 800 t</span>
+                {t('ui_0990c86da482')}</span>
+              <span className="text-xs text-slate-400 font-medium">{t('ui_b9a33440e340')}</span>
             </div>
 
             {/* Progress Bar */}
@@ -289,8 +279,7 @@ export default function PaddyStockFifoPage() {
             </div>
 
             <p className="text-xs text-slate-400 dark:text-slate-500 pt-0.5">
-              49% full · 2 stacks · 7 lots
-            </p>
+              {t('ui_1e5061aba1c0')}</p>
           </div>
         </div>
       </div>
@@ -302,15 +291,14 @@ export default function PaddyStockFifoPage() {
         {/* Table Header & Search */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
           <h2 className="text-base font-bold text-slate-900 dark:text-white">
-            Lots, oldest first
-          </h2>
+            {t('ui_51c0454f0e0a')}</h2>
 
           {/* Search Box from Image */}
           <div className="relative w-full sm:w-72">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-2.5" />
             <input
               type="text"
-              placeholder="Lot, variety or farmer"
+              placeholder={t('ui_284cce884060')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all shadow-2xs"
@@ -323,18 +311,18 @@ export default function PaddyStockFifoPage() {
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-semibold">
-                <th className="pb-3.5 pl-2">Order</th>
-                <th className="pb-3.5">Lot</th>
-                <th className="pb-3.5">Godown</th>
-                <th className="pb-3.5">Variety</th>
-                <th className="pb-3.5">Source</th>
-                <th className="pb-3.5">Arrived</th>
-                <th className="pb-3.5 text-center">Moisture</th>
-                <th className="pb-3.5 text-right sm:text-left">Bags</th>
-                <th className="pb-3.5 text-right sm:text-left">Came in</th>
-                <th className="pb-3.5 text-right sm:text-left">Left</th>
-                <th className="pb-3.5">Status</th>
-                <th className="pb-3.5 text-right pr-2">Action</th>
+                <th className="pb-3.5 pl-2">{t('ui_1d75774c0f96')}</th>
+                <th className="pb-3.5">{t('ui_4a211932145b')}</th>
+                <th className="pb-3.5">{t('ui_53d77a34224e')}</th>
+                <th className="pb-3.5">{t('ui_85e646fbb9f6')}</th>
+                <th className="pb-3.5">{t('ui_6da13addb000')}</th>
+                <th className="pb-3.5">{t('ui_a22d66c8578a')}</th>
+                <th className="pb-3.5 text-center">{t('ui_dbab2db9c507')}</th>
+                <th className="pb-3.5 text-right sm:text-left">{t('ui_81cf1fc845ed')}</th>
+                <th className="pb-3.5 text-right sm:text-left">{t('ui_7e92864f14e5')}</th>
+                <th className="pb-3.5 text-right sm:text-left">{t('ui_8ae1c34bd37f')}</th>
+                <th className="pb-3.5">{t('ui_bae7d5be7082')}</th>
+                <th className="pb-3.5 text-right pr-2">{t('ui_97c89a4d6630')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-medium">
@@ -396,49 +384,42 @@ export default function PaddyStockFifoPage() {
 
                   {/* Came in */}
                   <td className="py-4 font-mono text-right sm:text-left">
-                    {row.cameIn.toFixed(1)} t
-                  </td>
+                    {row.cameIn.toFixed(1)} {' '}{t('ui_8efd86fb78a5')}</td>
 
                   {/* Left */}
                   <td className="py-4 font-mono font-bold text-slate-900 dark:text-white text-right sm:text-left">
-                    {row.left.toFixed(1)} t
-                  </td>
+                    {row.left.toFixed(1)} {' '}{t('ui_8efd86fb78a5')}</td>
 
                   {/* Status Pills Matching Screenshot */}
                   <td className="py-4">
                     {row.status === 'milling_line_2' && (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-400">
                         <span className="w-1.5 h-1.5 rounded-full bg-teal-600 dark:bg-teal-400" />
-                        Milling on line 2
-                      </span>
+                        {t('ui_e2e994fc1486')}</span>
                     )}
 
                     {row.status === 'milling_line_1' && (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-400">
                         <span className="w-1.5 h-1.5 rounded-full bg-teal-600 dark:bg-teal-400" />
-                        Milling on line 1
-                      </span>
+                        {t('ui_05b6850d6b75')}</span>
                     )}
 
                     {row.status === 'drying' && (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400">
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                        Drying
-                      </span>
+                        {t('ui_7ea61a9bd524')}</span>
                     )}
 
                     {row.status === 'ready_next' && (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                        Ready · next to mill
-                      </span>
+                        {t('ui_eefa85a30a16')}</span>
                     )}
 
                     {row.status === 'ready' && (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                        Ready
-                      </span>
+                        {t('ui_20c7c5522fc2')}</span>
                     )}
                   </td>
 
@@ -453,8 +434,7 @@ export default function PaddyStockFifoPage() {
                         }}
                         className="px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-2xs cursor-pointer"
                       >
-                        Re-check moisture
-                      </button>
+                        {t('ui_14fa93b60a23')}</button>
                     )}
 
                     {row.actionType === 'issue' && (
@@ -467,8 +447,7 @@ export default function PaddyStockFifoPage() {
                         className="px-4 py-1.5 rounded-xl text-white text-xs font-bold shadow-xs cursor-pointer transition-transform active:scale-95"
                         style={{ backgroundColor: accent?.primary || '#0d9488' }}
                       >
-                        Issue
-                      </button>
+                        {t('ui_73781a127ec1')}</button>
                     )}
                   </td>
                 </tr>
@@ -480,22 +459,19 @@ export default function PaddyStockFifoPage() {
         {/* Footer: Pagination & Count from Image */}
         <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
           <span className="text-slate-400 dark:text-slate-500">
-            Showing {filteredLots.length} of 38 lots
-          </span>
+            {t('ui_163d8174ff4b')}{' '}{filteredLots.length} {' '}{t('ui_c1ef4ab608e8')}</span>
 
           <div className="flex items-center gap-2">
             <button
               type="button"
               className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer shadow-2xs"
             >
-              Previous
-            </button>
+              {t('ui_50f94286ba30')}</button>
             <button
               type="button"
               className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer shadow-2xs"
             >
-              Next
-            </button>
+              {t('ui_bc981983e7f5')}</button>
           </div>
         </div>
       </div>
@@ -509,8 +485,7 @@ export default function PaddyStockFifoPage() {
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-                  Re-check Moisture Level
-                </h3>
+                  {t('ui_19b09f0ed807')}</h3>
                 <p className="text-[11px] text-slate-400">{recheckLot.lot} · {recheckLot.variety}</p>
               </div>
               <button
@@ -525,30 +500,29 @@ export default function PaddyStockFifoPage() {
             <form onSubmit={handleUpdateMoisture} className="space-y-4 text-xs">
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 space-y-1">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Current recorded moisture:</span>
+                  <span className="text-slate-500">{t('ui_c5694429d5ec')}</span>
                   <span className="font-bold text-amber-600 font-mono">{recheckLot.moisture}%</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Stack location:</span>
+                  <span className="text-slate-500">{t('ui_d23c3f758c1e')}</span>
                   <span className="font-semibold text-slate-800 dark:text-slate-200">{recheckLot.godown}</span>
                 </div>
               </div>
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  New Sample Moisture Reading (%)
-                </label>
+                  {t('ui_ea7c8f4ae8bc')}</label>
                 <input
                   type="number"
                   step="0.1"
                   required
                   value={newMoisture}
                   onChange={(e) => setNewMoisture(e.target.value)}
-                  placeholder="e.g. 13.6"
+                  placeholder={t('ui_6f20eb5f5630')}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-mono font-bold text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
                 />
                 <p className="text-[10px] text-slate-400">
-                  If ≤ 14.0%, lot status will automatically update to <strong>Ready to Mill</strong>.
+                  {t('ui_a9b37f7b5308')}{' '}<strong>{t('ui_5b98e6cf8d67')}</strong>.
                 </p>
               </div>
 
@@ -558,15 +532,13 @@ export default function PaddyStockFifoPage() {
                   onClick={() => setRecheckLot(null)}
                   className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300"
                 >
-                  Cancel
-                </button>
+                  {t('ui_77dfd2135f4d')}</button>
                 <button
                   type="submit"
                   className="px-4 py-2 rounded-xl text-white text-xs font-bold shadow-xs cursor-pointer"
                   style={{ backgroundColor: accent?.primary || '#0d9488' }}
                 >
-                  Update & Save
-                </button>
+                  {t('ui_8529d1a17b5d')}</button>
               </div>
             </form>
           </div>
@@ -582,8 +554,7 @@ export default function PaddyStockFifoPage() {
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-                  Issue Lot to Milling Line
-                </h3>
+                  {t('ui_7c78976ae6eb')}</h3>
                 <p className="text-[11px] text-slate-400">{issueLot.lot} · {issueLot.variety}</p>
               </div>
               <button
@@ -598,19 +569,18 @@ export default function PaddyStockFifoPage() {
             <form onSubmit={handleConfirmIssue} className="space-y-4 text-xs">
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 space-y-1">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Available paddy balance:</span>
-                  <span className="font-bold text-emerald-700 dark:text-emerald-400 font-mono">{issueLot.left.toFixed(1)} MT</span>
+                  <span className="text-slate-500">{t('ui_c74e6e229c4d')}</span>
+                  <span className="font-bold text-emerald-700 dark:text-emerald-400 font-mono">{issueLot.left.toFixed(1)} {' '}{t('ui_c3c2fa56598a')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Moisture reading:</span>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200">{issueLot.moisture}% (Safe)</span>
+                  <span className="text-slate-500">{t('ui_605c4180d43d')}</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-200">{issueLot.moisture}{t('ui_3553e1e9b03b')}</span>
                 </div>
               </div>
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Quantity to Issue (MT) *
-                </label>
+                  {t('ui_420ca2b07cde')}</label>
                 <input
                   type="number"
                   step="0.1"
@@ -624,15 +594,14 @@ export default function PaddyStockFifoPage() {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Target Machine Line
-                </label>
+                  {t('ui_aaf6727e4129')}</label>
                 <select
                   value={millingLine}
                   onChange={(e) => setMillingLine(e.target.value)}
                   className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-white outline-none"
                 >
-                  <option value="Line 1 (Basmati)">Milling Line 1 (Basmati Polish)</option>
-                  <option value="Line 2 (PR Paddy)">Milling Line 2 (PR High-Speed)</option>
+                  <option value="Line 1 (Basmati)">{t('ui_de973b2a258e')}</option>
+                  <option value="Line 2 (PR Paddy)">{t('ui_01a9e2136943')}</option>
                 </select>
               </div>
 
@@ -642,15 +611,13 @@ export default function PaddyStockFifoPage() {
                   onClick={() => setIssueLot(null)}
                   className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300"
                 >
-                  Cancel
-                </button>
+                  {t('ui_77dfd2135f4d')}</button>
                 <button
                   type="submit"
                   className="px-4 py-2 rounded-xl text-white text-xs font-bold shadow-xs cursor-pointer"
                   style={{ backgroundColor: accent?.primary || '#0d9488' }}
                 >
-                  Confirm Issue
-                </button>
+                  {t('ui_83689dbe7073')}</button>
               </div>
             </form>
           </div>

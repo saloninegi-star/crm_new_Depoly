@@ -3,6 +3,16 @@
 
 import React, { createContext, useContext, useEffect, useSyncExternalStore } from "react";
 import { LANGUAGES, LanguageOption, translations } from "./translations";
+import uiKeywords from "./ui-keywords.json";
+
+const keywordTranslations: Record<string, Record<string, unknown>> = uiKeywords;
+const uiTextKeyByEnglish = new Map<string, string>();
+
+for (const [key, value] of Object.entries(keywordTranslations.en || {})) {
+  if (key.startsWith("ui_") && typeof value === "string") {
+    uiTextKeyByEnglish.set(value, key);
+  }
+}
 
 interface LanguageContextType {
   currentLanguage: string;
@@ -53,8 +63,27 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
 
   // Translation helper function (Fallback: English ya Key khud)
   const t = (key: string): string => {
+    const dictionaryKey = uiTextKeyByEnglish.get(key) || key;
+    const localeValue = keywordTranslations[currentLanguage]?.[dictionaryKey];
+    const getNestedTranslation = (
+      section: string,
+      locale = currentLanguage
+    ): string | undefined => {
+      const localeValues = keywordTranslations[section]?.[locale];
+      if (!localeValues || typeof localeValues !== "object") return undefined;
+      const value = (localeValues as Record<string, unknown>)[dictionaryKey];
+      return typeof value === "string" ? value : undefined;
+    };
     return (
       translations[currentLanguage]?.[key] ||
+      (typeof localeValue === "string" ? localeValue : undefined) ||
+      getNestedTranslation("auth") ||
+      getNestedTranslation("landing") ||
+      getNestedTranslation("dashboard") ||
+      keywordTranslations.en?.[dictionaryKey] as string | undefined ||
+      getNestedTranslation("auth", "en") ||
+      getNestedTranslation("landing", "en") ||
+      getNestedTranslation("dashboard", "en") ||
       translations["en"]?.[key] ||
       key
     );

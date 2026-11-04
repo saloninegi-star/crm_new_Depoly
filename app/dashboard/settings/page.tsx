@@ -71,10 +71,9 @@ export default function SettingsPage() {
         {/* 1. Accent colour Section */}
         <div className="space-y-3">
           <div>
-            <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100">Accent colour</h3>
+            <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100">{t('ui_8ba7c3fbd3a3')}</h3>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-              Buttons, links and the selected menu item. Changes only your view.
-            </p>
+              {t('ui_3af515623a32')}</p>
           </div>
 
           {/* 3-Column Grid Matching Image 2 */}
@@ -100,7 +99,7 @@ export default function SettingsPage() {
                   >
                     {isSelected && <Check className="w-2.5 h-2.5 stroke-[3.5]" />}
                   </span>
-                  <span>{item.label}</span>
+                  <span>{t(item.label)}</span>
                 </button>
               );
             })}
@@ -115,8 +114,7 @@ export default function SettingsPage() {
           <div>
             <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100">{t('theme')}</h3>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-              Dark is easier on the eyes at night.
-            </p>
+              {t('ui_84abd6f8bdb5')}</p>
           </div>
 
           <div className="inline-flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-medium">
@@ -162,10 +160,9 @@ export default function SettingsPage() {
         {/* 3. Preview Box */}
         <div className="space-y-3">
           <div>
-            <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100">Preview</h3>
+            <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100">{t('ui_f1fbb2b43dca')}</h3>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-              What your choice looks like.
-            </p>
+              {t('ui_93de3b04f81c')}</p>
           </div>
 
           <div className="p-5 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30 flex flex-wrap items-center gap-3.5">
@@ -174,16 +171,14 @@ export default function SettingsPage() {
               className="px-4 py-2 rounded-lg text-white text-xs font-bold shadow-xs transition-colors"
               style={{ backgroundColor: accent.primary }}
             >
-              Save weighment
-            </button>
+              {t('ui_e8ee6d3dd585')}</button>
 
             <button
               type="button"
               className="px-4 py-2 rounded-lg text-xs font-bold transition-colors"
               style={{ backgroundColor: accent.lightBg, color: accent.text }}
             >
-              Paddy stock
-            </button>
+              {t('ui_a53b571bd339')}</button>
 
             <span
               className="text-xs font-semibold underline underline-offset-2 cursor-pointer transition-colors"
@@ -197,8 +192,7 @@ export default function SettingsPage() {
               style={{ backgroundColor: accent.lightBg, color: accent.text }}
             >
               <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accent.primary }} />
-              Unloading
-            </span>
+              {t('ui_b0dd9a8036a7')}</span>
           </div>
         </div>
       </div>
@@ -207,23 +201,23 @@ export default function SettingsPage() {
           CARD 2: YOUR ACCOUNT (EXACT ALIGNMENT FROM IMAGE 2)
          ======================================================== */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xs p-7 space-y-5 transition-colors">
-        <h2 className="text-base font-bold text-slate-900 dark:text-white">Your account</h2>
+        <h2 className="text-base font-bold text-slate-900 dark:text-white">{t('ui_4ab291020939')}</h2>
 
         <div className="space-y-3 text-xs">
           <div className="grid grid-cols-4 sm:grid-cols-6 py-0.5">
-            <span className="text-slate-400 dark:text-slate-500 font-medium">Name</span>
+            <span className="text-slate-400 dark:text-slate-500 font-medium">{t('ui_709a23220f2c')}</span>
             <span className="font-semibold text-slate-900 dark:text-white col-span-3 sm:col-span-5 capitalize">
               {userName}
             </span>
           </div>
           <div className="grid grid-cols-4 sm:grid-cols-6 py-0.5">
-            <span className="text-slate-400 dark:text-slate-500 font-medium">Role</span>
+            <span className="text-slate-400 dark:text-slate-500 font-medium">{t('ui_c3f104d13657')}</span>
             <span className="font-semibold text-slate-900 dark:text-white col-span-3 sm:col-span-5 capitalize">
               {userRole}
             </span>
           </div>
           <div className="grid grid-cols-4 sm:grid-cols-6 py-0.5">
-            <span className="text-slate-400 dark:text-slate-500 font-medium">Mobile</span>
+            <span className="text-slate-400 dark:text-slate-500 font-medium">{t('ui_b1d702459399')}</span>
             <span className="font-semibold text-slate-900 dark:text-white col-span-3 sm:col-span-5 font-mono">
               {userMobile}
             </span>
@@ -239,8 +233,7 @@ export default function SettingsPage() {
             }}
             className="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-2xs cursor-pointer"
           >
-            Sign out of all devices
-          </button>
+            {t('ui_8d421fb01232')}</button>
         </div>
       </div>
     </div>

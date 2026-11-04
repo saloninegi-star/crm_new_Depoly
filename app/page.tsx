@@ -91,11 +91,9 @@ export default function HomePage() {
             </div>
             <div>
               <span className="font-black text-base tracking-tight text-slate-900 block leading-tight">
-                KOGNOS
-              </span>
+                {t('ui_856a1699fb4b')}</span>
               <span className="text-[10px] text-emerald-700 font-bold tracking-wider uppercase block">
-                 Mill ERP
-              </span>
+                 {t('ui_689b770148bc')}</span>
             </div>
           </Link>  
 
@@ -188,17 +186,15 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold shadow-xs">
             <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Autonomous Agro-Tech Milling ERP</span>
+            <span>{t('home_badge')}</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight max-w-4xl mx-auto leading-[1.15]">
-            Run Your Entire Rice Mill from{' '}
-            <span className="text-emerald-600">Gate Inward</span> to{' '}
-            <span className="text-emerald-600">Accounts Ledger</span>
+            {t('home_headline')}
           </h1>
 
           <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto font-normal leading-relaxed">
-            Eliminate operational leakages with real-time weighbridge IoT integration, FIFO paddy godown queue, 60–65% milling recovery tracking, and complete accounts governance.
+            {t('home_description')}
           </p>
 
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -206,38 +202,38 @@ export default function HomePage() {
               href="/login"
               className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer"
             >
-              <span>Launch ERP System</span>
+              <span>{t('launch_erp')}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <a
               href="#pipeline"
               className="w-full sm:w-auto px-7 py-3.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-xs"
             >
-              <span>View Mill Flowchart</span>
+              <span>{t('view_flowchart')}</span>
             </a>
           </div>
 
           {/* Quick Metrics Strip */}
           <div className="pt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
             <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-0.5">
-              <span className="text-xs text-slate-400 font-semibold">Today Paddy Inward</span>
-              <div className="text-2xl font-black text-slate-900">428.5 MT</div>
-              <div className="text-[11px] text-emerald-600 font-bold">+14% vs Target</div>
+              <span className="text-xs text-slate-400 font-semibold">{t('metric_paddy_inward')}</span>
+              <div className="text-2xl font-black text-slate-900">{t('ui_1fb34c49ee6c')}</div>
+              <div className="text-[11px] text-emerald-600 font-bold">+14% {t('metric_vs_target')}</div>
             </div>
             <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-0.5">
-              <span className="text-xs text-slate-400 font-semibold">Head Rice Yield</span>
+              <span className="text-xs text-slate-400 font-semibold">{t('metric_rice_yield')}</span>
               <div className="text-2xl font-black text-emerald-600">64.8%</div>
-              <div className="text-[11px] text-slate-400">Target 60-65% OK</div>
+              <div className="text-[11px] text-slate-400">{t('metric_target_yield')}</div>
             </div>
             <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-0.5">
-              <span className="text-xs text-slate-400 font-semibold">FIFO Godown Stock</span>
-              <div className="text-2xl font-black text-blue-600">2,410 MT</div>
-              <div className="text-[11px] text-slate-400">3 Godowns Active</div>
+              <span className="text-xs text-slate-400 font-semibold">{t('metric_fifo_stock')}</span>
+              <div className="text-2xl font-black text-blue-600">{t('ui_39bb57f05d0c')}</div>
+              <div className="text-[11px] text-slate-400">3 {t('metric_active_godowns')}</div>
             </div>
             <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-0.5">
-              <span className="text-xs text-slate-400 font-semibold">Sales Dispatches</span>
-              <div className="text-2xl font-black text-purple-700">₹42.8 Lakh</div>
-              <div className="text-[11px] text-emerald-600 font-bold">12 Trucks Cleared</div>
+              <span className="text-xs text-slate-400 font-semibold">{t('metric_sales_dispatches')}</span>
+              <div className="text-2xl font-black text-purple-700">{t('ui_97ab094e7b33')}</div>
+              <div className="text-[11px] text-emerald-600 font-bold">12 {t('metric_trucks_cleared')}</div>
             </div>
           </div>
         </div>
@@ -251,13 +247,13 @@ export default function HomePage() {
           
           <div className="text-center space-y-3 max-w-3xl mx-auto">
             <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
-              Enterprise Milling Capabilities
+              {t('home_feature_badge')}
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              Engineered Exclusively for Modern Rice Mills
+              {t('home_feature_title')}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-              Every feature is built directly around real grain mandi arrivals, boiler operations, automated weighment calibrations, and cash-book reconciliation.
+              {t('home_feature_description')}
             </p>
           </div>
 
@@ -268,13 +264,12 @@ export default function HomePage() {
                 <Scale className="w-6 h-6" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-base font-bold text-slate-900">Digital Weighbridge Integration</h3>
+                <h3 className="text-base font-bold text-slate-900">{t('feature_weighbridge')}</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Direct electronic sensor capture for Gross and Tare weights. Prevents manual slip tampering and automatically syncs net weight into purchase records.
-                </p>
+                  {t('ui_27c0ae441d61')}</p>
               </div>
               <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-emerald-700">
-                <span>Auto Zero & Gross Capture</span>
+                <span>{t('ui_abaa4baf8e58')}</span>
                 <Check className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -285,13 +280,12 @@ export default function HomePage() {
                 <Droplets className="w-6 h-6" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-base font-bold text-slate-900">Smart Moisture Deduction Engine</h3>
+                <h3 className="text-base font-bold text-slate-900">{t('feature_moisture')}</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Paddy arrivals above the standard 14.0% moisture base automatically compute exact kilogram deductions to safeguard your milling recovery margins.
-                </p>
+                  {t('ui_12e003a8eeb2')}</p>
               </div>
               <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-blue-700">
-                <span>Standard 14.0% Base Cut</span>
+                <span>{t('ui_30ab6535db08')}</span>
                 <Check className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -302,13 +296,12 @@ export default function HomePage() {
                 <Warehouse className="w-6 h-6" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-base font-bold text-slate-900">FIFO Godown Stacking & Lots</h3>
+                <h3 className="text-base font-bold text-slate-900">{t('feature_fifo')}</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  First-In, First-Out lot queues across Basmati, PR, and Sharbati chambers prevent grain aging, yellowing, and optimize milling shift intake.
-                </p>
+                  {t('ui_d723de884d46')}</p>
               </div>
               <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-amber-700">
-                <span>Milling Queue Prioritization</span>
+                <span>{t('ui_f337451ff320')}</span>
                 <Check className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -319,13 +312,12 @@ export default function HomePage() {
                 <Cog className="w-6 h-6" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-base font-bold text-slate-900">Milling Recovery Yield (60–65%)</h3>
+                <h3 className="text-base font-bold text-slate-900">{t('feature_yield')}</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Real-time machine line recovery ratios for Grade A Head Rice, 10–12% Broken Rice split, and lucrative byproduct margins (Husk boiler fuel and Bran).
-                </p>
+                  {t('ui_4a856e97f6b2')}</p>
               </div>
               <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-purple-700">
-                <span>Byproduct Profit Contributions</span>
+                <span>{t('ui_4ef263497d72')}</span>
                 <Check className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -336,13 +328,12 @@ export default function HomePage() {
                 <HardHat className="w-6 h-6" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-base font-bold text-slate-900">Loading, Unloading & Labour Charges</h3>
+                <h3 className="text-base font-bold text-slate-900">{t('feature_labour')}</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Per-bag piece-rate calculation for unloading gangs, godown stacking, and truck dispatch loading. Tracks weekly advances (kharcha) automatically.
-                </p>
+                  {t('ui_c9864c576d9a')}</p>
               </div>
               <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-teal-700">
-                <span>Per-Bag Piece Rate Tracking</span>
+                <span>{t('ui_e1a3c599e2ff')}</span>
                 <Check className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -353,13 +344,12 @@ export default function HomePage() {
                 <Calculator className="w-6 h-6" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-base font-bold text-slate-900">Integrated Accounts & GST Layer</h3>
+                <h3 className="text-base font-bold text-slate-900">{t('feature_accounts')}</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Denomination-wise daily cash book closing, farmer RTGS auto-linking, party-wise overdue aging alerts, and GSTR compliance statements.
-                </p>
+                  {t('ui_a6356842ba22')}</p>
               </div>
               <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-rose-700">
-                <span>Direct Cash/Bank Auto-Sync</span>
+                <span>{t('ui_f795f343172f')}</span>
                 <Check className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -374,13 +364,13 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
             <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
-              Operations Lifecycle
+              {t('home_process_badge')}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              End-to-End Milling Architecture
+              {t('home_process_title')}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
-              Structured strictly according to real mill checkpoints for complete lot traceability.
+              {t('home_process_description')}
             </p>
           </div>
 
@@ -442,8 +432,8 @@ export default function HomePage() {
                     <span className="text-xs font-black font-mono text-slate-300">{card.step}</span>
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900">{card.title}</h3>
-                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">{card.desc}</p>
+                    <h3 className="text-sm font-bold text-slate-900">{t(card.title)}</h3>
+                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">{t(card.desc)}</p>
                   </div>
                   <span className="inline-block px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                     {card.tag}
@@ -462,13 +452,13 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
             <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
-              Role-Based Access
+              {t('home_roles_badge')}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Tailored Desks for Every Department
+              {t('home_roles_title')}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
-              Every staff member sees only what they need. Zero confidential leaks, 100% operational focus.
+              {t('home_roles_description')}
             </p>
           </div>
 
@@ -499,15 +489,15 @@ export default function HomePage() {
                 color: 'border-slate-200 bg-white',
               },
             ].map((role) => (
-              <div key={role.title} className={`p-5 rounded-2xl border shadow-xs space-y-2.5 ${role.color}`}>
+              <div key={t(role.title)} className={`p-5 rounded-2xl border shadow-xs space-y-2.5 ${role.color}`}>
                 <div className="flex justify-between items-center">
                   <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-900 text-white">
-                    {role.badge}
+                    {t(role.badge)}
                   </span>
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                 </div>
-                <h3 className="text-sm font-bold text-slate-900">{role.title}</h3>
-                <p className="text-xs text-slate-500 leading-relaxed">{role.desc}</p>
+                <h3 className="text-sm font-bold text-slate-900">{t(role.title)}</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">{t(role.desc)}</p>
               </div>
             ))}
           </div>
@@ -521,13 +511,13 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center space-y-2">
             <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
-              Frequently Asked Questions
+              {t('home_faq_badge')}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Everything You Need to Know
+              {t('home_faq_title')}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
-              Clear answers regarding ERP operations, hardware integrations, and security.
+              {t('home_faq_description')}
             </p>
           </div>
 
@@ -546,7 +536,7 @@ export default function HomePage() {
                     className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer"
                   >
                     <span className="text-xs sm:text-sm font-bold text-slate-900">
-                      {faq.question}
+                      {t(faq.question)}
                     </span>
                     <ChevronDown
                       className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${
@@ -556,7 +546,7 @@ export default function HomePage() {
                   </button>
                   {isOpen && (
                     <div className="px-5 pb-5 text-xs text-slate-600 leading-relaxed animate-in fade-in duration-200 border-t border-slate-100 pt-3">
-                      {faq.answer}
+                      {t(faq.answer)}
                     </div>
                   )}
                 </div>
@@ -573,15 +563,15 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
             <Activity className="w-3.5 h-3.5 animate-pulse" />
-            <span>Ready for Production Deployment</span>
+            <span>{t('home_cta_badge')}</span>
           </div>
 
           <h2 className="text-2xl sm:text-4xl font-black tracking-tight max-w-2xl mx-auto">
-            Streamline Your Mill Operations Today
+            {t('home_cta_title')}
           </h2>
 
           <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
-            Access your department desk with authenticated mobile OTP credentials.
+            {t('home_cta_description')}
           </p>
 
           <div className="pt-2">
@@ -590,7 +580,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/30 transition-all active:scale-95 cursor-pointer"
             >
               <Lock className="w-3.5 h-3.5" />
-              <span>Go to Login Portal</span>
+              <span>{t('go_to_login')}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -604,12 +594,12 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <div className="flex items-center gap-2">
             <Wheat className="w-4 h-4 text-emerald-600" />
-            <span className="font-bold text-slate-800">Kognos Rice Mill ERP</span>
-            <span>• Season 2026-27</span>
+            <span className="font-bold text-slate-800">{t('ui_b5368e2f98fe')}</span>
+            <span>{t('ui_4facd7de819b')}</span>
           </div>
 
           <div>
-            Built strictly for modern automated rice milling facilities. All rights reserved.
+            {t('footer_rights')}
           </div>
         </div>
       </footer>

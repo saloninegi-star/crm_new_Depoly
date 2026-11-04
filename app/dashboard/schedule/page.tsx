@@ -17,6 +17,7 @@ import {
   X,
   Filter,
 } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface MillEvent {
   id: string;
@@ -142,6 +143,7 @@ const INITIAL_EVENTS: MillEvent[] = [
 ];
 
 export default function OperationsSchedulePage() {
+  const { t } = useLanguage();
   const { accent } = useTheme();
 
   const [events, setEvents] = useState<MillEvent[]>(INITIAL_EVENTS);
@@ -230,8 +232,7 @@ export default function OperationsSchedulePage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
         <div>
           <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-            October 2026 · Master Mill Operations Schedule & Logistics Planner
-          </span>
+            {t('ui_8de30954cc6a')}</span>
         </div>
 
         <button
@@ -241,7 +242,7 @@ export default function OperationsSchedulePage() {
           style={{ backgroundColor: accent?.primary || '#0d9488' }}
         >
           <Plus className="w-4 h-4 stroke-[2.5]" />
-          <span>Schedule event</span>
+          <span>{t('ui_95f06c20faae')}</span>
         </button>
       </div>
 
@@ -250,7 +251,7 @@ export default function OperationsSchedulePage() {
         {/* Today's Schedule */}
         <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 p-5 space-y-2 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Today's Schedule (24 Oct)</span>
+            <span className="text-xs font-semibold">{t('ui_a73e3abfe8e0')}</span>
             <div className="w-8 h-8 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center">
               <Clock className="w-4.5 h-4.5" />
             </div>
@@ -259,17 +260,16 @@ export default function OperationsSchedulePage() {
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               4
             </span>
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">events</span>
+            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{t('ui_82d50d9042de')}</span>
           </div>
           <p className="text-xs text-teal-700 dark:text-teal-400 font-medium">
-            2 Dispatches · 1 Inward · 1 Payment
-          </p>
+            {t('ui_6d76ae392b5a')}</p>
         </div>
 
         {/* Planned Dispatches */}
         <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 p-5 space-y-2 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Planned Dispatches</span>
+            <span className="text-xs font-semibold">{t('ui_6880a78abbbf')}</span>
             <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
               <Truck className="w-4.5 h-4.5" />
             </div>
@@ -278,17 +278,16 @@ export default function OperationsSchedulePage() {
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               3
             </span>
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">truck slots</span>
+            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{t('ui_7deaf31fb7a4')}</span>
           </div>
           <p className="text-xs text-emerald-700 dark:text-emerald-400 font-medium">
-            53.0 MT · Delhi, Jaipur, Kanpur
-          </p>
+            {t('ui_01994b22b4b5')}</p>
         </div>
 
         {/* Expected Paddy Inward */}
         <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 p-5 space-y-2 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Expected Paddy Inward</span>
+            <span className="text-xs font-semibold">{t('ui_1b464ca50310')}</span>
             <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center">
               <ArrowDownLeft className="w-4.5 h-4.5" />
             </div>
@@ -297,17 +296,16 @@ export default function OperationsSchedulePage() {
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               155
             </span>
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">MT</span>
+            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{t('ui_c3c2fa56598a')}</span>
           </div>
           <p className="text-xs text-amber-700 dark:text-amber-400 font-medium">
-            5 Trucks from Hapur & Panipat
-          </p>
+            {t('ui_2fc52884cad3')}</p>
         </div>
 
         {/* Saturday Wage & Dues */}
         <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 p-5 space-y-2 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Upcoming Payout</span>
+            <span className="text-xs font-semibold">{t('ui_9f8daff65767')}</span>
             <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center">
               <Coins className="w-4.5 h-4.5" />
             </div>
@@ -318,8 +316,7 @@ export default function OperationsSchedulePage() {
             </span>
           </div>
           <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">
-            Saturday 28 Oct · 24 Labourers
-          </p>
+            {t('ui_56afa5b58fb9')}</p>
         </div>
       </div>
 
@@ -343,7 +340,7 @@ export default function OperationsSchedulePage() {
                 : 'border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 hover:bg-white'
             }`}
           >
-            {tab.label}
+            {t(tab.label)}
           </button>
         ))}
       </div>
@@ -354,8 +351,8 @@ export default function OperationsSchedulePage() {
         <div className="lg:col-span-8 bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 shadow-xs p-6 space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
             <div>
-              <h2 className="text-base font-bold text-slate-900 dark:text-white">October 2026</h2>
-              <p className="text-xs text-slate-400">Harvest Peak Season & Active Milling Cycles</p>
+              <h2 className="text-base font-bold text-slate-900 dark:text-white">{t('ui_a02c6f3a7142')}</h2>
+              <p className="text-xs text-slate-400">{t('ui_ca94643230b9')}</p>
             </div>
 
             <div className="flex items-center gap-1.5">
@@ -376,13 +373,13 @@ export default function OperationsSchedulePage() {
 
           {/* Days of Week Header */}
           <div className="grid grid-cols-7 text-center text-xs font-bold text-slate-400 dark:text-slate-500 pb-2">
-            <span>Thu</span>
-            <span>Fri</span>
-            <span>Sat</span>
-            <span>Sun</span>
-            <span>Mon</span>
-            <span>Tue</span>
-            <span>Wed</span>
+            <span>{t('ui_3593ccd96f6c')}</span>
+            <span>{t('ui_bbd6e32ee132')}</span>
+            <span>{t('ui_6b782d41b0c2')}</span>
+            <span>{t('ui_48c98cab7866')}</span>
+            <span>{t('ui_24b2a0993d0c')}</span>
+            <span>{t('ui_529541bb390c')}</span>
+            <span>{t('ui_23408b19b29e')}</span>
           </div>
 
           {/* Date Grid */}
@@ -439,8 +436,7 @@ export default function OperationsSchedulePage() {
                     ))}
                     {dayEvents.length > 2 && (
                       <span className="text-[9px] text-slate-400 font-bold block pl-0.5">
-                        +{dayEvents.length - 2} more
-                      </span>
+                        +{dayEvents.length - 2} {' '}{t('ui_e7c95b4c2824')}</span>
                     )}
                   </div>
                 </div>
@@ -454,21 +450,19 @@ export default function OperationsSchedulePage() {
           <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
             <div>
               <h2 className="text-sm font-bold text-slate-900 dark:text-white">
-                {selectedDay} October Schedule
-              </h2>
+                {selectedDay} {' '}{t('ui_5c8e6901b3af')}</h2>
               <p className="text-xs text-slate-400 font-medium">
                 {selectedDay === 24 ? 'Today · Operations Live' : 'Scheduled Logistics'}
               </p>
             </div>
             <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-              {selectedDayEvents.length} Tasks
-            </span>
+              {selectedDayEvents.length} {' '}{t('ui_090ec5f560fc')}</span>
           </div>
 
           {selectedDayEvents.length === 0 ? (
             <div className="py-12 text-center space-y-2">
               <CalendarDays className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto" />
-              <p className="text-xs text-slate-400">No scheduled operations for {selectedDay} Oct.</p>
+              <p className="text-xs text-slate-400">{t('ui_d546546675a7')}{' '}{selectedDay} {' '}{t('ui_fb769c2f3a24')}</p>
               <button
                 type="button"
                 onClick={() => {
@@ -477,8 +471,7 @@ export default function OperationsSchedulePage() {
                 }}
                 className="text-xs font-semibold text-teal-600 dark:text-teal-400 hover:underline"
               >
-                + Schedule operation on this date
-              </button>
+                {t('ui_3c20d599da02')}</button>
             </div>
           ) : (
             <div className="space-y-3">
@@ -500,20 +493,20 @@ export default function OperationsSchedulePage() {
                         ev.category
                       )}`}
                     >
-                      {ev.badge}
+                      {t(ev.badge)}
                     </span>
                   </div>
 
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">{ev.title}</h4>
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">{t(ev.title)}</h4>
                     <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
-                      {ev.subtitle}
+                      {t(ev.subtitle)}
                     </p>
                   </div>
 
                   {ev.amountOrQty && (
                     <div className="pt-1.5 border-t border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center text-[11px]">
-                      <span className="text-slate-400">Volume / Value:</span>
+                      <span className="text-slate-400">{t('ui_d7c4419b51f0')}</span>
                       <span className="font-mono font-bold text-slate-800 dark:text-slate-200">
                         {ev.amountOrQty}
                       </span>
@@ -533,11 +526,9 @@ export default function OperationsSchedulePage() {
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-                  Schedule New Mill Operation
-                </h3>
+                  {t('ui_0b3495772eed')}</h3>
                 <p className="text-[11px] text-slate-400">
-                  Plan dispatch truck, paddy arrival, or payment due date
-                </p>
+                  {t('ui_2e139fab7dad')}</p>
               </div>
               <button
                 type="button"
@@ -551,25 +542,23 @@ export default function OperationsSchedulePage() {
             <form onSubmit={handleCreateEvent} className="space-y-4 text-xs">
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Operation Category
-                </label>
+                  {t('ui_b25efa059c39')}</label>
                 <select
                   value={newEventCategory}
                   onChange={(e) => setNewEventCategory(e.target.value as any)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-white outline-none"
                 >
-                  <option value="dispatch">🟢 Truck Dispatch (Sales Order)</option>
-                  <option value="inward">🟡 Paddy Arrival (Mandi Inward)</option>
-                  <option value="payment">🔴 Payment Due (Farmer RTGS)</option>
-                  <option value="labour">🔵 Labour Wage Payout</option>
-                  <option value="milling">🟣 Milling Line Maintenance</option>
+                  <option value="dispatch">{t('ui_05dda150446c')}</option>
+                  <option value="inward">{t('ui_b6cee419e068')}</option>
+                  <option value="payment">{t('ui_2a18e298aff1')}</option>
+                  <option value="labour">{t('ui_ede66d5660fd')}</option>
+                  <option value="milling">{t('ui_e01b5e05bb01')}</option>
                 </select>
               </div>
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Event Title *
-                </label>
+                  {t('ui_c1a7adc60394')}</label>
                 <input
                   type="text"
                   required
@@ -583,8 +572,7 @@ export default function OperationsSchedulePage() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="font-semibold text-slate-700 dark:text-slate-300">
-                    Day in October *
-                  </label>
+                    {t('ui_89ba4be95b18')}</label>
                   <input
                     type="number"
                     min="1"
@@ -598,12 +586,11 @@ export default function OperationsSchedulePage() {
 
                 <div className="space-y-1.5">
                   <label className="font-semibold text-slate-700 dark:text-slate-300">
-                    Planned Time *
-                  </label>
+                    {t('ui_9d30e6a7979c')}</label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. 11:30 AM"
+                    placeholder={t('ui_0f20d909be16')}
                     value={newEventTime}
                     onChange={(e) => setNewEventTime(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white outline-none font-mono"
@@ -613,11 +600,10 @@ export default function OperationsSchedulePage() {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Description / Subtitle
-                </label>
+                  {t('ui_a3b891b193ba')}</label>
                 <input
                   type="text"
-                  placeholder="e.g. Loading at Bay #2, Driver assigned"
+                  placeholder={t('ui_030cec5b28b0')}
                   value={newEventSubtitle}
                   onChange={(e) => setNewEventSubtitle(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white outline-none"
@@ -626,11 +612,10 @@ export default function OperationsSchedulePage() {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Volume / Value (Optional)
-                </label>
+                  {t('ui_a3cc4f36e7f6')}</label>
                 <input
                   type="text"
-                  placeholder="e.g. 32 MT / ₹11,20,000"
+                  placeholder={t('ui_dfd86710e657')}
                   value={newEventAmount}
                   onChange={(e) => setNewEventAmount(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white outline-none font-mono"
@@ -643,15 +628,13 @@ export default function OperationsSchedulePage() {
                   onClick={() => setIsModalOpen(false)}
                   className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer"
                 >
-                  Cancel
-                </button>
+                  {t('ui_77dfd2135f4d')}</button>
                 <button
                   type="submit"
                   className="px-5 py-2 rounded-xl text-white text-xs font-bold shadow-xs cursor-pointer active:scale-95 transition-transform"
                   style={{ backgroundColor: accent?.primary || '#0d9488' }}
                 >
-                  Save Schedule
-                </button>
+                  {t('ui_e9bbbb24aa89')}</button>
               </div>
             </form>
           </div>

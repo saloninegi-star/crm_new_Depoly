@@ -21,6 +21,7 @@ import {
   Warehouse,
   PlusCircle,
 } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface StockItem {
   code: string;
@@ -149,6 +150,7 @@ const INITIAL_RECENT_BAGGING: RecentBaggingItem[] = [
 ];
 
 export default function PackagingFinishedStockPage() {
+  const { t } = useLanguage();
   const { accent } = useTheme();
 
   const [stock, setStock] = useState<StockItem[]>(INITIAL_STOCK_ITEMS);
@@ -259,8 +261,7 @@ export default function PackagingFinishedStockPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
         <div>
           <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-            Packed rice ready for sale · Live Warehouse Inventory
-          </span>
+            {t('ui_976cba1da1c8')}</span>
         </div>
 
         {/* 🟢 "+ Record bagging" Button Matching Screenshot */}
@@ -271,7 +272,7 @@ export default function PackagingFinishedStockPage() {
           style={{ backgroundColor: accent?.primary || '#0d9488' }}
         >
           <Plus className="w-4 h-4 stroke-[2.5]" />
-          <span>Record bagging</span>
+          <span>{t('ui_072b105916d4')}</span>
         </button>
       </div>
 
@@ -282,7 +283,7 @@ export default function PackagingFinishedStockPage() {
         {/* Metric 1 - Finished Stock (Teal) */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-2 shadow-2xs hover:border-teal-300 dark:hover:border-teal-800 transition-all group">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Finished stock</span>
+            <span className="text-xs font-semibold">{t('ui_67c9c2abb5da')}</span>
             <div className="w-8 h-8 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center shadow-2xs transition-transform group-hover:scale-110">
               <PackageCheck className="w-4.5 h-4.5" />
             </div>
@@ -291,17 +292,16 @@ export default function PackagingFinishedStockPage() {
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               {totalTonnes.toFixed(1)}
             </span>
-            <span className="text-base font-semibold text-slate-600 dark:text-slate-300">t</span>
+            <span className="text-base font-semibold text-slate-600 dark:text-slate-300">{t('ui_8efd86fb78a5')}</span>
           </div>
           <p className="text-xs text-teal-700 dark:text-teal-400 font-medium">
-            {formatNumber(totalBags)} bags in godowns
-          </p>
+            {formatNumber(totalBags)} {' '}{t('ui_da3cca84276a')}</p>
         </div>
 
         {/* Metric 2 - 50 kg Bags (Blue) */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-2 shadow-2xs hover:border-blue-300 dark:hover:border-blue-800 transition-all group">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">50 kg bags</span>
+            <span className="text-xs font-semibold">{t('ui_5165fecc4eea')}</span>
             <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shadow-2xs transition-transform group-hover:scale-110">
               <ShoppingBag className="w-4.5 h-4.5" />
             </div>
@@ -312,14 +312,13 @@ export default function PackagingFinishedStockPage() {
             </span>
           </div>
           <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">
-            208.0 t · mandi and export
-          </p>
+            {t('ui_7004866aa881')}</p>
         </div>
 
         {/* Metric 3 - 20 kg Bags (Amber) */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-2 shadow-2xs hover:border-amber-300 dark:hover:border-amber-800 transition-all group">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">20 kg bags</span>
+            <span className="text-xs font-semibold">{t('ui_51fcfb7e31a7')}</span>
             <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shadow-2xs transition-transform group-hover:scale-110">
               <Store className="w-4.5 h-4.5" />
             </div>
@@ -330,14 +329,13 @@ export default function PackagingFinishedStockPage() {
             </span>
           </div>
           <p className="text-xs text-amber-700 dark:text-amber-400 font-medium">
-            19.0 t · counter sale
-          </p>
+            {t('ui_f0fc7f745500')}</p>
         </div>
 
         {/* Metric 4 - Free to Sell (Purple) */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-2 shadow-2xs hover:border-purple-300 dark:hover:border-purple-800 transition-all group">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Free to sell</span>
+            <span className="text-xs font-semibold">{t('ui_c94d1eb4ebd9')}</span>
             <div className="w-8 h-8 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center shadow-2xs transition-transform group-hover:scale-110">
               <Sparkles className="w-4.5 h-4.5" />
             </div>
@@ -346,11 +344,10 @@ export default function PackagingFinishedStockPage() {
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               {totalFreeTonnes.toFixed(1)}
             </span>
-            <span className="text-base font-semibold text-slate-600 dark:text-slate-300">t</span>
+            <span className="text-base font-semibold text-slate-600 dark:text-slate-300">{t('ui_8efd86fb78a5')}</span>
           </div>
           <p className="text-xs text-purple-700 dark:text-purple-400 font-medium">
-            {totalHeldTonnes.toFixed(1)} t held for orders
-          </p>
+            {totalHeldTonnes.toFixed(1)} {' '}{t('ui_c338b08faf88')}</p>
         </div>
       </div>
 
@@ -361,11 +358,9 @@ export default function PackagingFinishedStockPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
           <div className="flex items-center gap-2">
             <h2 className="text-base font-bold text-slate-900 dark:text-white">
-              Stock by product
-            </h2>
+              {t('ui_7a90cc31feb5')}</h2>
             <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-              {filteredStock.length} SKUs
-            </span>
+              {filteredStock.length} {' '}{t('ui_f2f09f513e9e')}</span>
           </div>
 
           {/* Search Box matching screenshot */}
@@ -373,7 +368,7 @@ export default function PackagingFinishedStockPage() {
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-2.5" />
             <input
               type="text"
-              placeholder="Product or code"
+              placeholder={t('ui_0c05820887a5')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all shadow-2xs"
@@ -386,16 +381,16 @@ export default function PackagingFinishedStockPage() {
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-semibold">
-                <th className="pb-3.5 pl-2">Code</th>
-                <th className="pb-3.5">Product</th>
-                <th className="pb-3.5">Pack</th>
-                <th className="pb-3.5">Location</th>
-                <th className="pb-3.5 text-right sm:text-left">Bags</th>
-                <th className="pb-3.5 text-right sm:text-left">Tonnes</th>
-                <th className="pb-3.5 text-center sm:text-left">Held for orders</th>
-                <th className="pb-3.5 text-right sm:text-left">Free</th>
-                <th className="pb-3.5 text-right sm:text-left">Rate per quintal</th>
-                <th className="pb-3.5 text-right pr-2">Action</th>
+                <th className="pb-3.5 pl-2">{t('ui_adac69379a62')}</th>
+                <th className="pb-3.5">{t('ui_dd3b86d1ef21')}</th>
+                <th className="pb-3.5">{t('ui_152a5035bf6b')}</th>
+                <th className="pb-3.5">{t('ui_d219c68101f5')}</th>
+                <th className="pb-3.5 text-right sm:text-left">{t('ui_81cf1fc845ed')}</th>
+                <th className="pb-3.5 text-right sm:text-left">{t('ui_6dadfb4d1463')}</th>
+                <th className="pb-3.5 text-center sm:text-left">{t('ui_df36c2b48209')}</th>
+                <th className="pb-3.5 text-right sm:text-left">{t('ui_75f527181b57')}</th>
+                <th className="pb-3.5 text-right sm:text-left">{t('ui_99a637fbd058')}</th>
+                <th className="pb-3.5 text-right pr-2">{t('ui_97c89a4d6630')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-medium">
@@ -472,8 +467,7 @@ export default function PackagingFinishedStockPage() {
                     {row.isAllHeld ? (
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-200/80 dark:border-amber-900">
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                        All held
-                      </span>
+                        {t('ui_d19dd59f5451')}</span>
                     ) : (
                       <span className="font-bold text-emerald-700 dark:text-emerald-400">
                         {row.freeTonnes.toFixed(1)}
@@ -494,8 +488,7 @@ export default function PackagingFinishedStockPage() {
                       onClick={() => setOrderModalItem(row)}
                       className="px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40 transition-colors shadow-2xs cursor-pointer active:scale-95"
                     >
-                      Add to order
-                    </button>
+                      {t('ui_649ff9af556d')}</button>
                   </td>
                 </tr>
               ))}
@@ -503,8 +496,7 @@ export default function PackagingFinishedStockPage() {
               {/* Exact Matching Total Row */}
               <tr className="border-t-2 border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white bg-slate-50/50 dark:bg-slate-800/30">
                 <td className="py-4 pl-2 font-bold text-xs" colSpan={4}>
-                  Total
-                </td>
+                  {t('ui_b25928c69902')}</td>
                 <td className="py-4 font-mono text-right sm:text-left">{formatNumber(totalBags)}</td>
                 <td className="py-4 font-mono text-right sm:text-left">{totalTonnes.toFixed(1)}</td>
                 <td className="py-4 font-mono text-center sm:text-left">{totalHeldTonnes.toFixed(1)}</td>
@@ -525,26 +517,24 @@ export default function PackagingFinishedStockPage() {
         <div className="flex items-center justify-between pb-1 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2">
             <h2 className="text-base font-bold text-slate-900 dark:text-white">
-              Recent bagging
-            </h2>
+              {t('ui_42d21ed46712')}</h2>
             <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400">
-              Live Shifts
-            </span>
+              {t('ui_1dc7a082b4c8')}</span>
           </div>
-          <span className="text-xs text-slate-400 font-medium">From milling batches</span>
+          <span className="text-xs text-slate-400 font-medium">{t('ui_e510a683449f')}</span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-semibold">
-                <th className="pb-3.5 pl-2">When</th>
-                <th className="pb-3.5">Batch</th>
-                <th className="pb-3.5">Product</th>
-                <th className="pb-3.5">Pack</th>
-                <th className="pb-3.5 text-right sm:text-left">Bags</th>
-                <th className="pb-3.5 text-right sm:text-left">Tonnes</th>
-                <th className="pb-3.5 pr-2">Packed by</th>
+                <th className="pb-3.5 pl-2">{t('ui_769bb19e615b')}</th>
+                <th className="pb-3.5">{t('ui_8bf1ef5668b1')}</th>
+                <th className="pb-3.5">{t('ui_dd3b86d1ef21')}</th>
+                <th className="pb-3.5">{t('ui_152a5035bf6b')}</th>
+                <th className="pb-3.5 text-right sm:text-left">{t('ui_81cf1fc845ed')}</th>
+                <th className="pb-3.5 text-right sm:text-left">{t('ui_6dadfb4d1463')}</th>
+                <th className="pb-3.5 pr-2">{t('ui_6b7d1c8d8710')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-medium">
@@ -572,8 +562,7 @@ export default function PackagingFinishedStockPage() {
                   </td>
                   <td className="py-3.5 font-mono text-right sm:text-left">{row.bags}</td>
                   <td className="py-3.5 font-mono font-bold text-teal-700 dark:text-teal-400 text-right sm:text-left">
-                    {row.tonnes.toFixed(1)} t
-                  </td>
+                    {row.tonnes.toFixed(1)} {' '}{t('ui_8efd86fb78a5')}</td>
                   <td className="py-3.5 pr-2 text-slate-600 dark:text-slate-400">
                     <span className="flex items-center gap-1.5">
                       <Users className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -596,11 +585,9 @@ export default function PackagingFinishedStockPage() {
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-                  Record Daily Bagging Entry
-                </h3>
+                  {t('ui_f9f1ae67c9cd')}</h3>
                 <p className="text-[11px] text-slate-400">
-                  Transfer milled rice output to finished goods bagging
-                </p>
+                  {t('ui_6d47084924a5')}</p>
               </div>
               <button
                 type="button"
@@ -615,39 +602,34 @@ export default function PackagingFinishedStockPage() {
               {/* Batch Selection */}
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Active Milling Batch
-                </label>
+                  {t('ui_acb2f0ca2c15')}</label>
                 <select
                   value={baggingBatch}
                   onChange={(e) => setBaggingBatch(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-white outline-none"
                 >
                   <option value="B-102 (Line 1 · 1121 Basmati)">
-                    B-102 (Line 1 · 1121 Basmati)
-                  </option>
+                    {t('ui_c5a193e6b46c')}</option>
                   <option value="B-103 (Line 2 · PR-114)">
-                    B-103 (Line 2 · PR-114)
-                  </option>
+                    {t('ui_77262148de8c')}</option>
                   <option value="B-101 (Line 1 · 1509 Basmati)">
-                    B-101 (Line 1 · 1509 Basmati)
-                  </option>
+                    {t('ui_3cd3a7a00e58')}</option>
                 </select>
               </div>
 
               {/* Product Variety */}
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Finished Product / Variety
-                </label>
+                  {t('ui_9e49110c6cb0')}</label>
                 <select
                   value={baggingProduct}
                   onChange={(e) => setBaggingProduct(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-white outline-none"
                 >
-                  <option value="1121 Basmati, steam">1121 Basmati, steam</option>
-                  <option value="1509 Basmati, sella">1509 Basmati, sella</option>
-                  <option value="PR-126, raw">PR-126, raw</option>
-                  <option value="Broken rice, 25%">Broken rice, 25%</option>
+                  <option value="1121 Basmati, steam">{t('ui_6f39b288ce64')}</option>
+                  <option value="1509 Basmati, sella">{t('ui_3038d5ced739')}</option>
+                  <option value="PR-126, raw">{t('ui_4c676fa0b1e7')}</option>
+                  <option value="Broken rice, 25%">{t('ui_b9912ba163ea')}</option>
                 </select>
               </div>
 
@@ -655,28 +637,26 @@ export default function PackagingFinishedStockPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="font-semibold text-slate-700 dark:text-slate-300">
-                    Bag Specification
-                  </label>
+                    {t('ui_dfd2d5407d54')}</label>
                   <select
                     value={baggingPack}
                     onChange={(e) => setBaggingPack(e.target.value as '50 kg' | '20 kg')}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-white outline-none"
                   >
-                    <option value="50 kg">50 kg HDPE Bag</option>
-                    <option value="20 kg">20 kg Retail Pack</option>
+                    <option value="50 kg">{t('ui_6356971b2d4a')}</option>
+                    <option value="20 kg">{t('ui_bf67aa0ecb09')}</option>
                   </select>
                 </div>
 
                 <div className="space-y-1.5">
                   <label className="font-semibold text-slate-700 dark:text-slate-300">
-                    Bags Count *
-                  </label>
+                    {t('ui_d1d618c2ad7e')}</label>
                   <input
                     type="number"
                     required
                     value={baggingCount}
                     onChange={(e) => setBaggingCount(e.target.value)}
-                    placeholder="e.g. 400"
+                    placeholder={t('ui_14db35cecafc')}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-mono font-bold text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
                   />
                 </div>
@@ -686,31 +666,29 @@ export default function PackagingFinishedStockPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="font-semibold text-slate-700 dark:text-slate-300">
-                    Godown Location
-                  </label>
+                    {t('ui_bc8b086e9da1')}</label>
                   <select
                     value={baggingLocation}
                     onChange={(e) => setBaggingLocation(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-white outline-none"
                   >
-                    <option value="Finished godown A">Finished godown A</option>
-                    <option value="Finished godown B">Finished godown B</option>
-                    <option value="Retail rack">Retail rack</option>
+                    <option value="Finished godown A">{t('ui_fd3622f31587')}</option>
+                    <option value="Finished godown B">{t('ui_3b315a2b3801')}</option>
+                    <option value="Retail rack">{t('ui_52c7441afcf8')}</option>
                   </select>
                 </div>
 
                 <div className="space-y-1.5">
                   <label className="font-semibold text-slate-700 dark:text-slate-300">
-                    Packing Gang
-                  </label>
+                    {t('ui_4cce3d925cc3')}</label>
                   <select
                     value={baggingGang}
                     onChange={(e) => setBaggingGang(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-white outline-none"
                   >
-                    <option value="Gang C · Mukesh Pal">Gang C · Mukesh Pal</option>
-                    <option value="Gang A · Radhey Shyam">Gang A · Radhey Shyam</option>
-                    <option value="Gang B · Kallu Ram">Gang B · Kallu Ram</option>
+                    <option value="Gang C · Mukesh Pal">{t('ui_35189254f5f0')}</option>
+                    <option value="Gang A · Radhey Shyam">{t('ui_b3662eda4d5e')}</option>
+                    <option value="Gang B · Kallu Ram">{t('ui_dc505059ae58')}</option>
                   </select>
                 </div>
               </div>
@@ -718,15 +696,13 @@ export default function PackagingFinishedStockPage() {
               {/* Auto Metric Calculation Box */}
               <div className="p-3 rounded-xl bg-teal-50/60 dark:bg-teal-950/30 border border-teal-200/80 dark:border-teal-800 flex justify-between items-center text-xs">
                 <span className="text-teal-900 dark:text-teal-300 font-medium">
-                  Total Tonnes to Add:
-                </span>
+                  {t('ui_e04545558333')}</span>
                 <span className="font-mono font-bold text-teal-700 dark:text-teal-400 text-sm">
                   {(
                     (Number(baggingCount) || 0) *
                     (baggingPack === '50 kg' ? 0.05 : 0.02)
                   ).toFixed(1)}{' '}
-                  MT
-                </span>
+                  {t('ui_c3c2fa56598a')}</span>
               </div>
 
               <div className="pt-2 flex justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
@@ -735,15 +711,13 @@ export default function PackagingFinishedStockPage() {
                   onClick={() => setIsBaggingModalOpen(false)}
                   className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer"
                 >
-                  Cancel
-                </button>
+                  {t('ui_77dfd2135f4d')}</button>
                 <button
                   type="submit"
                   className="px-5 py-2 rounded-xl text-white text-xs font-bold shadow-xs cursor-pointer active:scale-95 transition-transform"
                   style={{ backgroundColor: accent?.primary || '#0d9488' }}
                 >
-                  Save & Update Stock
-                </button>
+                  {t('ui_78cc57b3c4e8')}</button>
               </div>
             </form>
           </div>
@@ -759,8 +733,7 @@ export default function PackagingFinishedStockPage() {
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-                  Add to Sales Order
-                </h3>
+                  {t('ui_81e3ff48db09')}</h3>
                 <p className="text-[11px] text-slate-400">
                   {orderModalItem.code} · {orderModalItem.product}
                 </p>
@@ -777,13 +750,12 @@ export default function PackagingFinishedStockPage() {
             <form onSubmit={handleConfirmOrderAllocation} className="space-y-4 text-xs">
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 space-y-1">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Free available stock:</span>
+                  <span className="text-slate-500">{t('ui_7a20c9106935')}</span>
                   <span className="font-bold text-emerald-700 dark:text-emerald-400 font-mono">
-                    {orderModalItem.freeTonnes.toFixed(1)} MT
-                  </span>
+                    {orderModalItem.freeTonnes.toFixed(1)} {' '}{t('ui_c3c2fa56598a')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Rate per quintal:</span>
+                  <span className="text-slate-500">{t('ui_ff576af7c3a2')}</span>
                   <span className="font-bold font-mono text-slate-900 dark:text-white">
                     ₹{formatNumber(orderModalItem.ratePerQtl)}
                   </span>
@@ -792,8 +764,7 @@ export default function PackagingFinishedStockPage() {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Quantity to Allocate (Tonnes) *
-                </label>
+                  {t('ui_a4f13ba05c59')}</label>
                 <input
                   type="number"
                   step="0.1"
@@ -807,8 +778,7 @@ export default function PackagingFinishedStockPage() {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Select Sales Order / Buyer
-                </label>
+                  {t('ui_ca19f92416f0')}</label>
                 <select
                   value={buyerName}
                   onChange={(e) => setBuyerName(e.target.value)}
@@ -821,8 +791,7 @@ export default function PackagingFinishedStockPage() {
                     SO-2219 · Aggarwal Foods, Kanpur
                   </option>
                   <option value="Jai Bharat Rice Overseas">
-                    SO-2220 · Jai Bharat Rice Overseas
-                  </option>
+                    {t('ui_ff24e8c261ff')}</option>
                 </select>
               </div>
 
@@ -832,15 +801,13 @@ export default function PackagingFinishedStockPage() {
                   onClick={() => setOrderModalItem(null)}
                   className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer"
                 >
-                  Cancel
-                </button>
+                  {t('ui_77dfd2135f4d')}</button>
                 <button
                   type="submit"
                   className="px-4 py-2 rounded-xl text-white text-xs font-bold shadow-xs cursor-pointer active:scale-95 transition-transform"
                   style={{ backgroundColor: accent?.primary || '#0d9488' }}
                 >
-                  Confirm Allocation
-                </button>
+                  {t('ui_7627719727a4')}</button>
               </div>
             </form>
           </div>

@@ -14,6 +14,7 @@ import {
   ArrowRight,
   TrendingDown,
 } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface QueueItem {
   token: string;
@@ -122,6 +123,7 @@ const INITIAL_COMPLETED: CompletedRecord[] = [
 ];
 
 export default function WeighbridgePage() {
+  const { t } = useLanguage();
   const { accent } = useTheme();
 
   // Hydration safety flag
@@ -192,61 +194,61 @@ export default function WeighbridgePage() {
         {/* Card 1: Waiting Gross (Warm Amber) */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-2 shadow-2xs relative overflow-hidden group hover:border-amber-300 dark:hover:border-amber-800 transition-all">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Waiting for gross weight</span>
+            <span className="text-xs font-semibold">{t('ui_48eb140d1d93')}</span>
             <div className="w-7 h-7 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 flex items-center justify-center">
               <Clock className="w-4 h-4" />
             </div>
           </div>
           <div className="flex items-baseline gap-1.5">
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">2</span>
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">trucks</span>
+            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{t('ui_5736894ffc48')}</span>
           </div>
-          <p className="text-xs text-amber-700 dark:text-amber-400 font-medium">Longest wait 1 h 45 min</p>
+          <p className="text-xs text-amber-700 dark:text-amber-400 font-medium">{t('ui_f5b18a75d1cd')}</p>
         </div>
 
         {/* Card 2: Waiting Tare (Cool Blue) */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-2 shadow-2xs relative overflow-hidden group hover:border-sky-300 dark:hover:border-sky-800 transition-all">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Waiting for tare weight</span>
+            <span className="text-xs font-semibold">{t('ui_d78e815c1c80')}</span>
             <div className="w-7 h-7 rounded-lg bg-sky-50 dark:bg-sky-950/60 text-sky-600 flex items-center justify-center">
               <Truck className="w-4 h-4" />
             </div>
           </div>
           <div className="flex items-baseline gap-1.5">
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">1</span>
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">truck</span>
+            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{t('ui_7a4d63b1ba71')}</span>
           </div>
-          <p className="text-xs text-sky-700 dark:text-sky-400 font-medium">Unloading since 08:31</p>
+          <p className="text-xs text-sky-700 dark:text-sky-400 font-medium">{t('ui_2c438a00c049')}</p>
         </div>
 
         {/* Card 3: Weighed Today (Violet/Purple) */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-2 shadow-2xs relative overflow-hidden group hover:border-purple-300 dark:hover:border-purple-800 transition-all">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Weighed today</span>
+            <span className="text-xs font-semibold">{t('ui_7e22e37d44d8')}</span>
             <div className="w-7 h-7 rounded-lg bg-purple-50 dark:bg-purple-950/60 text-purple-600 flex items-center justify-center">
               <Scale className="w-4 h-4" />
             </div>
           </div>
           <div className="flex items-baseline gap-1.5">
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">3</span>
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">trucks</span>
+            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{t('ui_5736894ffc48')}</span>
           </div>
-          <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">Last at 09:52</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">{t('ui_f7fb13acc23d')}</p>
         </div>
 
         {/* Card 4: Paddy to Godown (Emerald Green) */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-2 shadow-2xs relative overflow-hidden group hover:border-emerald-300 dark:hover:border-emerald-800 transition-all">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Paddy to godown</span>
+            <span className="text-xs font-semibold">{t('ui_aebac535669d')}</span>
             <div className="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center">
               <Warehouse className="w-4 h-4" />
             </div>
           </div>
           <div className="flex items-baseline gap-1.5">
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">84.4</span>
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">t</span>
+            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{t('ui_8efd86fb78a5')}</span>
           </div>
-          <p className="text-xs text-emerald-700 dark:text-emerald-400 font-medium">After 506 kg moisture cut</p>
+          <p className="text-xs text-emerald-700 dark:text-emerald-400 font-medium">{t('ui_0daed11d5201')}</p>
         </div>
       </div>
 
@@ -258,12 +260,11 @@ export default function WeighbridgePage() {
         <div className="lg:col-span-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xs p-6 space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white">Queue</h2>
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white">{t('ui_d325fcd91938')}</h2>
               <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                {queue.length} Vehicles
-              </span>
+                {queue.length} {' '}{t('ui_60261ed2752b')}</span>
             </div>
-            <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">In order at the scale</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">{t('ui_aadc65074c65')}</span>
           </div>
 
           <div className="space-y-3">
@@ -295,8 +296,7 @@ export default function WeighbridgePage() {
                         </span>
                       </div>
                       <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
-                        {item.source} · <span className="font-medium text-slate-700 dark:text-slate-300">{item.variety}</span> · {item.bags} bags
-                      </p>
+                        {item.source} · <span className="font-medium text-slate-700 dark:text-slate-300">{item.variety}</span> · {item.bags} {' '}{t('ui_ba366690aa50')}</p>
                     </div>
 
                     {/* Status Badge & Action */}
@@ -304,22 +304,20 @@ export default function WeighbridgePage() {
                       {item.status === 'tare_next' && (
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-400 border border-teal-200 dark:border-teal-800">
                           <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse" />
-                          Tare next
-                        </span>
+                          {t('ui_a96f96e5da90')}</span>
                       )}
 
                       {item.status === 'gross_waiting' && (
                         <>
                           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800">
                             <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                            Gross · wait {item.waitTime}
+                            {t('ui_eb96ce98ca00')}{' '}{item.waitTime}
                           </span>
                           <button
                             type="button"
                             className="px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-2xs"
                           >
-                            Weigh
-                          </button>
+                            {t('ui_ad10964b3607')}</button>
                         </>
                       )}
 
@@ -327,14 +325,12 @@ export default function WeighbridgePage() {
                         <>
                           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                             <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-                            Gross next
-                          </span>
+                            {t('ui_77c590fa87cb')}</span>
                           <button
                             type="button"
                             className="px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-2xs"
                           >
-                            Weigh
-                          </button>
+                            {t('ui_ad10964b3607')}</button>
                         </>
                       )}
                     </div>
@@ -348,7 +344,7 @@ export default function WeighbridgePage() {
         {/* RIGHT COLUMN: Record Tare Weight Form */}
         <div className="lg:col-span-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xs p-6 space-y-5">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-            <h2 className="text-sm font-bold text-slate-900 dark:text-white">Record tare weight</h2>
+            <h2 className="text-sm font-bold text-slate-900 dark:text-white">{t('ui_2435e0ebf903')}</h2>
             <span className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-mono font-bold text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700">
               {selectedTruck.vehicle}
             </span>
@@ -357,29 +353,28 @@ export default function WeighbridgePage() {
           {/* Truck Metadata */}
           <div className="p-3.5 rounded-xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/80 space-y-1.5 text-xs">
             <div className="grid grid-cols-4 py-0.5">
-              <span className="text-slate-400 dark:text-slate-500 font-medium">Token</span>
+              <span className="text-slate-400 dark:text-slate-500 font-medium">{t('ui_a1141eb96836')}</span>
               <span className="font-semibold text-slate-900 dark:text-white col-span-3 font-mono">
                 {selectedTruck.token}
               </span>
             </div>
             <div className="grid grid-cols-4 py-0.5">
-              <span className="text-slate-400 dark:text-slate-500 font-medium">Source</span>
+              <span className="text-slate-400 dark:text-slate-500 font-medium">{t('ui_6da13addb000')}</span>
               <span className="font-semibold text-slate-900 dark:text-white col-span-3">
                 {selectedTruck.source}
               </span>
             </div>
             <div className="grid grid-cols-4 py-0.5">
-              <span className="text-slate-400 dark:text-slate-500 font-medium">Load</span>
+              <span className="text-slate-400 dark:text-slate-500 font-medium">{t('ui_ddcb77ff769e')}</span>
               <span className="font-semibold text-slate-900 dark:text-white col-span-3">
-                {selectedTruck.variety} · {selectedTruck.bags} bags
-              </span>
+                {selectedTruck.variety} · {selectedTruck.bags} {' '}{t('ui_ba366690aa50')}</span>
             </div>
             <div className="grid grid-cols-4 py-0.5">
-              <span className="text-slate-400 dark:text-slate-500 font-medium">Gross weight</span>
+              <span className="text-slate-400 dark:text-slate-500 font-medium">{t('ui_1b9810c36469')}</span>
               <span className="font-semibold text-slate-900 dark:text-white col-span-3 font-mono">
-                {formatKg(grossVal)} kg{' '}
+                {formatKg(grossVal)} {' '}{t('ui_1389845b02c0')}{' '}
                 <span className="text-slate-400 font-normal">
-                  at {selectedTruck.grossTime || '08:31'}
+                  {t('ui_27e90dfa57c3')}{' '}{selectedTruck.grossTime || '08:31'}
                 </span>
               </span>
             </div>
@@ -390,12 +385,11 @@ export default function WeighbridgePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                  Tare weight (kg) *
-                </label>
+                  {t('ui_0df9a8892774')}</label>
                 <input
                   type="number"
                   required
-                  placeholder="e.g. 13800"
+                  placeholder={t('ui_8dfe04d223b4')}
                   value={tareInput}
                   onChange={(e) => setTareInput(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-mono font-bold text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all shadow-2xs"
@@ -404,54 +398,51 @@ export default function WeighbridgePage() {
 
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                  Moisture (%)
-                </label>
+                  {t('ui_9c26878ca4c1')}</label>
                 <input
                   type="number"
                   step="0.1"
-                  placeholder="e.g. 14.5"
+                  placeholder={t('ui_c4d9650a50c6')}
                   value={moistureInput}
                   onChange={(e) => setMoistureInput(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-mono font-bold text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all shadow-2xs"
                 />
                 <p className="text-[11px] text-slate-400 pt-0.5">
-                  Above 14% is cut from the weight.
-                </p>
+                  {t('ui_3a1f3badb5dc')}</p>
               </div>
             </div>
 
             {/* Godown and Stack Dropdown */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Godown and stack
-              </label>
+                {t('ui_ccc28dd6bc2c')}</label>
               <select
                 value={godownInput}
                 onChange={(e) => setGodownInput(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-900 dark:text-white outline-none cursor-pointer focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all shadow-2xs"
               >
-                <option value="Godown 1 · Basmati · stack C">Godown 1 · Basmati · stack C</option>
-                <option value="Godown 2 · PR Paddy · stack D">Godown 2 · PR Paddy · stack D</option>
-                <option value="Godown 3 · Buffer · stack A">Godown 3 · Buffer · stack A</option>
+                <option value="Godown 1 · Basmati · stack C">{t('ui_f35e5c6b962c')}</option>
+                <option value="Godown 2 · PR Paddy · stack D">{t('ui_13a41dc259e6')}</option>
+                <option value="Godown 3 · Buffer · stack A">{t('ui_9de5736b0589')}</option>
               </select>
             </div>
 
             {/* Calculations Box */}
             <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 divide-y divide-slate-100 dark:divide-slate-800 text-xs font-medium bg-slate-50/50 dark:bg-slate-850">
               <div className="px-4 py-2.5 flex justify-between items-center">
-                <span className="text-slate-600 dark:text-slate-400">Gross – tare</span>
+                <span className="text-slate-600 dark:text-slate-400">{t('ui_ebc3510f2455')}</span>
                 <span className="font-mono text-slate-900 dark:text-white font-bold">
                   {tareVal > 0 ? `${formatKg(rawNet)} kg` : '—'}
                 </span>
               </div>
               <div className="px-4 py-2.5 flex justify-between items-center">
-                <span className="text-rose-600 dark:text-rose-400">Moisture cut</span>
+                <span className="text-rose-600 dark:text-rose-400">{t('ui_4e7aeeb1ce95')}</span>
                 <span className="font-mono text-rose-600 dark:text-rose-400 font-bold">
                   {moistureCut > 0 ? `-${formatKg(moistureCut)} kg` : '—'}
                 </span>
               </div>
               <div className="px-4 py-2.5 flex justify-between items-center bg-emerald-50/40 dark:bg-emerald-950/20 rounded-b-xl">
-                <span className="text-emerald-900 dark:text-emerald-300 font-bold">Paddy to godown</span>
+                <span className="text-emerald-900 dark:text-emerald-300 font-bold">{t('ui_aebac535669d')}</span>
                 <span className="font-mono text-emerald-700 dark:text-emerald-400 font-bold text-sm">
                   {tareVal > 0 ? `${formatKg(paddyToGodown)} kg` : '—'}
                 </span>
@@ -467,7 +458,7 @@ export default function WeighbridgePage() {
                 style={{ backgroundColor: accent?.primary || '#0d9488' }}
               >
                 <Printer className="w-4 h-4" />
-                <span>Save and print slip</span>
+                <span>{t('ui_6ccbe1fcb44b')}</span>
               </button>
             </div>
           </form>
@@ -480,27 +471,26 @@ export default function WeighbridgePage() {
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xs p-6 space-y-4">
         <div className="flex items-center justify-between pb-1">
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-bold text-slate-900 dark:text-white">Weighed today</h2>
+            <h2 className="text-sm font-bold text-slate-900 dark:text-white">{t('ui_7e22e37d44d8')}</h2>
             <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200/70 dark:border-emerald-800">
-              {completed.length} Cleared
-            </span>
+              {completed.length} {' '}{t('ui_a5654a379120')}</span>
           </div>
-          <span className="text-xs text-slate-400 font-medium">Daily Master Scale Ledger</span>
+          <span className="text-xs text-slate-400 font-medium">{t('ui_359d7020752c')}</span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-semibold">
-                <th className="pb-3">Token</th>
-                <th className="pb-3">Truck</th>
-                <th className="pb-3">Source</th>
-                <th className="pb-3">Godown</th>
-                <th className="pb-3 text-right sm:text-left">Gross (kg)</th>
-                <th className="pb-3 text-right sm:text-left">Tare (kg)</th>
-                <th className="pb-3 text-center">Moisture</th>
-                <th className="pb-3 text-right sm:text-left">Cut (kg)</th>
-                <th className="pb-3 text-right sm:text-left">To godown (kg)</th>
+                <th className="pb-3">{t('ui_a1141eb96836')}</th>
+                <th className="pb-3">{t('ui_5bfebf2e9996')}</th>
+                <th className="pb-3">{t('ui_6da13addb000')}</th>
+                <th className="pb-3">{t('ui_53d77a34224e')}</th>
+                <th className="pb-3 text-right sm:text-left">{t('ui_cdb78902f6c6')}</th>
+                <th className="pb-3 text-right sm:text-left">{t('ui_da5b688e005c')}</th>
+                <th className="pb-3 text-center">{t('ui_dbab2db9c507')}</th>
+                <th className="pb-3 text-right sm:text-left">{t('ui_d5fe01364843')}</th>
+                <th className="pb-3 text-right sm:text-left">{t('ui_a6f1f978f35e')}</th>
                 <th className="pb-3 text-right"></th>
               </tr>
             </thead>
@@ -543,7 +533,7 @@ export default function WeighbridgePage() {
                       type="button"
                       onClick={() => setPrintSlip(row)}
                       className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                      title="Print computerized slip"
+                      title={t('ui_02b4fc309aa1')}
                     >
                       <Printer className="w-4 h-4" />
                     </button>
@@ -554,8 +544,7 @@ export default function WeighbridgePage() {
               {/* 🟢 TOTAL SUMMARY ROW (Fixed Hydration Output) */}
               <tr className="border-t-2 border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white bg-slate-50/50 dark:bg-slate-800/30">
                 <td colSpan={4} className="py-4 font-bold text-xs">
-                  Total, {completed.length} trucks
-                </td>
+                  {t('ui_0964d0ea8853')}{' '}{completed.length} {' '}{t('ui_5736894ffc48')}</td>
                 <td className="py-4 font-mono text-right sm:text-left">
                   {formatKg(totalGross)}
                 </td>
@@ -585,11 +574,9 @@ export default function WeighbridgePage() {
             <div className="flex items-center justify-between border-b border-dashed border-slate-200 dark:border-slate-800 pb-3">
               <div>
                 <h4 className="font-extrabold text-sm tracking-tight text-slate-900 dark:text-white">
-                  KOGNOS RICE MILL • WEIGHBRIDGE
-                </h4>
+                  {t('ui_1f42972d319d')}</h4>
                 <p className="text-[10px] uppercase font-bold text-slate-400">
-                  Electronic Slip (Scale #01)
-                </p>
+                  {t('ui_ba37fa1267e5')}</p>
               </div>
               <button
                 type="button"
@@ -602,36 +589,36 @@ export default function WeighbridgePage() {
 
             <div className="space-y-2 text-xs">
               <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                <span className="text-slate-400">Token No:</span>
+                <span className="text-slate-400">{t('ui_e83712561b2b')}</span>
                 <span className="font-mono font-bold text-slate-900 dark:text-white">{printSlip.token}</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                <span className="text-slate-400">Truck No:</span>
+                <span className="text-slate-400">{t('ui_623603110168')}</span>
                 <span className="font-mono font-bold text-slate-900 dark:text-white">{printSlip.truck}</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                <span className="text-slate-400">Source:</span>
+                <span className="text-slate-400">{t('ui_922acd282cc0')}</span>
                 <span className="font-semibold text-slate-900 dark:text-white">{printSlip.source}</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                <span className="text-slate-400">Allocated Godown:</span>
+                <span className="text-slate-400">{t('ui_a913b01674df')}</span>
                 <span className="font-semibold text-slate-900 dark:text-white">{printSlip.godown}</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                <span className="text-slate-400">Gross Weight:</span>
-                <span className="font-mono font-bold">{formatKg(printSlip.gross)} kg</span>
+                <span className="text-slate-400">{t('ui_41d895d10f6a')}</span>
+                <span className="font-mono font-bold">{formatKg(printSlip.gross)} {' '}{t('ui_1389845b02c0')}</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                <span className="text-slate-400">Tare Weight:</span>
-                <span className="font-mono font-bold">{formatKg(printSlip.tare)} kg</span>
+                <span className="text-slate-400">{t('ui_0221b2da5e48')}</span>
+                <span className="font-mono font-bold">{formatKg(printSlip.tare)} {' '}{t('ui_1389845b02c0')}</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-1 text-rose-600">
-                <span>Moisture Cut:</span>
-                <span className="font-mono font-bold">-{formatKg(printSlip.cut)} kg</span>
+                <span>{t('ui_0db348959082')}</span>
+                <span className="font-mono font-bold">-{formatKg(printSlip.cut)} {' '}{t('ui_1389845b02c0')}</span>
               </div>
               <div className="flex justify-between pt-1 font-bold text-sm text-teal-700 dark:text-teal-400">
-                <span>Final Paddy to Godown:</span>
-                <span className="font-mono">{formatKg(printSlip.toGodown)} kg</span>
+                <span>{t('ui_9f05c51cebab')}</span>
+                <span className="font-mono">{formatKg(printSlip.toGodown)} {' '}{t('ui_1389845b02c0')}</span>
               </div>
             </div>
 
@@ -641,8 +628,7 @@ export default function WeighbridgePage() {
                 onClick={() => setPrintSlip(null)}
                 className="w-1/2 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
-                Close
-              </button>
+                {t('ui_bbfa773e5a63')}</button>
               <button
                 type="button"
                 onClick={() => window.print()}
@@ -650,7 +636,7 @@ export default function WeighbridgePage() {
                 style={{ backgroundColor: accent?.primary || '#0d9488' }}
               >
                 <Printer className="w-3.5 h-3.5" />
-                <span>Print Slip</span>
+                <span>{t('ui_68a24eb1f4f9')}</span>
               </button>
             </div>
           </div>

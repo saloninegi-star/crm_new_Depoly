@@ -20,6 +20,7 @@ import {
   AlertCircle,
   Coins,
 } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface AttendanceSection {
   section: string;
@@ -118,6 +119,7 @@ const INITIAL_ADVANCES: AdvanceRecord[] = [
 ];
 
 export default function HrLabourPage() {
+  const { t } = useLanguage();
   const { accent } = useTheme();
 
   const [attendance, setAttendance] = useState<AttendanceSection[]>(INITIAL_ATTENDANCE);
@@ -192,8 +194,7 @@ export default function HrLabourPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
         <div>
           <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-            Staff attendance, hamali gangs and advances · Workforce Operations
-          </span>
+            {t('ui_3cc9a93a52cb')}</span>
         </div>
 
         <div className="flex items-center gap-2.5">
@@ -203,8 +204,7 @@ export default function HrLabourPage() {
             onClick={() => setIsAdvanceModalOpen(true)}
             className="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-2xs cursor-pointer"
           >
-            Record advance
-          </button>
+            {t('ui_c9a65236709c')}</button>
 
           {/* Mark Attendance Button (Teal / Accent Solid) */}
           <button
@@ -214,7 +214,7 @@ export default function HrLabourPage() {
             style={{ backgroundColor: accent?.primary || '#0d9488' }}
           >
             <CalendarCheck className="w-4 h-4" />
-            <span>Mark attendance</span>
+            <span>{t('ui_3632c7913379')}</span>
           </button>
         </div>
       </div>
@@ -226,7 +226,7 @@ export default function HrLabourPage() {
         {/* Metric 1 - Staff on duty (Blue) */}
         <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 p-5 space-y-2 shadow-xs hover:border-blue-300 dark:hover:border-blue-800 transition-all group">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Staff on duty</span>
+            <span className="text-xs font-semibold">{t('ui_7c10ba316f1e')}</span>
             <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shadow-2xs transition-transform group-hover:scale-110">
               <Users className="w-4.5 h-4.5" />
             </div>
@@ -236,18 +236,17 @@ export default function HrLabourPage() {
               {totalPresent}
             </span>
             <span className="text-base font-semibold text-slate-500 dark:text-slate-400">
-              of {totalStaff}
+              {t('ui_de04fa0e29f9')}{' '}{totalStaff}
             </span>
           </div>
           <p className="text-xs text-rose-600 dark:text-rose-400 font-medium">
-            {totalAbsent} absent
-          </p>
+            {totalAbsent} {' '}{t('ui_16ca7689b5f9')}</p>
         </div>
 
         {/* Metric 2 - Hamali gangs working (Amber) */}
         <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 p-5 space-y-2 shadow-xs hover:border-amber-300 dark:hover:border-amber-800 transition-all group">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Hamali gangs working</span>
+            <span className="text-xs font-semibold">{t('ui_739e1ae09fe0')}</span>
             <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shadow-2xs transition-transform group-hover:scale-110">
               <HardHat className="w-4.5 h-4.5" />
             </div>
@@ -258,14 +257,13 @@ export default function HrLabourPage() {
             </span>
           </div>
           <p className="text-xs text-amber-700 dark:text-amber-400 font-medium">
-            {totalWorkers} workers
-          </p>
+            {totalWorkers} {' '}{t('ui_f74e09031a1e')}</p>
         </div>
 
         {/* Metric 3 - Bags handled today (Purple) */}
         <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 p-5 space-y-2 shadow-xs hover:border-purple-300 dark:hover:border-purple-800 transition-all group">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Bags handled today</span>
+            <span className="text-xs font-semibold">{t('ui_5f1183fdd8a4')}</span>
             <div className="w-8 h-8 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center shadow-2xs transition-transform group-hover:scale-110">
               <Package className="w-4.5 h-4.5" />
             </div>
@@ -276,14 +274,13 @@ export default function HrLabourPage() {
             </span>
           </div>
           <p className="text-xs text-purple-700 dark:text-purple-400 font-medium">
-            Unloading, stacking, bagging
-          </p>
+            {t('ui_1e3d0d7a3c4e')}</p>
         </div>
 
         {/* Metric 4 - Hamali cost today (Emerald) */}
         <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 p-5 space-y-2 shadow-xs hover:border-emerald-300 dark:hover:border-emerald-800 transition-all group">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Hamali cost today</span>
+            <span className="text-xs font-semibold">{t('ui_0af8f845e8af')}</span>
             <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-2xs transition-transform group-hover:scale-110">
               <Banknote className="w-4.5 h-4.5" />
             </div>
@@ -294,8 +291,7 @@ export default function HrLabourPage() {
             </span>
           </div>
           <p className="text-xs text-emerald-700 dark:text-emerald-400 font-medium">
-            Paid on Saturday
-          </p>
+            {t('ui_7509ee85ceb7')}</p>
         </div>
       </div>
 
@@ -307,18 +303,17 @@ export default function HrLabourPage() {
         <div className="lg:col-span-5 bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 shadow-xs p-6 space-y-4 transition-colors">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
             <h2 className="text-sm font-bold text-slate-900 dark:text-white">
-              Attendance by section
-            </h2>
-            <span className="text-xs text-slate-400 font-medium">Marked at 08:00</span>
+              {t('ui_97c2dcc159f0')}</h2>
+            <span className="text-xs text-slate-400 font-medium">{t('ui_207500b7cce9')}</span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-semibold">
-                  <th className="pb-3 pl-1">Section</th>
-                  <th className="pb-3 text-center sm:text-left">Present</th>
-                  <th className="pb-3 pr-1">Absent</th>
+                  <th className="pb-3 pl-1">{t('ui_f2c6b564bd81')}</th>
+                  <th className="pb-3 text-center sm:text-left">{t('ui_4e9f7a31eef4')}</th>
+                  <th className="pb-3 pr-1">{t('ui_e92452c8d3e2')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-medium">
@@ -338,12 +333,12 @@ export default function HrLabourPage() {
                             : 'text-amber-700 dark:text-amber-400 font-bold'
                         }
                       >
-                        {row.present} of {row.total}
+                        {row.present} {' '}{t('ui_de04fa0e29f9')}{' '}{row.total}
                       </span>
                     </td>
                     <td className="py-3 pr-1">
                       {row.absentNames === 'None' ? (
-                        <span className="text-slate-400 font-normal">None</span>
+                        <span className="text-slate-400 font-normal">{t('ui_6eef6648406c')}</span>
                       ) : (
                         <span className="text-rose-600 dark:text-rose-400 font-medium">
                           {row.absentNames}
@@ -355,13 +350,12 @@ export default function HrLabourPage() {
 
                 {/* Total Attendance Row */}
                 <tr className="border-t-2 border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white">
-                  <td className="py-3.5 pl-1 font-bold">Total</td>
+                  <td className="py-3.5 pl-1 font-bold">{t('ui_b25928c69902')}</td>
                   <td className="py-3.5 font-mono text-center sm:text-left">
-                    {totalPresent} of {totalStaff}
+                    {totalPresent} {' '}{t('ui_de04fa0e29f9')}{' '}{totalStaff}
                   </td>
                   <td className="py-3.5 pr-1 font-bold text-rose-600 dark:text-rose-400">
-                    {totalAbsent} absent
-                  </td>
+                    {totalAbsent} {' '}{t('ui_16ca7689b5f9')}</td>
                 </tr>
               </tbody>
             </table>
@@ -372,21 +366,20 @@ export default function HrLabourPage() {
         <div className="lg:col-span-7 bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 shadow-xs p-6 space-y-4 transition-colors">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
             <h2 className="text-sm font-bold text-slate-900 dark:text-white">
-              Hamali gangs today
-            </h2>
-            <span className="text-xs text-slate-400 font-medium">Paid per bag</span>
+              {t('ui_5822f040dcd9')}</h2>
+            <span className="text-xs text-slate-400 font-medium">{t('ui_f7d67462a410')}</span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-semibold">
-                  <th className="pb-3 pl-1">Gang</th>
-                  <th className="pb-3">Work</th>
-                  <th className="pb-3 text-center sm:text-left">Workers</th>
-                  <th className="pb-3 text-right sm:text-left">Bags</th>
-                  <th className="pb-3 text-right sm:text-left">Rate</th>
-                  <th className="pb-3 text-right pr-1">Amount</th>
+                  <th className="pb-3 pl-1">{t('ui_f64da04564d5')}</th>
+                  <th className="pb-3">{t('ui_00040bab8a78')}</th>
+                  <th className="pb-3 text-center sm:text-left">{t('ui_b6ef3acd0f91')}</th>
+                  <th className="pb-3 text-right sm:text-left">{t('ui_81cf1fc845ed')}</th>
+                  <th className="pb-3 text-right sm:text-left">{t('ui_3a9c736b3175')}</th>
+                  <th className="pb-3 text-right pr-1">{t('ui_43dc8532f7e5')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-medium">
@@ -429,8 +422,7 @@ export default function HrLabourPage() {
                 {/* Total Hamali Row */}
                 <tr className="border-t-2 border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white">
                   <td className="py-3.5 pl-1 font-bold" colSpan={2}>
-                    Total
-                  </td>
+                    {t('ui_b25928c69902')}</td>
                   <td className="py-3.5 font-mono text-center sm:text-left">{totalWorkers}</td>
                   <td className="py-3.5 font-mono text-right sm:text-left">{formatNumber(totalBags)}</td>
                   <td className="py-3.5 text-right sm:text-left"></td>
@@ -450,9 +442,8 @@ export default function HrLabourPage() {
       <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 shadow-xs p-6 space-y-4 transition-colors">
         <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
           <h2 className="text-sm font-bold text-slate-900 dark:text-white">
-            Advances to recover this week
-          </h2>
-          <span className="text-xs text-slate-400 font-medium">Cut from Saturday wages</span>
+            {t('ui_a6211ad35959')}</h2>
+          <span className="text-xs text-slate-400 font-medium">{t('ui_285f9bdd9f06')}</span>
         </div>
 
         <div className="divide-y divide-slate-100 dark:divide-slate-800 text-xs font-medium">
@@ -473,7 +464,7 @@ export default function HrLabourPage() {
 
           {/* Total Advance Row */}
           <div className="pt-3.5 flex items-center justify-between font-bold text-slate-900 dark:text-white">
-            <span className="font-bold text-xs">Total</span>
+            <span className="font-bold text-xs">{t('ui_b25928c69902')}</span>
             <span className="font-mono text-sm font-black">₹{formatNumber(totalAdvances)}</span>
           </div>
         </div>
@@ -488,9 +479,8 @@ export default function HrLabourPage() {
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-                  Mark Section Attendance
-                </h3>
-                <p className="text-[11px] text-slate-400">Shift #1 Biometric & Daily Roll</p>
+                  {t('ui_9a0ec524a95f')}</h3>
+                <p className="text-[11px] text-slate-400">{t('ui_9f308657724c')}</p>
               </div>
               <button
                 type="button"
@@ -504,8 +494,7 @@ export default function HrLabourPage() {
             <form onSubmit={handleUpdateAttendance} className="space-y-4 text-xs">
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Select Mill Section
-                </label>
+                  {t('ui_69b10cc9911d')}</label>
                 <select
                   value={selectedSection}
                   onChange={(e) => {
@@ -517,16 +506,14 @@ export default function HrLabourPage() {
                 >
                   {attendance.map((sec) => (
                     <option key={sec.section} value={sec.section}>
-                      {sec.section} (Total: {sec.total} Staff)
-                    </option>
+                      {sec.section} {' '}{t('ui_4182685ee49d')}{' '}{sec.total} {' '}{t('ui_460af448fc35')}</option>
                   ))}
                 </select>
               </div>
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Present Staff Count
-                </label>
+                  {t('ui_f3c3a76d054a')}</label>
                 <input
                   type="number"
                   min="0"
@@ -544,15 +531,13 @@ export default function HrLabourPage() {
                   onClick={() => setIsAttendanceModalOpen(false)}
                   className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300"
                 >
-                  Cancel
-                </button>
+                  {t('ui_77dfd2135f4d')}</button>
                 <button
                   type="submit"
                   className="px-4 py-2 rounded-xl text-white text-xs font-bold shadow-xs cursor-pointer active:scale-95 transition-transform"
                   style={{ backgroundColor: accent?.primary || '#0d9488' }}
                 >
-                  Save Attendance
-                </button>
+                  {t('ui_7872df7d85c0')}</button>
               </div>
             </form>
           </div>
@@ -568,9 +553,8 @@ export default function HrLabourPage() {
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-                  Record Worker Advance
-                </h3>
-                <p className="text-[11px] text-slate-400">Weekly Kharcha Advance Payout</p>
+                  {t('ui_ffb6c4f613d0')}</h3>
+                <p className="text-[11px] text-slate-400">{t('ui_3c7f1aa2996f')}</p>
               </div>
               <button
                 type="button"
@@ -584,12 +568,11 @@ export default function HrLabourPage() {
             <form onSubmit={handleAddAdvance} className="space-y-4 text-xs">
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Worker / Gang Leader Name *
-                </label>
+                  {t('ui_b5bf5edb7b4e')}</label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Mukesh Pal"
+                  placeholder={t('ui_9982008b3d78')}
                   value={advanceWorkerName}
                   onChange={(e) => setAdvanceWorkerName(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
@@ -598,36 +581,33 @@ export default function HrLabourPage() {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Designation / Role
-                </label>
+                  {t('ui_0294211368dc')}</label>
                 <select
                   value={advanceWorkerRole}
                   onChange={(e) => setAdvanceWorkerRole(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-white outline-none"
                 >
-                  <option value="Gang C leader">Gang C leader</option>
-                  <option value="Gang A leader">Gang A leader</option>
-                  <option value="Gang B leader">Gang B leader</option>
-                  <option value="Boiler Operator">Boiler Operator</option>
-                  <option value="Truck Driver">Truck Driver</option>
+                  <option value="Gang C leader">{t('ui_ace8c0aa1178')}</option>
+                  <option value="Gang A leader">{t('ui_7ccbd96f4237')}</option>
+                  <option value="Gang B leader">{t('ui_5da8966917bd')}</option>
+                  <option value="Boiler Operator">{t('ui_58ebebdd71bf')}</option>
+                  <option value="Truck Driver">{t('ui_0045e90e2d89')}</option>
                 </select>
               </div>
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Advance Amount (₹) *
-                </label>
+                  {t('ui_f747a7c4f737')}</label>
                 <input
                   type="number"
                   required
-                  placeholder="e.g. 2000"
+                  placeholder={t('ui_ab44ea8ac69d')}
                   value={advanceAmountInput}
                   onChange={(e) => setAdvanceAmountInput(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-mono font-bold text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
                 />
                 <p className="text-[10px] text-slate-400">
-                  Will be auto-deducted from Saturday payroll wages.
-                </p>
+                  {t('ui_bfb0610bc5dc')}</p>
               </div>
 
               <div className="pt-2 flex justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
@@ -636,15 +616,13 @@ export default function HrLabourPage() {
                   onClick={() => setIsAdvanceModalOpen(false)}
                   className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300"
                 >
-                  Cancel
-                </button>
+                  {t('ui_77dfd2135f4d')}</button>
                 <button
                   type="submit"
                   className="px-4 py-2 rounded-xl text-white text-xs font-bold shadow-xs cursor-pointer active:scale-95 transition-transform"
                   style={{ backgroundColor: accent?.primary || '#0d9488' }}
                 >
-                  Disburse Advance
-                </button>
+                  {t('ui_e83de755b010')}</button>
               </div>
             </form>
           </div>

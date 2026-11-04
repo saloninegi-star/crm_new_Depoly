@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
 import {
   Wallet,
   Building,
@@ -31,8 +32,10 @@ function formatNumber(num: number): string {
 
 export default function AccountsPage() {
   const { accent } = useTheme();
+  const { t } = useLanguage();
 
-  const [activeTab, setActiveTab] = useState<'overview' | 'payables' | 'receivables' | 'cash_bank' | 'expenses'>('overview');
+  type AccountsTab = 'overview' | 'payables' | 'receivables' | 'cash_bank' | 'expenses';
+  const [activeTab, setActiveTab] = useState<AccountsTab>('overview');
   const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
   const [isHeld, setIsHeld] = useState(false);
@@ -55,7 +58,7 @@ export default function AccountsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
         <div>
           <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-            Cash, bank, payments and dues · Live Financial Ledger
+            {t('accounts_subtitle')}
           </span>
         </div>
 
@@ -66,7 +69,7 @@ export default function AccountsPage() {
           style={{ backgroundColor: accent?.primary || '#0d9488' }}
         >
           <Plus className="w-4 h-4 stroke-[2.5]" />
-          <span>New voucher</span>
+          <span>{t('new_voucher')}</span>
         </button>
       </div>
 
@@ -75,7 +78,7 @@ export default function AccountsPage() {
         {/* Cash in hand (Emerald) */}
         <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 p-5 space-y-2 shadow-xs hover:border-emerald-300 dark:hover:border-emerald-800 transition-all group">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">Cash in hand</span>
+            <span className="text-xs font-semibold">{t('cash_in_hand')}</span>
             <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-2xs transition-transform group-hover:scale-110">
               <Wallet className="w-4.5 h-4.5" />
             </div>
@@ -86,14 +89,14 @@ export default function AccountsPage() {
             </span>
           </div>
           <p className="text-xs text-emerald-700 dark:text-emerald-400 font-medium">
-            Cash book closed for 23 Oct
+            {t('cash_book_closed')}
           </p>
         </div>
 
         {/* In bank (Sky Blue) */}
         <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 p-5 space-y-2 shadow-xs hover:border-blue-300 dark:hover:border-blue-800 transition-all group">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">In bank</span>
+            <span className="text-xs font-semibold">{t('in_bank')}</span>
             <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shadow-2xs transition-transform group-hover:scale-110">
               <Building className="w-4.5 h-4.5" />
             </div>
@@ -104,14 +107,14 @@ export default function AccountsPage() {
             </span>
           </div>
           <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">
-            2 accounts
+            2 {t('accounts')}
           </p>
         </div>
 
         {/* To receive (Amber) */}
         <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 p-5 space-y-2 shadow-xs hover:border-amber-300 dark:hover:border-amber-800 transition-all group">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">To receive</span>
+            <span className="text-xs font-semibold">{t('to_receive')}</span>
             <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shadow-2xs transition-transform group-hover:scale-110">
               <CreditCard className="w-4.5 h-4.5" />
             </div>
@@ -122,14 +125,14 @@ export default function AccountsPage() {
             </span>
           </div>
           <p className="text-xs text-amber-700 dark:text-amber-400 font-medium">
-            3 buyers · 1 overdue
+            3 {t('buyers')} · 1 {t('overdue')}
           </p>
         </div>
 
         {/* To pay (Purple/Rose) */}
         <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 p-5 space-y-2 shadow-xs hover:border-rose-300 dark:hover:border-rose-800 transition-all group">
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-            <span className="text-xs font-semibold">To pay</span>
+            <span className="text-xs font-semibold">{t('to_pay')}</span>
             <div className="w-8 h-8 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center shadow-2xs transition-transform group-hover:scale-110">
               <FileSpreadsheet className="w-4.5 h-4.5" />
             </div>
@@ -140,7 +143,7 @@ export default function AccountsPage() {
             </span>
           </div>
           <p className="text-xs text-rose-600 dark:text-rose-400 font-medium">
-            2 farmers · ₹8,43,200 due today
+            2 {t('farmers')} · ₹8,43,200 {t('due_today')}
           </p>
         </div>
       </div>
@@ -148,16 +151,16 @@ export default function AccountsPage() {
       {/* 2. NAVIGATION TABS (MATCHING SCREENSHOT) */}
       <div className="flex items-center gap-6 border-b border-slate-200/80 dark:border-slate-800 text-xs font-semibold overflow-x-auto pb-2 scrollbar-none">
         {[
-          { id: 'overview', label: 'Overview' },
-          { id: 'payables', label: 'Farmer payables' },
-          { id: 'receivables', label: 'Buyer receivables' },
-          { id: 'cash_bank', label: 'Cash book and bank' },
-          { id: 'expenses', label: 'Expenses' },
+          { id: 'overview' as const, label: t('overview') },
+          { id: 'payables' as const, label: t('farmer_payables') },
+          { id: 'receivables' as const, label: t('buyer_receivables') },
+          { id: 'cash_bank' as const, label: t('cash_bank') },
+          { id: 'expenses' as const, label: t('expenses') },
         ].map((tab) => (
           <button
             key={tab.id}
             type="button"
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id)}
             className={`cursor-pointer transition-all pb-1 whitespace-nowrap ${
               activeTab === tab.id
                 ? 'text-slate-900 dark:text-white font-bold border-b-2'
@@ -167,7 +170,7 @@ export default function AccountsPage() {
               borderColor: activeTab === tab.id ? (accent?.primary || '#0d9488') : 'transparent',
             }}
           >
-            {tab.label}
+            {t(tab.label)}
           </button>
         ))}
       </div>
@@ -176,11 +179,11 @@ export default function AccountsPage() {
       <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 shadow-xs p-6 space-y-4 transition-colors">
         <div className="flex items-center justify-between pb-1 border-b border-slate-100 dark:border-slate-800">
           <h2 className="text-sm font-bold text-slate-900 dark:text-white">
-            Waiting for your approval
+            {t('waiting_approval')}
           </h2>
           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-200/70 dark:border-amber-900">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-            1 payment
+            1 {t('payment')}
           </span>
         </div>
 
@@ -202,11 +205,11 @@ export default function AccountsPage() {
 
             {isApproved ? (
               <span className="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 font-bold text-xs border border-emerald-200 flex items-center gap-1">
-                <Check className="w-3.5 h-3.5" /> Approved
+                <Check className="w-3.5 h-3.5" /> {t('approved')}
               </span>
             ) : isHeld ? (
               <span className="px-3 py-1.5 rounded-xl bg-amber-50 text-amber-700 font-bold text-xs border border-amber-200">
-                Payment Held
+                {t('payment_held')}
               </span>
             ) : (
               <>
@@ -215,7 +218,7 @@ export default function AccountsPage() {
                   onClick={() => setIsHeld(true)}
                   className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-2xs cursor-pointer active:scale-95"
                 >
-                  Hold
+                  {t('hold')}
                 </button>
                 <button
                   type="button"
@@ -223,7 +226,7 @@ export default function AccountsPage() {
                   className="px-4 py-2 rounded-xl text-white text-xs font-bold shadow-xs cursor-pointer active:scale-95 transition-transform"
                   style={{ backgroundColor: accent?.primary || '#0d9488' }}
                 >
-                  Approve payment
+                  {t('approve_payment')}
                 </button>
               </>
             )}
@@ -236,12 +239,12 @@ export default function AccountsPage() {
         {/* Left: To pay Card */}
         <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 shadow-xs p-6 space-y-4 transition-colors">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-            <h2 className="text-sm font-bold text-slate-900 dark:text-white">To pay</h2>
+            <h2 className="text-sm font-bold text-slate-900 dark:text-white">{t('to_pay')}</h2>
             <button
               type="button"
               className="px-3 py-1 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-2xs cursor-pointer"
             >
-              All payables
+              {t('all_payables')}
             </button>
           </div>
 
@@ -260,7 +263,7 @@ export default function AccountsPage() {
             {/* Row 2 */}
             <div className="py-3 flex items-center justify-between">
               <div>
-                <div className="font-bold text-slate-900 dark:text-white">Rameshwar Lal, Hapur</div>
+                <div className="font-bold text-slate-900 dark:text-white">{t('ui_007259c8e909')}</div>
                 <div className="text-[11px] text-slate-400">Lot L-0850 · due 27 Oct</div>
               </div>
               <span className="font-mono font-bold text-slate-900 dark:text-white text-sm">
@@ -270,7 +273,7 @@ export default function AccountsPage() {
 
             {/* Total Row */}
             <div className="pt-3.5 flex items-center justify-between font-bold text-slate-900 dark:text-white">
-              <span className="font-bold text-xs">Total</span>
+              <span className="font-bold text-xs">{t('total')}</span>
               <span className="font-mono text-sm font-black">₹16,81,000</span>
             </div>
           </div>
@@ -279,12 +282,12 @@ export default function AccountsPage() {
         {/* Right: To receive Card */}
         <div className="bg-white dark:bg-[#111726] rounded-2xl border border-violet-100/90 dark:border-slate-800 shadow-xs p-6 space-y-4 transition-colors">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-            <h2 className="text-sm font-bold text-slate-900 dark:text-white">To receive</h2>
+            <h2 className="text-sm font-bold text-slate-900 dark:text-white">{t('to_receive')}</h2>
             <button
               type="button"
               className="px-3 py-1 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-2xs cursor-pointer"
             >
-              All receivables
+              {t('all_receivables')}
             </button>
           </div>
 
@@ -296,7 +299,7 @@ export default function AccountsPage() {
                   Shree Krishna Traders, Delhi
                 </div>
                 <div className="text-[11px] text-amber-700 dark:text-amber-400 font-semibold">
-                  Overdue by 12 days · INV-401
+                  {t('overdue')} by 12 days · INV-401
                 </div>
               </div>
               <span className="font-mono font-bold text-slate-900 dark:text-white text-sm">
@@ -330,7 +333,7 @@ export default function AccountsPage() {
 
             {/* Total Row */}
             <div className="pt-3.5 flex items-center justify-between font-bold text-slate-900 dark:text-white">
-              <span className="font-bold text-xs">Total</span>
+              <span className="font-bold text-xs">{t('total')}</span>
               <span className="font-mono text-sm font-black">₹18,40,000</span>
             </div>
           </div>
@@ -344,10 +347,10 @@ export default function AccountsPage() {
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-                  Record Accounting Voucher
+                  {t('record_voucher')}
                 </h3>
                 <p className="text-[11px] text-slate-400">
-                  Post direct debit/credit to Cash Book or Bank ledger
+                  {t('voucher_description')}
                 </p>
               </div>
               <button
@@ -362,28 +365,28 @@ export default function AccountsPage() {
             <form onSubmit={handleVoucherSubmit} className="space-y-4 text-xs">
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Voucher Type
+                  {t('voucher_type')}
                 </label>
                 <select
                   value={voucherType}
                   onChange={(e) => setVoucherType(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-white outline-none"
                 >
-                  <option value="Payment (Bank RTGS)">Bank RTGS Payment (Farmer/Vendor)</option>
-                  <option value="Receipt (Sales NEFT)">Sales Receipt Inward (Buyer)</option>
-                  <option value="Cash Voucher (Petty Cash)">Cash Voucher (Daily Cash Book)</option>
-                  <option value="Expense Voucher">Mill Operational Expense</option>
+                  <option value="Payment (Bank RTGS)">{t('bank_payment_option')}</option>
+                  <option value="Receipt (Sales NEFT)">{t('sales_receipt_option')}</option>
+                  <option value="Cash Voucher (Petty Cash)">{t('cash_voucher_option')}</option>
+                  <option value="Expense Voucher">{t('expense_voucher_option')}</option>
                 </select>
               </div>
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Party / Account Name *
+                  {t('party_account_name')} *
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Baldev Singh / Electricity Discom"
+                  placeholder={t('party_placeholder')}
                   value={voucherParty}
                   onChange={(e) => setVoucherParty(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
@@ -392,12 +395,12 @@ export default function AccountsPage() {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Voucher Amount (₹) *
+                  {t('voucher_amount')} (₹) *
                 </label>
                 <input
                   type="number"
                   required
-                  placeholder="e.g. 843200"
+                  placeholder={t('amount_placeholder')}
                   value={voucherAmount}
                   onChange={(e) => setVoucherAmount(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-mono font-bold text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
@@ -410,14 +413,14 @@ export default function AccountsPage() {
                   onClick={() => setIsVoucherModalOpen(false)}
                   className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer"
                 >
-                  Cancel
+                  {t('cancel')}
                 </button>
                 <button
                   type="submit"
                   className="px-5 py-2 rounded-xl text-white text-xs font-bold shadow-xs cursor-pointer active:scale-95 transition-transform"
                   style={{ backgroundColor: accent?.primary || '#0d9488' }}
                 >
-                  Post Voucher
+                  {t('post_voucher')}
                 </button>
               </div>
             </form>

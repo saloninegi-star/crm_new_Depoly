@@ -15,6 +15,7 @@ import {
   Droplets,
   PackageCheck,
 } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface ActiveBatch {
   id: string;
@@ -121,6 +122,7 @@ const INITIAL_RECENT_BATCHES: FinishedBatchLog[] = [
 ];
 
 export default function MillingRecoveryPage() {
+  const { t } = useLanguage();
   const { accent } = useTheme();
 
   const [runningBatches, setRunningBatches] = useState<ActiveBatch[]>(INITIAL_RUNNING_BATCHES);
@@ -194,8 +196,7 @@ export default function MillingRecoveryPage() {
         {/* Metric 1 */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-1 shadow-2xs">
           <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-            Head rice recovery
-          </span>
+            {t('ui_f540da207bfd')}</span>
           <div className="flex items-baseline gap-1.5 pt-0.5">
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               61.2
@@ -203,56 +204,49 @@ export default function MillingRecoveryPage() {
             <span className="text-base font-semibold text-slate-600 dark:text-slate-300">%</span>
           </div>
           <p className="text-xs text-emerald-700 dark:text-emerald-400 font-medium pt-0.5">
-            Target 60–65% · in range
-          </p>
+            {t('ui_160825a23fac')}</p>
         </div>
 
         {/* Metric 2 */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-1 shadow-2xs">
           <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-            Paddy milled today
-          </span>
+            {t('ui_8791d25cc4f3')}</span>
           <div className="flex items-baseline gap-1.5 pt-0.5">
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               62.4
             </span>
-            <span className="text-base font-semibold text-slate-600 dark:text-slate-300">t</span>
+            <span className="text-base font-semibold text-slate-600 dark:text-slate-300">{t('ui_8efd86fb78a5')}</span>
           </div>
           <p className="text-xs text-slate-400 dark:text-slate-500 pt-0.5">
-            2 batches on 2 lines
-          </p>
+            {t('ui_62aed7abf6d4')}</p>
         </div>
 
         {/* Metric 3 */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-1 shadow-2xs">
           <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-            Head rice
-          </span>
+            {t('ui_ec9d9437763c')}</span>
           <div className="flex items-baseline gap-1.5 pt-0.5">
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               38.2
             </span>
-            <span className="text-base font-semibold text-slate-600 dark:text-slate-300">t</span>
+            <span className="text-base font-semibold text-slate-600 dark:text-slate-300">{t('ui_8efd86fb78a5')}</span>
           </div>
           <p className="text-xs text-slate-400 dark:text-slate-500 pt-0.5">
-            To finished stock
-          </p>
+            {t('ui_defc8ef51cb4')}</p>
         </div>
 
         {/* Metric 4 */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-1 shadow-2xs">
           <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-            Broken rice
-          </span>
+            {t('ui_bf954bff45e9')}</span>
           <div className="flex items-baseline gap-1.5 pt-0.5">
             <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               7.1
             </span>
-            <span className="text-base font-semibold text-slate-600 dark:text-slate-300">t</span>
+            <span className="text-base font-semibold text-slate-600 dark:text-slate-300">{t('ui_8efd86fb78a5')}</span>
           </div>
           <p className="text-xs text-slate-400 dark:text-slate-500 pt-0.5">
-            11.4% of paddy
-          </p>
+            {t('ui_3898178da77a')}</p>
         </div>
       </div>
 
@@ -263,8 +257,8 @@ export default function MillingRecoveryPage() {
         {/* LEFT COLUMN: Running now (2 lines busy) */}
         <div className="lg:col-span-7 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xs p-6 space-y-5 transition-colors">
           <div className="flex items-center justify-between pb-1 border-b border-slate-100 dark:border-slate-800">
-            <h2 className="text-base font-bold text-slate-900 dark:text-white">Running now</h2>
-            <span className="text-xs text-slate-400 font-medium">2 lines busy</span>
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">{t('ui_33cfd5d598aa')}</h2>
+            <span className="text-xs text-slate-400 font-medium">{t('ui_ca30552c2f19')}</span>
           </div>
 
           <div className="space-y-6">
@@ -283,7 +277,7 @@ export default function MillingRecoveryPage() {
                       {batch.line}
                     </span>
                     <span className="text-xs text-slate-400">
-                      {batch.lot} · since {batch.startTime}
+                      {batch.lot} {' '}{t('ui_4e96d9fa8b59')}{' '}{batch.startTime}
                     </span>
                   </div>
 
@@ -297,25 +291,22 @@ export default function MillingRecoveryPage() {
                 {/* Batch Stats Row */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                   <div>
-                    <span className="text-slate-400 dark:text-slate-500 block">Paddy in</span>
+                    <span className="text-slate-400 dark:text-slate-500 block">{t('ui_2a1a5b6b0041')}</span>
                     <span className="text-base font-bold text-slate-900 dark:text-white font-mono">
-                      {batch.paddyIn.toFixed(1)} t
-                    </span>
+                      {batch.paddyIn.toFixed(1)} {' '}{t('ui_8efd86fb78a5')}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 dark:text-slate-500 block">Head rice</span>
+                    <span className="text-slate-400 dark:text-slate-500 block">{t('ui_ec9d9437763c')}</span>
                     <span className="text-base font-bold text-slate-900 dark:text-white font-mono">
-                      {batch.headRice.toFixed(1)} t
-                    </span>
+                      {batch.headRice.toFixed(1)} {' '}{t('ui_8efd86fb78a5')}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 dark:text-slate-500 block">Broken</span>
+                    <span className="text-slate-400 dark:text-slate-500 block">{t('ui_3ad465ce2b95')}</span>
                     <span className="text-base font-bold text-slate-900 dark:text-white font-mono">
-                      {batch.broken.toFixed(1)} t
-                    </span>
+                      {batch.broken.toFixed(1)} {' '}{t('ui_8efd86fb78a5')}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 dark:text-slate-500 block">Recovery</span>
+                    <span className="text-slate-400 dark:text-slate-500 block">{t('ui_ea924f72d31e')}</span>
                     <span className="text-base font-black text-slate-900 dark:text-white font-mono">
                       {batch.recovery.toFixed(1)}%
                     </span>
@@ -333,15 +324,13 @@ export default function MillingRecoveryPage() {
                     }}
                     className="px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-2xs cursor-pointer"
                   >
-                    Add output
-                  </button>
+                    {t('ui_89d8c35046eb')}</button>
                   <button
                     type="button"
                     onClick={() => setBatchToClose(batch)}
                     className="px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-2xs cursor-pointer"
                   >
-                    Close batch
-                  </button>
+                    {t('ui_8aeef7bfa74f')}</button>
                 </div>
               </div>
             ))}
@@ -352,25 +341,24 @@ export default function MillingRecoveryPage() {
         <div className="lg:col-span-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xs p-6 space-y-5 transition-colors">
           <div className="flex items-center justify-between pb-1 border-b border-slate-100 dark:border-slate-800">
             <h2 className="text-base font-bold text-slate-900 dark:text-white">
-              Where today’s paddy went
-            </h2>
-            <span className="text-xs text-slate-400 font-medium">62.4 t milled</span>
+              {t('ui_8185287a7dda')}</h2>
+            <span className="text-xs text-slate-400 font-medium">{t('ui_ca4b9c614bb4')}</span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800">
-                  <th className="pb-3">Output</th>
-                  <th className="pb-3 text-center sm:text-left">Share</th>
-                  <th className="pb-3 text-right">Tonnes</th>
-                  <th className="pb-3 pl-4">Goes to</th>
+                  <th className="pb-3">{t('ui_4bed336194a9')}</th>
+                  <th className="pb-3 text-center sm:text-left">{t('ui_09ca55ca52d2')}</th>
+                  <th className="pb-3 text-right">{t('ui_6dadfb4d1463')}</th>
+                  <th className="pb-3 pl-4">{t('ui_05f1051584ce')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-medium">
                 {/* Row 1: Head Rice */}
                 <tr>
-                  <td className="py-3 font-semibold text-slate-900 dark:text-white">Head rice</td>
+                  <td className="py-3 font-semibold text-slate-900 dark:text-white">{t('ui_ec9d9437763c')}</td>
                   <td className="py-3">
                     <div className="flex items-center gap-2">
                       <div className="w-16 sm:w-20 bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
@@ -388,12 +376,12 @@ export default function MillingRecoveryPage() {
                   <td className="py-3 text-right font-mono font-bold text-slate-900 dark:text-white">
                     38.2
                   </td>
-                  <td className="py-3 pl-4 text-slate-600 dark:text-slate-400">Finished stock</td>
+                  <td className="py-3 pl-4 text-slate-600 dark:text-slate-400">{t('ui_67c9c2abb5da')}</td>
                 </tr>
 
                 {/* Row 2: Broken Rice */}
                 <tr>
-                  <td className="py-3 font-semibold text-slate-900 dark:text-white">Broken rice</td>
+                  <td className="py-3 font-semibold text-slate-900 dark:text-white">{t('ui_bf954bff45e9')}</td>
                   <td className="py-3">
                     <div className="flex items-center gap-2">
                       <div className="w-16 sm:w-20 bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
@@ -412,13 +400,12 @@ export default function MillingRecoveryPage() {
                     7.1
                   </td>
                   <td className="py-3 pl-4 text-slate-600 dark:text-slate-400">
-                    Finished stock, broken grade
-                  </td>
+                    {t('ui_d2e27a36e695')}</td>
                 </tr>
 
                 {/* Row 3: Husk */}
                 <tr>
-                  <td className="py-3 font-semibold text-slate-900 dark:text-white">Husk</td>
+                  <td className="py-3 font-semibold text-slate-900 dark:text-white">{t('ui_fe0cb320d1ee')}</td>
                   <td className="py-3">
                     <div className="flex items-center gap-2">
                       <div className="w-16 sm:w-20 bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
@@ -436,12 +423,12 @@ export default function MillingRecoveryPage() {
                   <td className="py-3 text-right font-mono font-bold text-slate-900 dark:text-white">
                     11.7
                   </td>
-                  <td className="py-3 pl-4 text-slate-600 dark:text-slate-400">Boiler fuel</td>
+                  <td className="py-3 pl-4 text-slate-600 dark:text-slate-400">{t('ui_743b5a172c33')}</td>
                 </tr>
 
                 {/* Row 4: Rice Bran */}
                 <tr>
-                  <td className="py-3 font-semibold text-slate-900 dark:text-white">Rice bran</td>
+                  <td className="py-3 font-semibold text-slate-900 dark:text-white">{t('ui_a6d5ccf30a3a')}</td>
                   <td className="py-3">
                     <div className="flex items-center gap-2">
                       <div className="w-16 sm:w-20 bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
@@ -460,13 +447,12 @@ export default function MillingRecoveryPage() {
                     5.4
                   </td>
                   <td className="py-3 pl-4 text-slate-600 dark:text-slate-400">
-                    Sold for oil extraction
-                  </td>
+                    {t('ui_5f1e5ee8e11b')}</td>
                 </tr>
 
                 {/* Total Summary Row */}
                 <tr className="border-t border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white">
-                  <td className="py-3.5">Total</td>
+                  <td className="py-3.5">{t('ui_b25928c69902')}</td>
                   <td className="py-3.5 font-mono">100%</td>
                   <td className="py-3.5 text-right font-mono text-sm">62.4</td>
                   <td className="py-3.5 pl-4"></td>
@@ -482,25 +468,24 @@ export default function MillingRecoveryPage() {
          ======================================================== */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-2xs p-6 space-y-4 transition-colors">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-1">
-          <h2 className="text-base font-bold text-slate-900 dark:text-white">Recent batches</h2>
+          <h2 className="text-base font-bold text-slate-900 dark:text-white">{t('ui_3dc3a93ed7cf')}</h2>
           <span className="text-xs text-slate-400 font-medium">
-            Recovery = head rice ÷ paddy in · target 60–65%
-          </span>
+            {t('ui_a556768b20ed')}</span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-semibold">
-                <th className="pb-3.5 pl-2">Batch</th>
-                <th className="pb-3.5">Date</th>
-                <th className="pb-3.5 text-center sm:text-left">Line</th>
-                <th className="pb-3.5">Lot</th>
-                <th className="pb-3.5 text-right sm:text-left">Paddy in</th>
-                <th className="pb-3.5 text-right sm:text-left">Head rice</th>
-                <th className="pb-3.5 text-right sm:text-left">Broken</th>
-                <th className="pb-3.5 text-right sm:text-left">Recovery</th>
-                <th className="pb-3.5 pr-2">Result</th>
+                <th className="pb-3.5 pl-2">{t('ui_8bf1ef5668b1')}</th>
+                <th className="pb-3.5">{t('ui_eb9a4bc1c0c1')}</th>
+                <th className="pb-3.5 text-center sm:text-left">{t('ui_ea9676003762')}</th>
+                <th className="pb-3.5">{t('ui_4a211932145b')}</th>
+                <th className="pb-3.5 text-right sm:text-left">{t('ui_2a1a5b6b0041')}</th>
+                <th className="pb-3.5 text-right sm:text-left">{t('ui_ec9d9437763c')}</th>
+                <th className="pb-3.5 text-right sm:text-left">{t('ui_3ad465ce2b95')}</th>
+                <th className="pb-3.5 text-right sm:text-left">{t('ui_ea924f72d31e')}</th>
+                <th className="pb-3.5 pr-2">{t('ui_5faa59d4bc37')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300 font-medium">
@@ -518,9 +503,9 @@ export default function MillingRecoveryPage() {
                     <div className="font-mono text-slate-900 dark:text-white">{row.lot}</div>
                     <div className="text-[11px] text-slate-400">{row.variety}</div>
                   </td>
-                  <td className="py-3.5 font-mono text-right sm:text-left">{row.paddyIn.toFixed(1)} t</td>
-                  <td className="py-3.5 font-mono text-right sm:text-left">{row.headRice.toFixed(1)} t</td>
-                  <td className="py-3.5 font-mono text-right sm:text-left">{row.broken.toFixed(1)} t</td>
+                  <td className="py-3.5 font-mono text-right sm:text-left">{row.paddyIn.toFixed(1)} {' '}{t('ui_8efd86fb78a5')}</td>
+                  <td className="py-3.5 font-mono text-right sm:text-left">{row.headRice.toFixed(1)} {' '}{t('ui_8efd86fb78a5')}</td>
+                  <td className="py-3.5 font-mono text-right sm:text-left">{row.broken.toFixed(1)} {' '}{t('ui_8efd86fb78a5')}</td>
                   <td className="py-3.5 font-mono font-bold text-slate-900 dark:text-white text-right sm:text-left">
                     {row.recovery.toFixed(1)}%
                   </td>
@@ -528,13 +513,11 @@ export default function MillingRecoveryPage() {
                     {row.result === 'in_range' ? (
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                        In range
-                      </span>
+                        {t('ui_07e10b5bd625')}</span>
                     ) : (
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400">
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                        Below target
-                      </span>
+                        {t('ui_c8394d8f08a6')}</span>
                     )}
                   </td>
                 </tr>
@@ -553,8 +536,7 @@ export default function MillingRecoveryPage() {
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-                  Add Milling Output
-                </h3>
+                  {t('ui_d790fd605f6f')}</h3>
                 <p className="text-[11px] text-slate-400">
                   {selectedBatchForOutput.id} · {selectedBatchForOutput.line}
                 </p>
@@ -571,8 +553,7 @@ export default function MillingRecoveryPage() {
             <form onSubmit={handleSaveOutput} className="space-y-4 text-xs">
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Add Head Rice (Tonnes)
-                </label>
+                  {t('ui_145199433dbb')}</label>
                 <input
                   type="number"
                   step="0.1"
@@ -585,8 +566,7 @@ export default function MillingRecoveryPage() {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-slate-700 dark:text-slate-300">
-                  Add Broken Rice (Tonnes)
-                </label>
+                  {t('ui_cd99a571d9bd')}</label>
                 <input
                   type="number"
                   step="0.1"
@@ -603,15 +583,13 @@ export default function MillingRecoveryPage() {
                   onClick={() => setSelectedBatchForOutput(null)}
                   className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300"
                 >
-                  Cancel
-                </button>
+                  {t('ui_77dfd2135f4d')}</button>
                 <button
                   type="submit"
                   className="px-4 py-2 rounded-xl text-white text-xs font-bold shadow-xs cursor-pointer"
                   style={{ backgroundColor: accent?.primary || '#0d9488' }}
                 >
-                  Update Output
-                </button>
+                  {t('ui_b060824f8d59')}</button>
               </div>
             </form>
           </div>
@@ -627,8 +605,7 @@ export default function MillingRecoveryPage() {
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-                  Close Milling Batch
-                </h3>
+                  {t('ui_214b9bcfa44b')}</h3>
                 <p className="text-[11px] text-slate-400">
                   {batchToClose.id} ({batchToClose.line})
                 </p>
@@ -644,19 +621,17 @@ export default function MillingRecoveryPage() {
 
             <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 space-y-2 text-xs">
               <div className="flex justify-between">
-                <span className="text-slate-500">Total Paddy In:</span>
+                <span className="text-slate-500">{t('ui_8875b47c3080')}</span>
                 <span className="font-mono font-bold text-slate-900 dark:text-white">
-                  {batchToClose.paddyIn.toFixed(1)} t
-                </span>
+                  {batchToClose.paddyIn.toFixed(1)} {' '}{t('ui_8efd86fb78a5')}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Head Rice Produced:</span>
+                <span className="text-slate-500">{t('ui_653313174a97')}</span>
                 <span className="font-mono font-bold text-emerald-600">
-                  {batchToClose.headRice.toFixed(1)} t
-                </span>
+                  {batchToClose.headRice.toFixed(1)} {' '}{t('ui_8efd86fb78a5')}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Final Recovery:</span>
+                <span className="text-slate-500">{t('ui_b66059b2f394')}</span>
                 <span className="font-mono font-black text-slate-900 dark:text-white">
                   {batchToClose.recovery.toFixed(1)}%
                 </span>
@@ -664,9 +639,7 @@ export default function MillingRecoveryPage() {
             </div>
 
             <p className="text-xs text-slate-500 leading-relaxed">
-              Are you sure you want to close this batch? The output will be transferred to finished
-              stock and archived in recent batches.
-            </p>
+              {t('ui_d3bcac262949')}</p>
 
             <div className="pt-2 flex justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
               <button
@@ -674,16 +647,14 @@ export default function MillingRecoveryPage() {
                 onClick={() => setBatchToClose(null)}
                 className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300"
               >
-                Cancel
-              </button>
+                {t('ui_77dfd2135f4d')}</button>
               <button
                 type="button"
                 onClick={handleConfirmClose}
                 className="px-4 py-2 rounded-xl text-white text-xs font-bold shadow-xs cursor-pointer"
                 style={{ backgroundColor: accent?.primary || '#0d9488' }}
               >
-                Confirm & Close Batch
-              </button>
+                {t('ui_e77323a4fdeb')}</button>
             </div>
           </div>
         </div>

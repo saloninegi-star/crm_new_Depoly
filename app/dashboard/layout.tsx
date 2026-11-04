@@ -419,13 +419,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-xs"
                 style={{ backgroundColor: accent.primary }}
               >
-                K
-              </div>
+                {t('ui_a7ee38bb7be4')}</div>
               <div className="flex flex-col leading-tight">
-                <span className="font-bold text-sm text-slate-900 dark:text-white">Kognos</span>
+                <span className="font-bold text-sm text-slate-900 dark:text-white">{t('ui_66e83e42f8e1')}</span>
                 <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
-                  Rice Mill CRM
-                </span>
+                  {t('ui_7618e15de46d')}</span>
               </div>
             </div>
 
@@ -558,7 +556,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <button
               onClick={() => setSidebarOpen(true)}
               className="lg:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
-              aria-label="Open sidebar"
+              aria-label={t('ui_24d219905fb8')}
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -601,7 +599,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 onClick={() => setShowProfilePopup((open) => !open)}
                 className="w-9 h-9 rounded-full flex items-center justify-center text-white shadow-sm ring-2 ring-white dark:ring-slate-800 hover:opacity-90 transition-opacity cursor-pointer"
                 style={{ backgroundColor: accent.primary }}
-                aria-label="Open profile"
+                aria-label={t('ui_3146b0083dd0')}
                 aria-expanded={showProfilePopup}
               >
                 <UserRound className="w-4 h-4" />
@@ -612,7 +610,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   <button
                     type="button"
                     className="fixed inset-0 z-30 cursor-default"
-                    aria-label="Close profile popup"
+                    aria-label={t('ui_fa388a7d025f')}
                     onClick={() => setShowProfilePopup(false)}
                   />
                   <div className="absolute right-0 top-full z-40 mt-2 w-72 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 shadow-xl">
@@ -635,14 +633,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
                     <dl className="space-y-2.5 pt-3 text-xs">
                       <div className="flex justify-between gap-3">
-                        <dt className="text-slate-500 dark:text-slate-400">Mobile</dt>
+                        <dt className="text-slate-500 dark:text-slate-400">{t('ui_b1d702459399')}</dt>
                         <dd className="text-slate-800 dark:text-slate-200 font-medium text-right">
                           {userProfile.mobile || '—'}
                         </dd>
                       </div>
                       {userProfile.id && (
                         <div className="flex justify-between gap-3">
-                          <dt className="text-slate-500 dark:text-slate-400">User ID</dt>
+                          <dt className="text-slate-500 dark:text-slate-400">{t('ui_23bf49dab136')}</dt>
                           <dd className="text-slate-800 dark:text-slate-200 font-medium text-right">
                             {userProfile.id}
                           </dd>
@@ -650,7 +648,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       )}
                       {userProfile.email && (
                         <div className="flex justify-between gap-3">
-                          <dt className="text-slate-500 dark:text-slate-400">Email</dt>
+                          <dt className="text-slate-500 dark:text-slate-400">{t('ui_84add5b29527')}</dt>
                           <dd className="text-slate-800 dark:text-slate-200 font-medium text-right break-all">
                             {userProfile.email}
                           </dd>
@@ -663,8 +661,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       onClick={() => setShowProfilePopup(false)}
                       className="mt-4 block w-full rounded-xl bg-slate-50 dark:bg-slate-800 px-3 py-2 text-center text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"
                     >
-                      View account settings
-                    </Link>
+                      {t('ui_b58f23e301b6')}</Link>
                   </div>
                 </>
               )}

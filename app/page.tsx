@@ -579,7 +579,7 @@ export default function HomePage() {
               href="/login"
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/30 transition-all active:scale-95 cursor-pointer"
             >
-              <Lock className="w-3.5 h-3.5" />
+              <Lock className="w-3.6 h-3.5" />
               <span>{t('go_to_login')}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
